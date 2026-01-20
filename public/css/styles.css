@@ -21,18 +21,18 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(180deg, #e8f0f8 0%, #c5d9e8 50%, #b3cce0 100%);
     min-height: 100vh;
     padding: 20px;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
     background: white;
     border-radius: 20px;
-    box-shadow: var(--shadow);
-    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 40px 30px;
     animation: fadeIn 0.5s ease-in;
 }
 
@@ -53,7 +53,7 @@ body {
 }
 
 .logo {
-    max-width: 200px;
+    max-width: 300px;
     height: auto;
 }
 
@@ -63,9 +63,11 @@ body {
 }
 
 .welcome-section h1 {
-    color: var(--primary-color);
-    font-size: 28px;
+    color: #1e5a96;
+    font-size: 36px;
     margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .welcome-text {

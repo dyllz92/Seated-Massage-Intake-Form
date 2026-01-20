@@ -10,7 +10,7 @@ class InteractiveMuscleMap {
         this.currentGender = 'Male'; // Default
         this.canvas = null;
         this.ctx = null;
-        this.dotRadius = 12;
+        this.dotRadius = 24;
         this.bodyImage = null;
         this.bodyImageLoaded = false;
         this.bodyImageErrored = false;
@@ -145,9 +145,27 @@ class InteractiveMuscleMap {
 
         const centerX = canvas.width / 2;
         if (this.bodyImageLoaded && this.bodyImage && !this.bodyImageErrored) {
-            // Draw PNG image to fill the canvas
+            // Draw PNG image preserving its aspect ratio (letterbox fit)
             ctx.imageSmoothingEnabled = true;
-            ctx.drawImage(this.bodyImage, 0, 0, canvas.width, canvas.height);
+            const iw = this.bodyImage.naturalWidth || this.bodyImage.width || 400;
+            const ih = this.bodyImage.naturalHeight || this.bodyImage.height || 600;
+            const canvasAspect = canvas.width / canvas.height;
+            const imageAspect = iw / ih;
+            let destW, destH;
+            if (imageAspect > canvasAspect) {
+                // Image is wider relative to canvas: fit width
+                const scale = canvas.width / iw;
+                destW = canvas.width;
+                destH = ih * scale;
+            } else {
+                // Image is taller: fit height
+                const scale = canvas.height / ih;
+                destH = canvas.height;
+                destW = iw * scale;
+            }
+            const destX = Math.round((canvas.width - destW) / 2);
+            const destY = Math.round((canvas.height - destH) / 2);
+            ctx.drawImage(this.bodyImage, destX, destY, destW, destH);
         } else {
             // Fallback: draw simple outline
             ctx.strokeStyle = '#999';
