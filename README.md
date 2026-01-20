@@ -10,6 +10,7 @@ A locally-hosted web application for collecting client intake forms for seated m
 - 📄 **PDF Generation**: Automatic conversion to professional PDF documents
 - ☁️ **Google Drive Integration**: Secure cloud storage with fallback to local storage
 - 🔒 **Privacy-Focused**: No persistent local data storage after upload
+- 🔒 **Privacy-Focused**: No persistent local data storage after upload (local PDF fallback off by default)
 
 ## Quick Start
 
@@ -30,6 +31,7 @@ Edit `.env` with your settings:
 ```env
 PORT=3000
 GOOGLE_DRIVE_FOLDER_ID=your-folder-id
+# ALLOW_LOCAL_PDF_FALLBACK=true   # optional, only for local testing
 ```
 
 ### 3. Start the Server
@@ -45,8 +47,8 @@ npm run dev
 
 ### 4. Access the App
 
-- **Local**: http://localhost:3001
-- **Network**: http://YOUR_LOCAL_IP:3001 (find your IP with `ipconfig` on Windows or `ifconfig` on Mac/Linux)
+- **Local**: http://localhost:3000 (or your configured `PORT`)
+- **Network**: http://YOUR_LOCAL_IP:3000 (find your IP with `ipconfig` on Windows)
 
 ## Google Drive Setup (Optional)
 
@@ -158,12 +160,14 @@ Seated-Massage-Intake-Form/
 
 ## Security & Privacy
 
-- ✅ Data encrypted in transit (use HTTPS in production)
+- ✅ Data encrypted in transit (use HTTPS/tunnel in production)
 - ✅ No local database - data not stored on server
 - ✅ PDFs uploaded to private Google Drive folder
 - ✅ Service account authentication (no user OAuth)
 - ✅ Signature data embedded in PDF only
 - ✅ HIPAA considerations addressed
+
+By default, local PDF fallback is disabled to avoid local persistence. For local development/testing without Drive, set `ALLOW_LOCAL_PDF_FALLBACK=true` in `.env`.
 
 ## Troubleshooting
 
@@ -176,7 +180,7 @@ Seated-Massage-Intake-Form/
 - Verify credentials file exists: `google-credentials.json`
 - Check service account has access to the folder
 - Ensure Drive API is enabled in Google Cloud Console
-- PDFs will save locally as fallback
+- If `ALLOW_LOCAL_PDF_FALLBACK=true`, PDFs will save locally as fallback; otherwise submissions will error until Drive is configured.
 
 ### Signature not appearing in PDF
 - Ensure signature canvas is signed before submission

@@ -10,6 +10,7 @@ class DriveUploader {
         this.configured = false;
         this.drive = null;
         this.folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+        this.allowLocalFallback = String(process.env.ALLOW_LOCAL_PDF_FALLBACK).toLowerCase() === 'true';
         
         // Try to initialize Google Drive API
         this.initialize();
@@ -57,7 +58,11 @@ class DriveUploader {
         if (this.configured && this.drive) {
             return await this.uploadToGoogleDrive(pdfBuffer, filename);
         } else {
-            return await this.saveLocally(pdfBuffer, filename);
+            if (this.allowLocalFallback) {
+                console.log('⚠️  Google Drive not configured - using local fallback by env setting');
+                return await this.saveLocally(pdfBuffer, filename);
+            }
+            throw new Error('Google Drive is not configured and local fallback is disabled. Set ALLOW_LOCAL_PDF_FALLBACK=true to allow local saves.');
         }
     }
     
