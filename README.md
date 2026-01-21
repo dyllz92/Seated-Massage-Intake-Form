@@ -223,6 +223,9 @@ For issues or questions:
 - Review the troubleshooting section above
 - Check console logs for error messages
 
+## Deployment
+- GitHub Actions will auto-deploy to Azure on each push to `main`.
+
 ## License
 
 ISC License - For Flexion & Flow use
