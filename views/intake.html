@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Massage Intake Form - Flexion & Flow</title>
+    <title>Seated Chair Massage Intake - Flexion & Flow</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/forms.css">
 </head>
@@ -11,14 +11,14 @@
     <div class="container">
         <div class="form-header">
             <img src="/Flexion and Flow Logo.png" alt="Flexion & Flow Logo" class="logo-small">
-            <h1>Seated Chair Massage</h1>
-            <p class="subtitle">Client Intake Form</p>
+            <h1>Seated Chair Massage Intake</h1>
+            <p class="subtitle">Single universal form (mobile-friendly)</p>
         </div>
 
         <form id="intakeForm" class="intake-form">
-            <!-- Client Details -->
+            <!-- A. Details -->
             <section class="form-section">
-                <h2>Your Information</h2>
+                <h2>Details</h2>
                 
                 <div class="form-group">
                     <label for="fullName">Full Name: <span class="required">*</span></label>
@@ -26,35 +26,37 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Phone: <span class="required">*</span></label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <label for="mobile">Mobile: <span class="required">*</span></label>
+                    <input type="tel" id="mobile" name="mobile" pattern="^(\+?61|0)[2-478][0-9]{8}$" placeholder="e.g., 04xxxxxxxx or +61xxxxxxxxx" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="dob">Date of Birth: <span class="required">*</span></label>
-                    <input type="date" id="dob" name="dob" required>
+                    <label for="email">Email (optional):</label>
+                    <input type="email" id="email" name="email">
                 </div>
 
                 <div class="form-group">
-                    <label>Gender: <span class="required">*</span></label>
+                    <label>Company/Team:</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="gender" value="Male" required> Male</label>
-                        <label><input type="radio" name="gender" value="Female"> Female</label>
-                        <label><input type="radio" name="gender" value="Non-binary"> Non-binary</label>
-                        <label><input type="radio" name="gender" value="Prefer not to disclose"> Prefer not to disclose</label>
+                        <label><input type="radio" name="companyTeam" value="Well Corp"> Well Corp</label>
+                        <label><input type="radio" name="companyTeam" value="Hemisphere"> Hemisphere</label>
+                        <label><input type="radio" name="companyTeam" value="AO"> AO</label>
+                        <label><input type="radio" name="companyTeam" value="Other"> Other: <input type="text" name="companyTeamOther" id="companyTeamOther" maxlength="60"></label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="emergencyContact">Emergency Contact: <span class="required">*</span></label>
-                    <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Name and phone number">
+                <div class="consent-checkbox">
+                    <label>
+                        <input type="checkbox" name="ageConfirm18Plus" id="ageConfirm18Plus" required>
+                        <span>I confirm I am 18 years or older <span class="required">*</span></span>
+                    </label>
                 </div>
             </section>
 
-            <!-- Areas of Discomfort -->
+            <!-- C. Body Map (unchanged) -->
             <section class="form-section">
-                <h2>Where do you need help today?</h2>
-                <p class="section-note">Click on areas where you feel discomfort</p>
+                <h2>Body Map</h2>
+                <p class="section-note">Tap areas to mark discomfort. Tap a dot to remove.</p>
                 
                 <div class="muscle-map-container">
                     <div id="muscleMapContainer"></div>
@@ -63,136 +65,179 @@
                 </div>
             </section>
 
-            <!-- Treatment Preferences -->
+            <!-- E. Today’s Focus -->
             <section class="form-section">
-                <h2>Treatment Preferences</h2>
+                <h2>Today's Focus</h2>
+                
+                <div class="form-group">
+                    <label>Reasons today (select any):</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="reasonsToday" value="Neck/shoulder tension"> Neck/shoulder tension</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Upper back tightness"> Upper back tightness</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Stress/anxiety"> Stress/anxiety</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Forearm/wrist/hand tightness"> Forearm/wrist/hand tightness</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Posture fatigue"> Posture fatigue</label>
+                        <label><input type="checkbox" name="reasonsToday" value="General tension"> General tension</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Event/work fatigue"> Event/work fatigue</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Headache support"> Headache support</label>
+                        <label><input type="checkbox" name="reasonsToday" value="Other"> Other: <input type="text" name="reasonsOtherText" id="reasonsOtherText" maxlength="200"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Areas to focus (select any):</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="focusAreas" value="Neck"> Neck</label>
+                        <label><input type="checkbox" name="focusAreas" value="Shoulders"> Shoulders</label>
+                        <label><input type="checkbox" name="focusAreas" value="Upper back"> Upper back</label>
+                        <label><input type="checkbox" name="focusAreas" value="Mid back"> Mid back</label>
+                        <label><input type="checkbox" name="focusAreas" value="Arms"> Arms</label>
+                        <label><input type="checkbox" name="focusAreas" value="Forearms"> Forearms</label>
+                        <label><input type="checkbox" name="focusAreas" value="Hands"> Hands</label>
+                        <label><input type="checkbox" name="focusAreas" value="Lower back (light only)"> Lower back (light only)</label>
+                        <label><input type="checkbox" name="focusAreas" value="Other"> Other: <input type="text" name="focusOtherText" id="focusOtherText" maxlength="200"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Areas to avoid (select any):</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="avoidAreas" value="Neck"> Neck</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Shoulders"> Shoulders</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Upper back"> Upper back</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Arms"> Arms</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Forearms"> Forearms</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Hands"> Hands</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Lower back"> Lower back</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Any recent injury area"> Any recent injury area</label>
+                        <label><input type="checkbox" name="avoidAreas" value="Other"> Other: <input type="text" name="avoidOtherText" id="avoidOtherText" maxlength="200"></label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- D. Quick Health Check -->
+            <section class="form-section alert-section">
+                <h2>Quick Health Check</h2>
+                <p class="section-note">Tick any that apply. If any are ticked, a banner will appear to check with the therapist.</p>
+                
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="healthChecks" value="Pregnant"> Pregnant</label>
+                    <label><input type="checkbox" name="healthChecks" value="Recent surgery (last 6 months)"> Recent surgery (last 6 months)</label>
+                    <label><input type="checkbox" name="healthChecks" value="Recent injury (last 3 months)"> Recent injury (last 3 months)</label>
+                    <label><input type="checkbox" name="healthChecks" value="Heart condition"> Heart condition</label>
+                    <label><input type="checkbox" name="healthChecks" value="Pacemaker/implanted device"> Pacemaker/implanted device</label>
+                    <label><input type="checkbox" name="healthChecks" value="History of blood clots / DVT"> History of blood clots / DVT</label>
+                    <label><input type="checkbox" name="healthChecks" value="On blood thinners"> On blood thinners</label>
+                    <label><input type="checkbox" name="healthChecks" value="High blood pressure (uncontrolled)"> High blood pressure (uncontrolled)</label>
+                    <label><input type="checkbox" name="healthChecks" value="Diabetes"> Diabetes</label>
+                    <label><input type="checkbox" name="healthChecks" value="Cancer - current treatment"> Cancer - current treatment</label>
+                    <label><input type="checkbox" name="healthChecks" value="Osteoporosis / fragile bones"> Osteoporosis / fragile bones</label>
+                    <label><input type="checkbox" name="healthChecks" value="Epilepsy / seizures"> Epilepsy / seizures</label>
+                    <label><input type="checkbox" name="healthChecks" value="Skin infection/rash/open wound in areas to be treated"> Skin infection/rash/open wound in areas to be treated</label>
+                    <label><input type="checkbox" name="healthChecks" value="Fever / contagious illness today"> Fever / contagious illness today</label>
+                    <label><input type="checkbox" name="healthChecks" value="Allergies/sensitivities (balms/oils/fragrances)"> Allergies/sensitivities (balms/oils/fragrances)</label>
+                    <label><input type="checkbox" name="healthChecks" value="Numbness/tingling (unexplained)"> Numbness/tingling (unexplained)</label>
+                    <label><input type="checkbox" name="healthChecks" value="Dizziness/fainting episodes"> Dizziness/fainting episodes</label>
+                    <label><input type="checkbox" name="healthChecks" value="Other health concern"> Other health concern: <input type="text" name="otherHealthConcernText" id="otherHealthConcernText" maxlength="200"></label>
+                </div>
+
+                <div id="healthBanner" class="info-box hidden-field" style="background:#fff1f1; border-left-color:#e74c3c;">
+                    <p><strong>May not be suitable today - please check with the therapist.</strong></p>
+                    <label style="display:block; margin-top:8px;">
+                        <input type="checkbox" name="reviewedByTherapist" id="reviewedByTherapist">
+                        <span>Reviewed by therapist</span>
+                    </label>
+                    <div class="form-group" style="margin-top:10px;">
+                        <label for="reviewNote">Optional note:</label>
+                        <input type="text" id="reviewNote" name="reviewNote" maxlength="200">
+                    </div>
+                </div>
+            </section>
+
+            <!-- F. Preferences -->
+            <section class="form-section">
+                <h2>Preferences</h2>
                 
                 <div class="form-group">
                     <label>Pressure Preference: <span class="required">*</span></label>
                     <div class="radio-group">
-                        <label><input type="radio" name="pressure" value="Light" required> Light</label>
-                        <label><input type="radio" name="pressure" value="Medium"> Medium</label>
-                        <label><input type="radio" name="pressure" value="Deep"> Deep</label>
+                        <label><input type="radio" name="pressurePreference" value="Light" required> Light</label>
+                        <label><input type="radio" name="pressurePreference" value="Medium"> Medium</label>
+                        <label><input type="radio" name="pressurePreference" value="Firm"> Firm</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="areasAvoid">Any areas to avoid?</label>
-                    <input type="text" id="areasAvoid" name="areasAvoid" placeholder="e.g., right shoulder injury">
-                </div>
-            </section>
-
-            <!-- Health Screening -->
-            <section class="form-section alert-section">
-                <h2>Health & Safety</h2>
-                <p class="section-note">Please let us know about any of the following:</p>
-                
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="healthIssue" value="Pregnancy"> Currently pregnant</label>
-                    <label><input type="checkbox" name="healthIssue" value="Recent surgery"> Recent surgery or open wounds (last 3 months)</label>
-                    <label><input type="checkbox" name="healthIssue" value="Fever/infection"> Fever, flu, or contagious condition</label>
-                    <label><input type="checkbox" name="healthIssue" value="Skin condition"> Skin condition or infection</label>
-                    <label><input type="checkbox" name="healthIssue" value="Heart condition"> Heart condition or high blood pressure</label>
-                    <label><input type="checkbox" name="healthIssue" value="Cancer"> Cancer (current or recent treatment)</label>
-                    <label><input type="checkbox" name="healthIssue" value="Severe osteoporosis"> Severe osteoporosis or bone fragility</label>
-                    <label><input type="checkbox" name="healthIssue" value="Blood thinners"> Taking blood thinning medication</label>
-                    <label><input type="checkbox" name="healthIssue" value="Other"> Other health condition</label>
-                </div>
-
-                <div id="healthDetailsContainer" class="conditional-container hidden-field">
-                    <div class="form-group">
-                        <label for="healthDetails">Please describe:</label>
-                        <textarea id="healthDetails" name="healthDetails" rows="2" placeholder="Details about your health condition..."></textarea>
+                    <label>Work-related injury:</label>
+                    <div class="radio-group inline">
+                        <label><input type="radio" name="workRelatedInjury" value="No"> No</label>
+                        <label><input type="radio" name="workRelatedInjury" value="Yes"> Yes</label>
                     </div>
                 </div>
             </section>
 
-            <!-- Medications & Allergies -->
-            <section class="form-section">
-                <h2>Medications & Allergies</h2>
-                
-                <div class="form-group">
-                    <label for="medications">Current medications (especially blood thinners):</label>
-                    <textarea id="medications" name="medications" rows="2" placeholder="List any medications you're taking..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="allergies">Allergies (oils, lotions, latex):</label>
-                    <input type="text" id="allergies" name="allergies" placeholder="Any allergies we should know about?">
-                </div>
-            </section>
-
-            <!-- Consent -->
+            <!-- B. Consent & Signature -->
             <section class="form-section consent-section">
-                <h2>Consent & Agreement</h2>
+                <h2>Consent & Signature</h2>
                 
                 <div class="info-box">
-                    <p><strong>Before your massage:</strong></p>
+                    <p><strong>Notes:</strong></p>
                     <ul>
-                        <li>Massage is delivered fully clothed, no oils used</li>
-                        <li>Pressure is adjustable - tell us if you'd like less or more</li>
-                        <li>This is not a substitute for medical treatment</li>
-                        <li>You can stop the session at any time</li>
+                        <li>Delivered fully clothed, no oils used.</li>
+                        <li>Pressure is adjustable — tell us if you'd like less or more.</li>
+                        <li>This is not a substitute for medical treatment.</li>
+                        <li>You can stop the session at any time.</li>
                     </ul>
                 </div>
 
                 <div class="info-box" style="margin-top: 12px;">
-                    <p><strong>Privacy Notice:</strong></p>
+                    <p><strong>Privacy:</strong></p>
                     <ul>
-                        <li>Your information is used only for providing massage services today.</li>
-                        <li>Upon submission, a PDF of this form is securely stored in a private Google Drive folder.</li>
-                        <li>No local database is used; data is not retained on the server beyond generating the PDF.</li>
-                        <li>Use of HTTPS or a secure tunnel (e.g., ngrok/Cloudflare) is recommended for encrypted transmission.</li>
+                        <li>A PDF copy of your form is stored securely in a private Google Drive folder.</li>
+                        <li>The server does not retain your data beyond generating the PDF.</li>
+                        <li>Use HTTPS or a secure tunnel (e.g., ngrok/Cloudflare) for encrypted transmission.</li>
                     </ul>
                 </div>
 
                 <div class="consent-checkbox">
                     <label>
-                        <input type="checkbox" name="consentAccurate" id="consentAccurate" required>
-                        <span>I confirm the information above is accurate <span class="required">*</span></span>
+                        <input type="checkbox" name="consentGiven" id="consentGiven" required>
+                        <span>I consent to receive seated chair massage today <span class="required">*</span></span>
                     </label>
                 </div>
 
-                <div class="consent-checkbox">
-                    <label>
-                        <input type="checkbox" name="consentTreatment" id="consentTreatment" required>
-                        <span>I consent to receive massage today <span class="required">*</span></span>
-                    </label>
-                </div>
-
-                <div class="consent-checkbox">
-                    <label>
-                        <input type="checkbox" name="consentUnderstand" id="consentUnderstand" required>
-                        <span>I understand I can stop at any time <span class="required">*</span></span>
-                    </label>
-                </div>
-
-                <div class="consent-checkbox">
-                    <label>
-                        <input type="checkbox" name="privacyConsent">
-                        <span>I consent to my information being stored securely (optional)</span>
-                    </label>
-                </div>
-            </section>
-
-            <!-- Signature -->
-            <section class="form-section">
-                <h2>Signature</h2>
                 <div class="signature-container">
                     <canvas id="signatureCanvas" class="signature-pad"></canvas>
                     <button type="button" id="clearSignature" class="btn-secondary">Clear Signature</button>
                 </div>
                 <input type="hidden" id="signatureData" name="signature" required>
-                
+                <input type="hidden" id="signedAt" name="signedAt">
+            </section>
+
+            <!-- G. Optional Notes -->
+            <section class="form-section">
+                <h2>Optional Notes</h2>
                 <div class="form-group">
-                    <label for="signatureDate">Date: <span class="required">*</span></label>
-                    <input type="date" id="signatureDate" name="signatureDate" required>
+                    <label for="notes">Anything important to know (optional):</label>
+                    <textarea id="notes" name="notes" rows="2" maxlength="200" placeholder="Up to 200 characters"></textarea>
                 </div>
             </section>
 
-            <!-- Submit -->
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">Complete & Submit</button>
+            <!-- H. Marketing Opt-in (optional) -->
+            <section class="form-section">
+                <h2>Marketing Opt-in (optional)</h2>
+                <div class="consent-checkbox">
+                    <label><input type="checkbox" name="emailOptIn"> Receive occasional email updates</label>
+                </div>
+                <div class="consent-checkbox">
+                    <label><input type="checkbox" name="smsOptIn"> Receive occasional SMS updates</label>
+                </div>
+            </section>
+
+            <!-- Sticky Action Bar -->
+            <div class="form-actions sticky-actions">
+                <button type="button" id="declineBtn" class="btn-secondary">Decline / Not Treated</button>
+                <button type="submit" id="submitBtn" class="btn-primary" disabled>Submit Intake</button>
             </div>
         </form>
     </div>

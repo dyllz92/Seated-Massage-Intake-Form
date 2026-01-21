@@ -1,49 +1,98 @@
 // Intake Form Validation and Submission
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('intakeForm');
-    
-    // Show health details if any health issue is checked
-    const healthIssueCheckboxes = document.querySelectorAll('input[name="healthIssue"]');
-    const healthDetailsContainer = document.getElementById('healthDetailsContainer');
-    
-    healthIssueCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            const anyChecked = Array.from(healthIssueCheckboxes).some(cb => cb.checked);
-            if (anyChecked) {
-                healthDetailsContainer.classList.remove('hidden-field');
-                healthDetailsContainer.style.display = 'block';
-            } else {
-                healthDetailsContainer.classList.add('hidden-field');
-                healthDetailsContainer.style.display = 'none';
-            }
-        });
+    const submitBtn = document.getElementById('submitBtn');
+    const declineBtn = document.getElementById('declineBtn');
+
+    if (!form) return;
+
+    // Progressive disclosure for Other fields
+    const otherPairs = [
+        { checkboxName: 'reasonsToday', inputId: 'reasonsOtherText' },
+        { checkboxName: 'focusAreas', inputId: 'focusOtherText' },
+        { checkboxName: 'avoidAreas', inputId: 'avoidOtherText' },
+        { checkboxName: 'healthChecks', inputId: 'otherHealthConcernText' }
+    ];
+    otherPairs.forEach(({ checkboxName, inputId }) => {
+        const inputs = document.querySelectorAll(`input[name="${checkboxName}"]`);
+        const otherInput = document.getElementById(inputId);
+        if (!otherInput) return;
+        const update = () => {
+            const otherChecked = Array.from(inputs).some(i => i.checked && i.value === 'Other' || i.value === 'Other health concern');
+            otherInput.parentElement.style.display = otherChecked ? 'block' : 'none';
+            if (!otherChecked) otherInput.value = '';
+        };
+        inputs.forEach(i => i.addEventListener('change', update));
+        update();
     });
-    
-    // Set today's date as default
-    const dateInput = document.getElementById('signatureDate');
-    if (dateInput) {
-        dateInput.valueAsDate = new Date();
+
+    // Health red-flag banner
+    const healthChecks = document.querySelectorAll('input[name="healthChecks"]');
+    const healthBanner = document.getElementById('healthBanner');
+    const updateHealthBanner = () => {
+        const anyChecked = Array.from(healthChecks).some(cb => cb.checked);
+        if (anyChecked) {
+            healthBanner.classList.remove('hidden-field');
+            healthBanner.style.display = 'block';
+        } else {
+            healthBanner.classList.add('hidden-field');
+            healthBanner.style.display = 'none';
+            const reviewed = document.getElementById('reviewedByTherapist');
+            const note = document.getElementById('reviewNote');
+            if (reviewed) reviewed.checked = false;
+            if (note) note.value = '';
+        }
+    };
+    healthChecks.forEach(cb => cb.addEventListener('change', updateHealthBanner));
+    updateHealthBanner();
+
+    // Enable submit when required fields are valid
+    const requiredControls = [
+        document.getElementById('fullName'),
+        document.getElementById('mobile'),
+        document.getElementById('consentGiven')
+    ];
+    const signatureRequired = () => !window.signaturePad || window.signaturePad.isEmpty();
+    const updateSubmitEnabled = () => {
+        const allValid = requiredControls.every(ctrl => ctrl && (ctrl.type === 'checkbox' ? ctrl.checked : ctrl.value.trim().length > 0))
+            && !signatureRequired();
+        submitBtn.disabled = !allValid;
+    };
+    requiredControls.forEach(ctrl => ctrl && ctrl.addEventListener('input', updateSubmitEnabled));
+    if (document.getElementById('consentGiven')) {
+        document.getElementById('consentGiven').addEventListener('change', updateSubmitEnabled);
     }
-    
-    // Form submission
+    updateSubmitEnabled();
+
+    // Decline flow
+    declineBtn.addEventListener('click', async () => {
+        const reason = prompt('Optional: brief reason for decline (cancel to skip)');
+        await submitForm('declined', reason || '');
+    });
+
+    // Submit
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Validate signature
-        if (window.signaturePad.isEmpty()) {
+        await submitForm('submitted');
+    });
+
+    async function submitForm(status, declineReason = '') {
+        // Validate signature for submitted status
+        if (status === 'submitted' && window.signaturePad && window.signaturePad.isEmpty()) {
             alert('Please provide your signature before submitting.');
             return;
         }
-        
+
         // Get signature data
-        const signatureData = window.signaturePad.toDataURL();
-        document.getElementById('signatureData').value = signatureData;
-        
+        if (!window.signaturePad.isEmpty()) {
+            const signatureData = window.signaturePad.toDataURL();
+            document.getElementById('signatureData').value = signatureData;
+            document.getElementById('signedAt').value = new Date().toISOString();
+        }
+
         // Collect form data
         const formData = new FormData(form);
         const data = {};
-        
-        // Convert FormData to object, handling multiple values
         formData.forEach((value, key) => {
             if (data[key]) {
                 if (Array.isArray(data[key])) {
@@ -55,30 +104,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 data[key] = value;
             }
         });
-        
-        // Add metadata
-        data.submissionDate = new Date().toISOString();
-        data.formType = 'standard';
-        
+
+        // Normalize "Other" pairs: append text if provided
+        const normalizeMulti = (key, otherKey) => {
+            const v = data[key];
+            const arr = Array.isArray(v) ? v : v ? [v] : [];
+            if (data[otherKey] && data[otherKey].trim()) {
+                arr.push(`Other: ${data[otherKey].trim()}`);
+            }
+            data[key] = arr.length ? arr : undefined;
+        };
+        normalizeMulti('reasonsToday', 'reasonsOtherText');
+        normalizeMulti('focusAreas', 'focusOtherText');
+        normalizeMulti('avoidAreas', 'avoidOtherText');
+
+        // Health checks other
+        if (data['otherHealthConcernText'] && data['otherHealthConcernText'].trim()) {
+            const v = data['healthChecks'];
+            const arr = Array.isArray(v) ? v : v ? [v] : [];
+            arr.push(`Other: ${data['otherHealthConcernText'].trim()}`);
+            data['healthChecks'] = arr;
+        }
+
+        // Metadata
+        const nowIso = new Date().toISOString();
+        data.submissionDate = nowIso;
+        data.createdAt = nowIso;
+        data.updatedAt = nowIso;
+        data.status = status;
+        data.formType = 'universal';
+        if (declineReason) data.declineReason = declineReason;
+
         // Show loading
         showLoading(true);
-        
+
         try {
             const response = await fetch('/api/submit-form', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            
             const result = await response.json();
-            
             if (response.ok) {
-                // Success
                 window.location.href = '/success';
             } else {
-                alert('Error submitting form: ' + result.message);
+                alert('Error submitting form: ' + (result.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Submission error:', error);
@@ -86,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             showLoading(false);
         }
-    });
+    }
 });
 
 function showLoading(show) {

@@ -20,6 +20,26 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 
 ---
 
+## File Locations
+
+- Home page: [views/index.html](views/index.html)
+- Server & routes: [server.js](server.js)
+  - Routes: `/`, `/intake`, `/api/submit-form`, `/api/health`
+  - PDF filename format generation
+- Universal intake form (UI): [views/intake.html](views/intake.html)
+- Client logic (universal form): [public/js/intake-form.js](public/js/intake-form.js)
+- Conditional field handling: [public/js/conditionalFields.js](public/js/conditionalFields.js)
+- Signature capture: [public/js/signature.js](public/js/signature.js)
+- Body map component (unchanged): [public/js/muscleMap.js](public/js/muscleMap.js)
+  - Hidden field name persisted: `muscleMapMarks`
+- Styles (forms + sticky actions): [public/css/forms.css](public/css/forms.css)
+- PDF generation: [utils/pdfGenerator.js](utils/pdfGenerator.js)
+- Google Drive upload (with local fallback): [utils/driveUploader.js](utils/driveUploader.js)
+- Success page: [views/success.html](views/success.html)
+- Launcher script (Windows): [run-app.bat](run-app.bat)
+
+---
+
 ## Implementation Steps
 
 ### 1. Set up project foundation
@@ -30,19 +50,17 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 - [ ] Set up public access solution (ngrok/cloudflare tunnel)
 - [ ] Configure HTTPS for secure transmission
 
-### 2. Create intake form UI
-- [x] Create home page with logo and welcome message
-- [ ] Add two form option buttons (Currently: only one button shown)
-- [x] Design short form layout for mobile browsers
-  - [x] Essential client information fields
-  - [x] Basic consent agreement
-  - [x] Signature capture
-- [x] Design detailed form layout for mobile browsers
-  - [x] Comprehensive client information fields
-  - [x] Medical history fields
-  - [x] Detailed consent agreement
-  - [x] Signature capture
-- [x] Implement client-side validation for both forms
+### 2. Create intake form UI (Unified)
+- [x] Home page shows one primary CTA: Start Intake
+- [x] Single universal, checkbox-first intake form (mobile-friendly)
+  - [x] Details (fullName, mobile, email, companyTeam, 18+)
+  - [x] Consent + signature
+  - [x] Body map component (unchanged)
+  - [x] Quick health check
+  - [x] Today’s focus (reasons, focus/avoid)
+  - [x] Preferences (pressure, work-related injury)
+  - [x] Optional notes + marketing opt-in
+- [x] Client-side validation and progressive disclosure
 
 ### 3. Implement PDF generation
 - [x] Choose and install PDF library (PDFKit)
@@ -65,11 +83,10 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 - [x] Add privacy disclosure text
 - [x] Implement secure session handling
 
-### 6. Interactive Muscle Map (NEW)
-- [x] Create canvas-based body diagram
-- [x] Implement dot placement for marking discomfort areas
-- [x] Add click-to-remove functionality for dots
-- [x] Integrate with both intake forms
+### 6. Interactive Body Map
+- [x] Component remains unchanged (UI, styling, behaviour, schema)
+- [x] Dot placement + click-to-remove
+- [x] Integrated into the single intake form
 - [ ] Replace with actual SVG body maps (Female Body Map.svg / Male Body Map.svg)
 
 ---
@@ -79,9 +96,7 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ### Home Page Design
 - ✅ Welcome message for clients
 - ✅ Display Flexion & Flow logo
-- ✅ Two form options:
-  - **"I'm short on time"** → Quick 60-second form
-  - **"I need to provide you specific information"** → Detailed intake form
+- ✅ One primary button: Start Seated Chair Massage Intake
 
 ### Form 1: Quick 60-Second Intake (Option 2)
 **Basic Information:**
@@ -192,11 +207,14 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ## Notes & Updates
 
 ### January 21, 2026
-- Added Windows launcher: `run-app.bat` to start the server in a new Command Prompt, auto-open the browser, and clear any process on the configured port.
-- Launcher reads `PORT` from `.env` (fallback to environment var, then default `3000`).
-- Confirmed default server port: 3000 (configurable via `.env`).
-- Health endpoint available: `/api/health` reports Drive configuration status.
-- Google Drive uploader supports local fallback when `ALLOW_LOCAL_PDF_FALLBACK=true`.
+- Switched to a single universal intake form (no quick vs detailed split). [views/intake.html](views/intake.html), [public/js/intake-form.js](public/js/intake-form.js), redirects in [server.js](server.js#L25-L33)
+- Updated home page to one CTA: Start Intake. [views/index.html](views/index.html)
+- Kept body map component completely unchanged and integrated into the new form. [public/js/muscleMap.js](public/js/muscleMap.js), hidden field `muscleMapMarks` in [views/intake.html](views/intake.html)
+- Updated PDF template to match the universal form. [utils/pdfGenerator.js](utils/pdfGenerator.js)
+- Updated filename format: `ChairMassageIntake_{fullName}_{YYYY-MM-DD}_{HHmm}.pdf`. [server.js](server.js#L88-L96)
+- Launcher clears ports and auto-opens the app; reads `PORT` from `.env`. [run-app.bat](run-app.bat)
+- Health endpoint available: `/api/health` reports Drive configuration status. [server.js](server.js#L66-L74)
+- Google Drive uploader supports local fallback when `ALLOW_LOCAL_PDF_FALLBACK=true`. [utils/driveUploader.js](utils/driveUploader.js)
 
 ### January 20, 2026
 - Updated roadmap to reflect actual implementation status
@@ -211,11 +229,19 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ---
 
 ## Next Milestones (Q1 2026)
-- [ ] Home page: show both form options clearly (Quick + Detailed)
-- [ ] Replace canvas muscle map with detailed SVG body maps (female/male)
-- [ ] Robust validation and UX polish on mobile
+- [ ] Replace canvas body map with SVG diagrams (female/male)
+- [ ] Robust validation and UX polish on mobile (sticky actions, banners)
 - [ ] Basic unit tests for `pdfGenerator` and API routes
-- [ ] Optional: VS Code task for `dev` (nodemon) and documentation for tunneling (ngrok/Cloudflare Tunnel)
+- [ ] Tunneling/HTTPS docs and task updates (ngrok/Cloudflare Tunnel)
+
+---
+
+## Testing / Regression
+- Body map E2E: select dots → submit → reload record → PDF includes same selections.
+- Required validation: fullName, mobile, consent, signature.
+- Conditional “Other” fields appear only when selected.
+- PDF generation succeeds.
+- Drive upload succeeds; fallback works when enabled.
 
 ### January 19, 2026
 - Added dual-form approach: Quick 60-second form vs. Detailed intake form
