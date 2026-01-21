@@ -18,24 +18,34 @@ class DriveUploader {
     
     initialize() {
         try {
-            // Check if credentials file exists
-            const credentialsPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH || './google-credentials.json';
-            
-            if (fs.existsSync(credentialsPath)) {
-                const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
-                
+            let credentials;
+
+            // Check if credentials are provided as JSON string in env var (for cloud deployment)
+            if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+                credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+                console.log('✅ Using Google credentials from environment variable');
+            } else {
+                // Fall back to file path (for local development)
+                const credentialsPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH || './google-credentials.json';
+
+                if (fs.existsSync(credentialsPath)) {
+                    credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+                    console.log('✅ Using Google credentials from file');
+                }
+            }
+
+            if (credentials) {
                 const auth = new google.auth.GoogleAuth({
                     credentials,
                     scopes: ['https://www.googleapis.com/auth/drive.file']
                 });
-                
+
                 this.drive = google.drive({ version: 'v3', auth });
                 this.configured = true;
-                
                 console.log('✅ Google Drive API configured successfully');
             } else {
                 console.log('⚠️  Google Drive not configured - PDFs will be saved locally');
-                console.log('   Add google-credentials.json to enable Google Drive uploads');
+                console.log('   Add GOOGLE_SERVICE_ACCOUNT_KEY env var or google-credentials.json to enable');
             }
         } catch (error) {
             console.error('⚠️  Error initializing Google Drive:', error.message);
