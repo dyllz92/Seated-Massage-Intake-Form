@@ -180,10 +180,11 @@ A locally-hosted web form accessible via QR code for clients to complete massage
    - Should display both form options prominently ("Quick Form" and "Detailed Form")
    - Currently only shows one button to intake form
 
-2. **SVG Body Maps:**
-   - Female Body Map.svg and Male Body Map.svg files exist but not yet integrated
-   - Currently using canvas-drawn simple body outline
-   - Next step: Replace with detailed SVG diagrams
+2. ~~**SVG Body Maps:**~~ ✅ RESOLVED (January 21, 2026)
+   - ~~Female Body Map.svg and Male Body Map.svg files exist but not yet integrated~~
+   - ~~Currently using canvas-drawn simple body outline~~
+   - ~~Next step: Replace with detailed SVG diagrams~~
+   - **Resolution:** Gender-based body maps now integrated using PNG images with fallback to canvas drawing
 
 ---
 
@@ -206,7 +207,26 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 
 ## Notes & Updates
 
-### January 21, 2026
+### January 21, 2026 (Evening Update)
+- ✅ Added gender selection field to all forms (Male, Female, Non-binary, Prefer not to disclose)
+  - Updated [views/intake.html](views/intake.html) with gender field in Details section
+  - Updated [views/detailed-form.html](views/detailed-form.html) with gender field in Client Details section
+  - Updated [views/quick-form.html](views/quick-form.html) with gender field in Basic Information section
+- ✅ Integrated gender-based muscle map display
+  - Modified [public/js/muscleMap.js](public/js/muscleMap.js) to load correct body map image based on gender selection
+  - Female gender shows female body map ([public/img/Female_Body_Chart.png](public/img/Female_Body_Chart.png))
+  - Male, Non-binary, and Prefer not to disclose show male body map ([public/img/Male_Body_Chart.png](public/img/Male_Body_Chart.png))
+  - Muscle map clears when gender is changed to prevent confusion
+- ✅ Enhanced conditional field hiding for better UX
+  - Updated [public/js/intake-form.js](public/js/intake-form.js) to hide "Other" text fields until relevant checkbox/radio is selected
+  - Added hide/show for Company/Team "Other" text input
+  - Existing conditional logic already handles allergies and medications in detailed form via [public/js/conditionalFields.js](public/js/conditionalFields.js)
+- ✅ Added gender validation to all form submission handlers
+  - Updated [public/js/intake-form.js](public/js/intake-form.js) for universal intake form
+  - Updated [public/js/detailed-form.js](public/js/detailed-form.js) for detailed form
+  - Updated [public/js/quick-form.js](public/js/quick-form.js) for quick form
+
+### January 21, 2026 (Morning)
 - Switched to a single universal intake form (no quick vs detailed split). [views/intake.html](views/intake.html), [public/js/intake-form.js](public/js/intake-form.js), redirects in [server.js](server.js#L25-L33)
 - Updated home page to one CTA: Start Intake. [views/index.html](views/index.html)
 - Kept body map component completely unchanged and integrated into the new form. [public/js/muscleMap.js](public/js/muscleMap.js), hidden field `muscleMapMarks` in [views/intake.html](views/intake.html)
@@ -229,7 +249,9 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ---
 
 ## Next Milestones (Q1 2026)
-- [ ] Replace canvas body map with SVG diagrams (female/male)
+- [x] Replace canvas body map with gender-specific PNG diagrams (female/male) ✅ January 21, 2026
+- [x] Add gender selection to all forms ✅ January 21, 2026
+- [x] Enhanced conditional field hiding (Other fields, allergies, medications) ✅ January 21, 2026
 - [ ] Robust validation and UX polish on mobile (sticky actions, banners)
 - [ ] Basic unit tests for `pdfGenerator` and API routes
 - [ ] Tunneling/HTTPS docs and task updates (ngrok/Cloudflare Tunnel)

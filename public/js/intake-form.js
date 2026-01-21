@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!form) return;
 
-    // Progressive disclosure for Other fields
+    // Progressive disclosure for Other fields (checkboxes)
     const otherPairs = [
         { checkboxName: 'reasonsToday', inputId: 'reasonsOtherText' },
         { checkboxName: 'focusAreas', inputId: 'focusOtherText' },
@@ -18,13 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const otherInput = document.getElementById(inputId);
         if (!otherInput) return;
         const update = () => {
-            const otherChecked = Array.from(inputs).some(i => i.checked && i.value === 'Other' || i.value === 'Other health concern');
-            otherInput.parentElement.style.display = otherChecked ? 'block' : 'none';
+            const otherChecked = Array.from(inputs).some(i => i.checked && (i.value === 'Other' || i.value === 'Other health concern'));
+            otherInput.parentElement.style.display = otherChecked ? 'inline-block' : 'none';
             if (!otherChecked) otherInput.value = '';
         };
         inputs.forEach(i => i.addEventListener('change', update));
         update();
     });
+
+    // Progressive disclosure for Other fields (radio buttons)
+    const companyTeamInputs = document.querySelectorAll('input[name="companyTeam"]');
+    const companyTeamOtherInput = document.getElementById('companyTeamOther');
+    if (companyTeamOtherInput) {
+        const updateCompanyTeam = () => {
+            const otherChecked = Array.from(companyTeamInputs).some(i => i.checked && i.value === 'Other');
+            companyTeamOtherInput.style.display = otherChecked ? 'inline-block' : 'none';
+            if (!otherChecked) companyTeamOtherInput.value = '';
+        };
+        companyTeamInputs.forEach(i => i.addEventListener('change', updateCompanyTeam));
+        updateCompanyTeam();
+    }
 
     // Health red-flag banner
     const healthChecks = document.querySelectorAll('input[name="healthChecks"]');
@@ -52,9 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mobile'),
         document.getElementById('consentGiven')
     ];
+    const genderInputs = document.querySelectorAll('input[name="gender"]');
     const signatureRequired = () => !window.signaturePad || window.signaturePad.isEmpty();
     const updateSubmitEnabled = () => {
+        const genderSelected = Array.from(genderInputs).some(g => g.checked);
         const allValid = requiredControls.every(ctrl => ctrl && (ctrl.type === 'checkbox' ? ctrl.checked : ctrl.value.trim().length > 0))
+            && genderSelected
             && !signatureRequired();
         submitBtn.disabled = !allValid;
     };
@@ -62,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('consentGiven')) {
         document.getElementById('consentGiven').addEventListener('change', updateSubmitEnabled);
     }
+    genderInputs.forEach(g => g.addEventListener('change', updateSubmitEnabled));
     updateSubmitEnabled();
 
     // Decline flow
