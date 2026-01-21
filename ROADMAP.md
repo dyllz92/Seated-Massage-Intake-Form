@@ -10,7 +10,31 @@
 - ✅ Repository initialized
 - ✅ Core implementation complete
 - ✅ MVP features functional
-- ⏳ Minor UI/UX refinements in progress
+- ✅ Universal intake form with comprehensive health screening
+- ✅ Gender-based body mapping system
+- ✅ Color-coded health disclaimers (Red/Orange/Yellow/Green)
+- ⏳ Ready for deployment - pending network setup (ngrok/Cloudflare Tunnel)
+
+---
+
+## Priority Tasks Remaining
+
+### High Priority (Required for Production)
+1. **Set up public access solution** - Configure ngrok or Cloudflare Tunnel for internet access
+2. **Configure HTTPS** - Ensure secure transmission for HIPAA compliance
+3. **Generate QR code** - Create QR code linking to the form for easy mobile access
+4. **Mobile device testing** - Test form on actual mobile devices (iOS/Android)
+
+### Medium Priority (Quality & Maintenance)
+1. **Basic unit tests** - Add tests for `pdfGenerator` and API routes
+2. **Documentation** - Create setup guide for tunneling/HTTPS configuration
+
+### Low Priority (Future Enhancements)
+1. **Admin dashboard** - For viewing submissions
+2. **Email notifications** - On form submission
+3. **Multi-language support** - For diverse client base
+4. **Form analytics** - Usage and completion metrics
+5. **Backup/export** - Additional data management features
 
 ---
 
@@ -53,12 +77,12 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ### 2. Create intake form UI (Unified)
 - [x] Home page shows one primary CTA: Start Intake
 - [x] Single universal, checkbox-first intake form (mobile-friendly)
-  - [x] Details (fullName, mobile, email, companyTeam, 18+)
+  - [x] Details (fullName, mobile, email, gender, companyTeam, 18+)
   - [x] Consent + signature
-  - [x] Body map component (unchanged)
-  - [x] Quick health check
-  - [x] Today’s focus (reasons, focus/avoid)
-  - [x] Preferences (pressure, work-related injury)
+  - [x] Body map component with gender-specific images
+  - [x] Quick health check with color-coded disclaimers
+  - [x] What brings you to see me today (reasons + treatment consent areas)
+  - [x] Preferences (pressure preference only)
   - [x] Optional notes + marketing opt-in
 - [x] Client-side validation and progressive disclosure
 
@@ -84,10 +108,11 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 - [x] Implement secure session handling
 
 ### 6. Interactive Body Map
-- [x] Component remains unchanged (UI, styling, behaviour, schema)
-- [x] Dot placement + click-to-remove
+- [x] Component with gender-based image loading
+- [x] Dot placement + click-to-remove functionality
 - [x] Integrated into the single intake form
-- [ ] Replace with actual SVG body maps (Female Body Map.svg / Male Body Map.svg)
+- [x] Gender-specific PNG body maps (Female Body Map.png / Male Body Map.png)
+- [x] Clears marks when gender selection changes
 
 ---
 
@@ -176,15 +201,15 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 
 ### Open Questions
 
-1. **Home Page Improvement:**
-   - Should display both form options prominently ("Quick Form" and "Detailed Form")
-   - Currently only shows one button to intake form
+1. ~~**Home Page Improvement:**~~ ✅ RESOLVED (January 21, 2026)
+   - ~~Should display both form options prominently ("Quick Form" and "Detailed Form")~~
+   - **Resolution:** Project now uses a single universal intake form approach. The home page shows one "Start Intake" button that leads to the comprehensive universal form.
 
 2. ~~**SVG Body Maps:**~~ ✅ RESOLVED (January 21, 2026)
    - ~~Female Body Map.svg and Male Body Map.svg files exist but not yet integrated~~
    - ~~Currently using canvas-drawn simple body outline~~
    - ~~Next step: Replace with detailed SVG diagrams~~
-   - **Resolution:** Gender-based body maps now integrated using PNG images with fallback to canvas drawing
+   - **Resolution:** Gender-based body maps now integrated using PNG images (Female Body Map.png / Male Body Map.png) with fallback to canvas drawing
 
 ---
 
@@ -269,9 +294,6 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 ### January 20, 2026
 - Updated roadmap to reflect actual implementation status
 - Most core features are complete and functional
-- Identified remaining tasks:
-  - Home page needs to display both form options (Quick + Detailed)
-  - Muscle map visualization needs to use actual SVG body diagrams instead of canvas drawing
 - Added interactive muscle map feature (canvas-based with dot placement)
 - Server running successfully on port 3000
 - PDF generation and Google Drive integration working
@@ -282,9 +304,12 @@ A locally-hosted web form accessible via QR code for clients to complete massage
 - [x] Replace canvas body map with gender-specific PNG diagrams (female/male) ✅ January 21, 2026
 - [x] Add gender selection to all forms ✅ January 21, 2026
 - [x] Enhanced conditional field hiding (Other fields, allergies, medications) ✅ January 21, 2026
-- [ ] Robust validation and UX polish on mobile (sticky actions, banners)
+- [x] Implement color-coded health disclaimers system ✅ January 21, 2026
+- [x] Form cleanup (removed decline button, work-related injury field) ✅ January 21, 2026
+- [ ] Mobile testing and UX validation (test on actual mobile devices)
 - [ ] Basic unit tests for `pdfGenerator` and API routes
-- [ ] Tunneling/HTTPS docs and task updates (ngrok/Cloudflare Tunnel)
+- [ ] Tunneling/HTTPS setup and documentation (ngrok/Cloudflare Tunnel)
+- [ ] QR code generation for easy mobile access
 
 ---
 
