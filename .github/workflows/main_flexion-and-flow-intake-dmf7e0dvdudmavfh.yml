@@ -1,10 +1,6 @@
-name: Build and deploy Node.js app to Azure Web App - flexion-and-flow-intake
+name: (disabled) legacy deploy workflow
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+on: []
 
 permissions:
   id-token: write
