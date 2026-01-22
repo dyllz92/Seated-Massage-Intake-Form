@@ -9,12 +9,14 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="/Flexion and Flow Logo.png" alt="Flexion & Flow Logo" class="logo">
+            <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo">
         </div>
 
         <div style="text-align:center; margin-bottom:12px;">
-            <!-- Replace with provided chair image at /public/img/chair.png -->
-            <img src="/img/chair.png" alt="Seated massage chair" class="hero-chair">
+            <picture>
+                <source srcset="/img/chair.png" type="image/png">
+                <img src="/img/chair.svg" alt="Seated massage chair" class="hero-chair">
+            </picture>
         </div>
 
         <div class="welcome-section">
@@ -24,13 +26,19 @@
 
         <div class="form-selection" style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <a href="/intake?form=seated" class="form-button" style="text-align: center; padding:18px; display:block; background:#fff; border-radius:10px; text-decoration:none; color:inherit;">
-                <div class="button-icon" aria-hidden="true">💺</div>
+                <picture>
+                    <source srcset="/img/chair.png" type="image/png">
+                    <img src="/img/chair.svg" alt="Seated massage" class="button-icon-image" aria-hidden="true">
+                </picture>
                 <h2>Seated Massage Intake</h2>
                 <p style="margin:6px 0 0 0;">Quick seated chair massage form — ~2–5 minutes</p>
             </a>
 
             <a href="/intake?form=table" class="form-button" style="text-align: center; padding:18px; display:block; background:#fff; border-radius:10px; text-decoration:none; color:inherit;">
-                <img src="/img/table.png" alt="Table massage" class="button-icon-image" aria-hidden="true">
+                <picture>
+                    <source srcset="/img/table.png" type="image/png">
+                    <img src="/img/table.svg" alt="Table massage" class="button-icon-image" aria-hidden="true">
+                </picture>
                 <h2>Table Massage Intake</h2>
                 <p style="margin:6px 0 0 0;">Full table massage form — ~5–8 minutes</p>
             </a>

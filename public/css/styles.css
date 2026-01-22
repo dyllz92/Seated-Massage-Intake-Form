@@ -59,11 +59,11 @@ body {
 
 /* Hero chair image on homepage */
 .hero-chair {
-    max-width: 360px;
-    width: 60%;
+    max-width: 520px;
+    width: 80%;
     height: auto;
     display: inline-block;
-    margin: 6px auto 12px auto;
+    margin: 8px auto 16px auto;
 }
 
 .welcome-section {
@@ -134,10 +134,11 @@ body {
 
 /* Button image variant (for table/other icons) */
 .button-icon-image {
-    width: 72px;
+    width: 64px;
     height: auto;
     display: block;
     margin: 0 auto 10px auto;
+    object-fit: contain;
 }
 
 .form-button h2 {
@@ -180,7 +181,7 @@ body {
         font-size: 32px;
     }
     .button-icon-image {
-        width: 56px;
+        width: 52px;
     }
 
     .form-button h2 {
