@@ -6,28 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!form) return;
 
     // Progressive disclosure for Other fields (checkboxes)
-    const otherPairs = [
-        { checkboxName: 'reasonsToday', inputId: 'reasonsOtherText' },
-        { checkboxName: 'healthChecks', inputId: 'otherHealthConcernText' }
-    ];
-    otherPairs.forEach(({ checkboxName, inputId }) => {
-        const inputs = document.querySelectorAll(`input[name="${checkboxName}"]`);
-        const otherInput = document.getElementById(inputId);
-        if (!otherInput) return;
-        const update = () => {
-            const otherChecked = Array.from(inputs).some(i => i.checked && (i.value === 'Other' || i.value === 'Other health concern'));
-            otherInput.parentElement.style.display = otherChecked ? 'inline-block' : 'none';
-            if (!otherChecked) otherInput.value = '';
-        };
-        inputs.forEach(i => i.addEventListener('change', update));
-        update();
-    });
-
-    // Health red-flag banner
-    const healthChecks = document.querySelectorAll('input[name="healthChecks"]');
+    // Health red-flag banner and 'no issues' mutual exclusivity
+    const healthChecks = Array.from(document.querySelectorAll('input[name="healthChecks"]'));
     const healthBanner = document.getElementById('healthBanner');
+    const noHealthIssues = document.getElementById('noHealthIssues');
+
     const updateHealthBanner = () => {
-        const anyChecked = Array.from(healthChecks).some(cb => cb.checked);
+        const anyChecked = healthChecks.some(cb => cb.checked);
         if (anyChecked) {
             healthBanner.classList.remove('hidden-field');
             healthBanner.style.display = 'block';
@@ -40,30 +25,37 @@ document.addEventListener('DOMContentLoaded', () => {
             if (note) note.value = '';
         }
     };
-    healthChecks.forEach(cb => cb.addEventListener('change', updateHealthBanner));
+
+    // When 'I feel well today' is checked, clear other health checks. If any health check selected, clear 'no issues'
+    healthChecks.forEach(cb => cb.addEventListener('change', () => {
+        if (cb.checked && noHealthIssues && noHealthIssues.checked) {
+            noHealthIssues.checked = false;
+        }
+        updateHealthBanner();
+    }));
+
+    if (noHealthIssues) {
+        noHealthIssues.addEventListener('change', () => {
+            if (noHealthIssues.checked) {
+                healthChecks.forEach(cb => cb.checked = false);
+                updateHealthBanner();
+            }
+        });
+    }
+
     updateHealthBanner();
 
-    // Enable submit when required fields are valid
-    const requiredControls = [
-        document.getElementById('fullName'),
-        document.getElementById('mobile'),
-        document.getElementById('consentGiven')
-    ];
-    const genderInputs = document.querySelectorAll('input[name="gender"]');
-    const signatureRequired = () => !window.signaturePad || window.signaturePad.isEmpty();
-    const updateSubmitEnabled = () => {
-        const genderSelected = Array.from(genderInputs).some(g => g.checked);
-        const allValid = requiredControls.every(ctrl => ctrl && (ctrl.type === 'checkbox' ? ctrl.checked : ctrl.value.trim().length > 0))
-            && genderSelected
-            && !signatureRequired();
-        submitBtn.disabled = !allValid;
-    };
-    requiredControls.forEach(ctrl => ctrl && ctrl.addEventListener('input', updateSubmitEnabled));
-    if (document.getElementById('consentGiven')) {
-        document.getElementById('consentGiven').addEventListener('change', updateSubmitEnabled);
+    // Auto-expand avoidNotes textarea
+    const avoidNotes = document.getElementById('avoidNotes');
+    if (avoidNotes) {
+        const resize = () => {
+            avoidNotes.style.height = 'auto';
+            avoidNotes.style.height = (avoidNotes.scrollHeight) + 'px';
+        };
+        avoidNotes.addEventListener('input', resize);
+        // initialize
+        setTimeout(resize, 0);
     }
-    genderInputs.forEach(g => g.addEventListener('change', updateSubmitEnabled));
-    updateSubmitEnabled();
 
     // Submit
     form.addEventListener('submit', async (e) => {
@@ -72,6 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function submitForm(status) {
+        // Validate terms, treatment consent and signature
+        const termsAcceptedEl = document.getElementById('termsAccepted');
+        const treatmentConsentEl = document.getElementById('treatmentConsent');
+
+        if (!termsAcceptedEl || !treatmentConsentEl) {
+            alert('Consent fields are not available. Please reload the page.');
+            return;
+        }
+
+        if (!termsAcceptedEl.checked) {
+            alert('Please confirm you have read and agree to the Terms and Privacy Collection Notice.');
+            return;
+        }
+
+        if (!treatmentConsentEl.checked) {
+            alert('Please confirm you consent to receive seated chair massage today.');
+            return;
+        }
+
         // Validate signature
         if (window.signaturePad && window.signaturePad.isEmpty()) {
             alert('Please provide your signature before submitting.');
@@ -100,26 +111,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Normalize "Other" pairs: append text if provided
-        const normalizeMulti = (key, otherKey) => {
-            const v = data[key];
-            const arr = Array.isArray(v) ? v : v ? [v] : [];
-            if (data[otherKey] && data[otherKey].trim()) {
-                arr.push(`Other: ${data[otherKey].trim()}`);
-            }
-            data[key] = arr.length ? arr : undefined;
-        };
-        normalizeMulti('reasonsToday', 'reasonsOtherText');
-        normalizeMulti('focusAreas', 'focusOtherText');
-        normalizeMulti('avoidAreas', 'avoidOtherText');
-
-        // Health checks other
-        if (data['otherHealthConcernText'] && data['otherHealthConcernText'].trim()) {
-            const v = data['healthChecks'];
-            const arr = Array.isArray(v) ? v : v ? [v] : [];
-            arr.push(`Other: ${data['otherHealthConcernText'].trim()}`);
-            data['healthChecks'] = arr;
+        // Normalize health checks to array and include otherHealthConcernText if present
+        if (data['healthChecks']) {
+            data['healthChecks'] = Array.isArray(data['healthChecks']) ? data['healthChecks'] : [data['healthChecks']];
         }
+        if (data['otherHealthConcernText'] && data['otherHealthConcernText'].trim()) {
+            data['healthChecks'] = data['healthChecks'] ? data['healthChecks'].concat([`Other: ${data['otherHealthConcernText'].trim()}`]) : [`Other: ${data['otherHealthConcernText'].trim()}`];
+        }
+
+        // Ensure 'noHealthIssues' represented
+        if (document.getElementById('noHealthIssues') && document.getElementById('noHealthIssues').checked) {
+            data['healthChecks'] = ['No issues to report'];
+        }
+
+        // Ensure consent booleans are included
+        data.termsAccepted = !!document.getElementById('termsAccepted') && document.getElementById('termsAccepted').checked;
+        data.treatmentConsent = !!document.getElementById('treatmentConsent') && document.getElementById('treatmentConsent').checked;
+        data.publicSettingOk = !!document.getElementById('publicSettingOk') && document.getElementById('publicSettingOk').checked;
 
         // Metadata
         const nowIso = new Date().toISOString();

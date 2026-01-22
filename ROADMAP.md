@@ -233,7 +233,8 @@ A web-based intake form application for massage therapy clients. Features a 6-st
 - Updated roadmap to reflect actual implementation status
 - Most core features are complete and functional
 - Identified remaining tasks:
-  - Home page needs to display both form options (Quick + Detailed)
+  - Home page now displays both form options (Seated + Table)
+  - Wizard simplified to a mobile-friendly 6-step flow (Jan 22, 2026)
   - Muscle map visualization needs to use actual SVG body diagrams instead of canvas drawing
 - Added interactive muscle map feature (canvas-based with dot placement)
 - Server running successfully on port 8080

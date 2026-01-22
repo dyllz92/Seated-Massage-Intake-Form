@@ -11,48 +11,39 @@
     // Step validation rules
     const stepValidation = {
         1: () => {
-            // Step 1: Details - fullName, mobile, gender, 18+ confirmation required
+            // Step 1: fullName + mobile required
             const fullName = document.getElementById('fullName');
             const mobile = document.getElementById('mobile');
-            const genderInputs = document.querySelectorAll('input[name="gender"]');
-            const ageConfirm = document.getElementById('ageConfirm18Plus');
-
-            const genderSelected = Array.from(genderInputs).some(g => g.checked);
             const nameValid = fullName && fullName.value.trim().length > 0;
             const mobileValid = mobile && mobile.value.trim().length > 0;
-            const ageValid = ageConfirm && ageConfirm.checked;
-
-            return nameValid && mobileValid && genderSelected && ageValid;
+            return nameValid && mobileValid;
         },
         2: () => {
-            // Step 2: Body Map - at least one mark required
-            const muscleMapInput = document.getElementById('muscleMapMarks');
-            if (muscleMapInput) {
-                const marks = JSON.parse(muscleMapInput.value || '[]');
-                return marks.length > 0;
-            }
-            return true;
-        },
-        3: () => {
-            // Step 3: Today's Focus - at least one reason and one consent area required
-            const reasonsChecked = Array.from(document.querySelectorAll('input[name="reasonsToday"]:checked'));
-            const consentAreasChecked = Array.from(document.querySelectorAll('input[name="consentAreas"]:checked'));
-            return reasonsChecked.length > 0 && consentAreasChecked.length > 0;
-        },
-        4: () => {
-            // Step 4: Health Check - optional, always valid
-            return true;
-        },
-        5: () => {
-            // Step 5: Preferences - pressure preference required
+            // Step 2: pressure preference required (body map optional)
             const pressureInputs = document.querySelectorAll('input[name="pressurePreference"]');
             return Array.from(pressureInputs).some(p => p.checked);
         },
-        6: () => {
-            // Step 6: Consent - consent checkbox and signature required
-            const consentGiven = document.getElementById('consentGiven');
+        3: () => {
+            // Step 3: health check optional
+            return true;
+        },
+        4: () => {
+            // Step 4: anything to avoid optional
+            return true;
+        },
+        5: () => {
+            // Step 5: consent + signature required
+            const treatmentConsent = document.getElementById('treatmentConsent');
             const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
-            return consentGiven && consentGiven.checked && signatureValid;
+            return treatmentConsent && treatmentConsent.checked && signatureValid;
+        },
+        6: () => {
+            // Step 6: marketing opt-in optional
+            // Submission requires the consent/signature as well — ensure they're present
+            const termsAccepted = document.getElementById('termsAccepted');
+            const treatmentConsent = document.getElementById('treatmentConsent');
+            const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
+            return termsAccepted && termsAccepted.checked && treatmentConsent && treatmentConsent.checked && signatureValid;
         }
     };
 
@@ -127,17 +118,23 @@
 
         updateButtonStates();
 
-        // Re-initialize muscle map if on step 2
-        if (currentStep === 2 && window.initMuscleMap) {
+        // Update textual step count (e.g., "Step 2 of 6")
+        const stepCountEl = document.getElementById('stepCount');
+        if (stepCountEl) {
+            stepCountEl.textContent = `Step ${currentStep} of ${TOTAL_STEPS}`;
+        }
+
+        // Ensure muscle map redraw on step 2 (if muscleMap instance exists)
+        if (currentStep === 2 && window.muscleMap && typeof window.muscleMap.redrawDots === 'function') {
             setTimeout(() => {
-                window.initMuscleMap();
+                try { window.muscleMap.redrawDots(); } catch (e) { /* ignore */ }
             }, 100);
         }
 
-        // Re-initialize signature pad if on step 6
-        if (currentStep === 6 && window.initSignaturePad) {
+        // Ensure signature pad is resized/available on step 5 (signature step)
+        if (currentStep === 5 && window.signaturePad && typeof window.signaturePad.resizeCanvas === 'function') {
             setTimeout(() => {
-                window.initSignaturePad();
+                try { window.signaturePad.resizeCanvas(); } catch (e) { /* ignore */ }
             }, 100);
         }
     }
@@ -195,14 +192,19 @@
                 else if (consentAreasChecked.length === 0) message = 'Please select at least one area you consent to treatment for.';
                 break;
             case 5:
-                message = 'Please select your pressure preference.';
+                const treatmentConsent = document.getElementById('treatmentConsent');
+                const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
+                if (!treatmentConsent || !treatmentConsent.checked) message = 'Please consent to receive treatment.';
+                else if (!signatureValid) message = 'Please provide your signature.';
                 break;
             case 6:
-                const consentGiven = document.getElementById('consentGiven');
-                const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
+                const termsAccepted = document.getElementById('termsAccepted');
+                const treatmentConsent2 = document.getElementById('treatmentConsent');
+                const signatureValid2 = window.signaturePad && !window.signaturePad.isEmpty();
 
-                if (!consentGiven || !consentGiven.checked) message = 'Please consent to receive treatment.';
-                else if (!signatureValid) message = 'Please provide your signature.';
+                if (!termsAccepted || !termsAccepted.checked) message = 'Please confirm you have read the Terms and Privacy.';
+                else if (!treatmentConsent2 || !treatmentConsent2.checked) message = 'Please consent to receive treatment.';
+                else if (!signatureValid2) message = 'Please provide your signature.';
                 break;
         }
 

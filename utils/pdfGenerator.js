@@ -102,45 +102,41 @@ function generateUniversalForm(doc, data) {
     addField(doc, 'Full name', data.fullName);
     addField(doc, 'Mobile', data.mobile);
     addField(doc, 'Email', data.email || 'Not provided');
-    addField(doc, 'Company/Team', formatValue(data.companyTeam, data.companyTeamOther));
-    addField(doc, '18+ confirmed', data.ageConfirm18Plus ? 'Yes' : 'No');
 
     addSection(doc, 'Body Map');
-    if (data.muscleMapMarks && data.muscleMapMarks !== '[]') {
+    if (data.muscleMapMarks) {
         try {
-            const marks = JSON.parse(data.muscleMapMarks);
-            addField(doc, 'Discomfort areas marked', marks.length > 0 ? `${marks.length} area(s) marked on body map` : 'None');
+            const marks = typeof data.muscleMapMarks === 'string' ? JSON.parse(data.muscleMapMarks) : data.muscleMapMarks;
+            addField(doc, 'Discomfort areas marked', Array.isArray(marks) && marks.length > 0 ? `${marks.length} area(s) marked on body map` : 'None');
         } catch (e) {
-            // Silently ignore parse errors
             addField(doc, 'Discomfort areas marked', 'Parse error');
         }
     } else {
         addField(doc, 'Discomfort areas marked', 'None');
     }
 
-    addSection(doc, "Today's Focus");
-    addField(doc, 'Reasons today', formatArrayValue(data.reasonsToday, data.reasonsOtherText));
-    addField(doc, 'Areas to focus', formatArrayValue(data.focusAreas, data.focusOtherText));
-    addField(doc, 'Areas to avoid', formatArrayValue(data.avoidAreas, data.avoidOtherText));
-
-    addSection(doc, 'Preferences');
+    addSection(doc, "Preferences");
     addField(doc, 'Pressure preference', data.pressurePreference || 'Not specified');
-    addField(doc, 'Work-related injury', data.workRelatedInjury || 'Not specified');
 
     addSection(doc, 'Quick Health Check');
-    addField(doc, 'Items flagged', formatArrayValue(data.healthChecks) || 'None flagged');
+    addField(doc, 'Items flagged', Array.isArray(data.healthChecks) ? data.healthChecks.join(', ') : (data.healthChecks || 'None'));
     if (data.reviewedByTherapist) {
         addField(doc, 'Reviewed by therapist', 'Yes');
         if (data.reviewNote) addField(doc, 'Review note', data.reviewNote);
     }
 
-    if (data.notes) {
-        addSection(doc, 'Notes');
-        addField(doc, 'Notes', data.notes);
+    if (data.avoidNotes) {
+        addSection(doc, 'Anything to avoid');
+        addField(doc, 'Avoid', data.avoidNotes);
     }
 
     addSection(doc, 'Consent');
-    addField(doc, 'Consent given', data.consentGiven ? 'Yes' : 'No');
+    addField(doc, 'Terms accepted', data.termsAccepted ? 'Yes' : 'No');
+    addField(doc, 'Treatment consent', data.treatmentConsent ? 'Yes' : 'No');
+    if (typeof data.publicSettingOk !== 'undefined') {
+        addField(doc, 'Public setting acknowledgement', data.publicSettingOk ? 'Yes' : 'No');
+    }
+    if (data.signedAt) addField(doc, 'Signed at', data.signedAt);
     addField(doc, 'Status', data.status || 'submitted');
 }
 

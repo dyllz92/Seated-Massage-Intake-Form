@@ -41,12 +41,12 @@
                 <span class="step-label">Consent</span>
             </div>
         </div>
+        <div id="stepCount" class="step-count" style="text-align:center; margin:12px 0; font-weight:600; color:var(--text-dark);">Step 1 of 6</div>
 
         <form id="intakeForm" class="intake-form wizard-form">
-            <!-- A. Details -->
-            <section class="form-section">
-                <h2>Details</h2>
-                
+            <!-- Step 1: Details -->
+            <div class="wizard-step form-section" data-step="1">
+                <h2>Step 1 — Details</h2>
                 <div class="form-group">
                     <label for="fullName">Full Name: <span class="required">*</span></label>
                     <input type="text" id="fullName" name="fullName" required>
@@ -54,90 +54,49 @@
 
                 <div class="form-group">
                     <label for="mobile">Mobile: <span class="required">*</span></label>
-                    <input type="tel" id="mobile" name="mobile" pattern="^(\+?61|0)[2-478][0-9]{8}$" placeholder="e.g., 04xxxxxxxx or +61xxxxxxxxx" required>
+                    <input type="tel" id="mobile" name="mobile" placeholder="e.g., 04xxxxxxxx or +61xxxxxxxxx" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email: <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email (optional):</label>
+                    <input type="email" id="email" name="email">
                 </div>
-
                 <div class="form-group">
-                    <label>Gender: <span class="required">*</span></label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="gender" value="Male" required> Male</label>
+                    <label>Gender (optional):</label>
+                    <div class="radio-group inline">
+                        <label><input type="radio" name="gender" value="Male"> Male</label>
                         <label><input type="radio" name="gender" value="Female"> Female</label>
-                        <label><input type="radio" name="gender" value="Non-binary"> Non-binary</label>
                         <label><input type="radio" name="gender" value="Prefer not to disclose"> Prefer not to disclose</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="companyTeam">Company/Team:</label>
-                    <input type="text" id="companyTeam" name="companyTeam" maxlength="60" placeholder="e.g., Well Corp, Hemisphere, AO">
-                </div>
-
-                <div class="consent-checkbox">
-                    <label>
-                        <input type="checkbox" name="ageConfirm18Plus" id="ageConfirm18Plus" required>
-                        <span>I confirm I am 18 years or older <span class="required">*</span></span>
-                    </label>
-                </div>
-            </section>
-
-            <!-- C. Body Map -->
-            <section class="form-section">
-                <h2>Body Map</h2>
-                <p class="section-note">Please select on the body map below, the areas you feel most discomfort or pain. Tap areas to mark discomfort. Tap a dot to remove.</p>
-
+            <!-- Step 2: Today's focus -->
+            <div class="wizard-step form-section" data-step="2">
+                <h2>Step 2 — Today's Focus</h2>
+                <p class="section-note">Tap the body map to mark areas of discomfort. Tap a dot to remove it.</p>
                 <div class="muscle-map-container">
                     <div id="muscleMapContainer"></div>
                     <button type="button" id="clearMuscleMap" class="btn-secondary">Clear</button>
                     <input type="hidden" id="muscleMapMarks" name="muscleMapMarks" value="[]">
                 </div>
-            </section>
-
-            <!-- E. What brings you to see me today? -->
-            <section class="form-section">
-                <h2>What brings you to see me today?</h2>
 
                 <div class="form-group">
-                    <label>Select any that apply: <span class="required">*</span></label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="reasonsToday" value="Stress/anxiety"> Stress/anxiety</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Posture fatigue"> Posture fatigue</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Event/work fatigue"> Event/work fatigue</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Headache support"> Headache support</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Gym soreness"> Gym soreness</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Improve sleep"> Improve sleep</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Relaxation/self-care"> Relaxation/self-care</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Sports recovery"> Sports recovery</label>
-                        <label><input type="checkbox" name="reasonsToday" value="Other"> Other: <input type="text" name="reasonsOtherText" id="reasonsOtherText" maxlength="200"></label>
+                    <label>Pressure Preference: <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="pressurePreference" value="Light"> Light</label>
+                        <label><input type="radio" name="pressurePreference" value="Medium"> Medium</label>
+                        <label><input type="radio" name="pressurePreference" value="Firm"> Firm</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>I consent to treatment of the below areas: <span class="required">*</span></label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="consentAreas" value="Neck"> Neck</label>
-                        <label><input type="checkbox" name="consentAreas" value="Shoulders"> Shoulders</label>
-                        <label><input type="checkbox" name="consentAreas" value="Upper back"> Upper back</label>
-                        <label><input type="checkbox" name="consentAreas" value="Mid back"> Mid back</label>
-                        <label><input type="checkbox" name="consentAreas" value="Lower back (light only)"> Lower back (light only)</label>
-                        <label><input type="checkbox" name="consentAreas" value="Arms"> Arms</label>
-                        <label><input type="checkbox" name="consentAreas" value="Forearms"> Forearms</label>
-                        <label><input type="checkbox" name="consentAreas" value="Hands"> Hands</label>
-                        <label><input type="checkbox" name="consentAreas" value="Head/scalp"> Head/scalp</label>
-                    </div>
-                </div>
-            </section>
+            <!-- Step 3: Quick Health Check -->
+            <div class="wizard-step form-section" data-step="3">
+                <h2>Step 3 — Quick Health Check</h2>
+                <p class="section-note">Tick any that apply. Please discuss flags with your therapist.</p>
 
-            <!-- D. Quick Health Check -->
-            <section class="form-section">
-                <h2>Quick Health Check</h2>
-                <p class="section-note">Tick any that apply. Please discuss any relevant flags with your therapist.</p>
-                
-                <div class="checkbox-group">
+                <div class="checkbox-group" id="healthChecksGroup">
                     <label><input type="checkbox" name="healthChecks" value="Pregnant"> Pregnant</label>
                     <label><input type="checkbox" name="healthChecks" value="Recent surgery (last 6 months)"> Recent surgery (last 6 months)</label>
                     <label><input type="checkbox" name="healthChecks" value="Recent injury (last 3 months)"> Recent injury (last 3 months)</label>
@@ -147,15 +106,13 @@
                     <label><input type="checkbox" name="healthChecks" value="On blood thinners"> On blood thinners</label>
                     <label><input type="checkbox" name="healthChecks" value="High blood pressure (uncontrolled)"> High blood pressure (uncontrolled)</label>
                     <label><input type="checkbox" name="healthChecks" value="Diabetes"> Diabetes</label>
-                    <label><input type="checkbox" name="healthChecks" value="Cancer - current treatment"> Cancer - current treatment</label>
-                    <label><input type="checkbox" name="healthChecks" value="Osteoporosis / fragile bones"> Osteoporosis / fragile bones</label>
-                    <label><input type="checkbox" name="healthChecks" value="Epilepsy / seizures"> Epilepsy / seizures</label>
                     <label><input type="checkbox" name="healthChecks" value="Skin infection/rash/open wound in areas to be treated"> Skin infection/rash/open wound in areas to be treated</label>
                     <label><input type="checkbox" name="healthChecks" value="Fever / contagious illness today"> Fever / contagious illness today</label>
                     <label><input type="checkbox" name="healthChecks" value="Allergies/sensitivities (balms/oils/fragrances)"> Allergies/sensitivities (balms/oils/fragrances)</label>
                     <label><input type="checkbox" name="healthChecks" value="Numbness/tingling (unexplained)"> Numbness/tingling (unexplained)</label>
                     <label><input type="checkbox" name="healthChecks" value="Dizziness/fainting episodes"> Dizziness/fainting episodes</label>
                     <label><input type="checkbox" name="healthChecks" value="Other health concern"> Other health concern: <input type="text" name="otherHealthConcernText" id="otherHealthConcernText" maxlength="200"></label>
+                    <label><input type="checkbox" id="noHealthIssues"> I feel well today / No issues to report</label>
                 </div>
 
                 <div id="healthBanner" class="info-box hidden-field" style="background:transparent; border:2px solid #2196F3; margin-top:20px;">
@@ -169,25 +126,20 @@
                         <input type="text" id="reviewNote" name="reviewNote" maxlength="200">
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- F. Preferences -->
-            <section class="form-section">
-                <h2>Preferences</h2>
-
+            <!-- Step 4: Anything to avoid -->
+            <div class="wizard-step form-section" data-step="4">
+                <h2>Step 4 — Anything to avoid?</h2>
                 <div class="form-group">
-                    <label>Pressure Preference: <span class="required">*</span></label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="pressurePreference" value="Light" required> Light</label>
-                        <label><input type="radio" name="pressurePreference" value="Medium"> Medium</label>
-                        <label><input type="radio" name="pressurePreference" value="Firm"> Firm</label>
-                    </div>
+                    <label for="avoidNotes">Anything to avoid? (optional)</label>
+                    <textarea id="avoidNotes" name="avoidNotes" rows="1" maxlength="200"></textarea>
                 </div>
-            </section>
+            </div>
 
-            <!-- B. Consent & Signature -->
-            <section class="form-section consent-section" style="border:2px solid #2196F3; padding:20px; border-radius:8px;">
-                <h2>Consent & Signature</h2>
+            <!-- Step 5: Consent & Signature -->
+            <div class="wizard-step form-section consent-section" data-step="5" style="border:2px solid #2196F3; padding:20px; border-radius:8px;">
+                <h2>Step 5 — Consent & Signature</h2>
 
                 <div class="info-box">
                     <p><strong>Notes:</strong></p>
@@ -199,19 +151,28 @@
                     </ul>
                 </div>
 
-                <div class="info-box" style="margin-top: 12px;">
-                    <p><strong>Privacy:</strong></p>
-                    <ul>
-                        <li>A PDF copy of your form is stored securely in a private Google Drive folder.</li>
-                        <li>The server does not retain your data beyond generating the PDF.</li>
-                        <li>Use HTTPS or a secure tunnel (e.g., ngrok/Cloudflare) for encrypted transmission.</li>
-                    </ul>
+                <div style="margin-bottom:12px; display:flex; justify-content:flex-end;">
+                    <button type="button" id="viewTermsBtn" class="btn-secondary" aria-label="View Terms and Privacy">View Terms + Privacy</button>
                 </div>
 
                 <div class="consent-checkbox">
                     <label>
-                        <input type="checkbox" name="consentGiven" id="consentGiven" required>
-                        <span>I consent to receive seated chair massage today <span class="required">*</span></span>
+                        <input type="checkbox" name="termsAccepted" id="termsAccepted">
+                        <span>I have read and agree to the Terms and Privacy Collection Notice. <span class="required">*</span></span>
+                    </label>
+                </div>
+
+                <div class="consent-checkbox">
+                    <label>
+                        <input type="checkbox" name="treatmentConsent" id="treatmentConsent">
+                        <span>I consent to receive seated chair massage today. I understand I can ask to change pressure, pause, or stop at any time. <span class="required">*</span></span>
+                    </label>
+                </div>
+
+                <div class="consent-checkbox">
+                    <label>
+                        <input type="checkbox" name="publicSettingOk" id="publicSettingOk">
+                        <span>I'm comfortable receiving seated massage in a shared workplace/event setting.</span>
                     </label>
                 </div>
 
@@ -219,33 +180,26 @@
                     <canvas id="signatureCanvas" class="signature-pad"></canvas>
                     <button type="button" id="clearSignature" class="btn-secondary">Clear Signature</button>
                 </div>
-                <input type="hidden" id="signatureData" name="signature" required>
+                <input type="hidden" id="signatureData" name="signature">
                 <input type="hidden" id="signedAt" name="signedAt">
-            </section>
+            </div>
 
-            <!-- G. Optional Notes -->
-            <section class="form-section">
-                <h2>Optional Notes</h2>
-                <div class="form-group">
-                    <label for="notes">Anything important to know (optional):</label>
-                    <textarea id="notes" name="notes" rows="2" maxlength="200" placeholder="Up to 200 characters"></textarea>
-                </div>
-            </section>
-
-            <!-- H. Marketing Opt-in (optional) -->
-            <section class="form-section">
-                <h2>Marketing Opt-in (optional)</h2>
+            <!-- Step 6: Marketing Opt-in -->
+            <div class="wizard-step form-section" data-step="6">
+                <h2>Step 6 — Optional Marketing Opt-in</h2>
                 <div class="consent-checkbox">
-                    <label><input type="checkbox" name="emailOptIn"> Receive occasional email updates</label>
+                    <label><input type="checkbox" name="emailOptIn" id="emailOptIn"> Receive occasional email updates</label>
                 </div>
                 <div class="consent-checkbox">
-                    <label><input type="checkbox" name="smsOptIn"> Receive occasional SMS updates</label>
+                    <label><input type="checkbox" name="smsOptIn" id="smsOptIn"> Receive occasional SMS updates</label>
                 </div>
-            </section>
+            </div>
 
-            <!-- Sticky Action Bar -->
-            <div class="form-actions sticky-actions">
-                <button type="submit" id="submitBtn" class="btn-primary" disabled>Submit Intake</button>
+            <!-- Sticky Action Bar (wizard controls) -->
+            <div class="form-actions sticky-actions" style="align-items:center;">
+                <button type="button" id="prevBtn" class="btn-secondary">Back</button>
+                <button type="button" id="nextBtn" class="btn-primary">Next</button>
+                <button type="submit" id="submitBtn" class="btn-primary" style="display:none;">Submit Intake</button>
             </div>
         </form>
     </div>
@@ -254,6 +208,54 @@
     <script src="/js/muscleMap.js"></script>
     <script src="/js/conditionalFields.js"></script>
     <script src="/js/healthDisclaimers.js"></script>
+    <script src="/js/wizard.js"></script>
+    
+    <!-- Terms + Privacy Modal -->
+    <div id="termsModal" class="terms-modal hidden-field" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+        <div class="terms-backdrop"></div>
+        <div class="terms-content" role="document">
+            <div class="terms-header">
+                <h2 id="termsModalTitle">Terms and Privacy</h2>
+                <button type="button" id="closeTermsBtn" class="btn-secondary" aria-label="Close Terms">Close</button>
+            </div>
+            <div class="terms-body">
+                <pre style="white-space:pre-wrap;">TERMS AND PRIVACY
+
+1) What this service is
+This is seated chair massage provided fully clothed. It is intended to support relaxation, comfort, and general musculoskeletal tension relief. It is not a medical diagnosis or a substitute for medical care.
+
+2) Your responsibilities
+Please provide accurate information about your health, injuries, medications, allergies/sensitivities, and any recent changes in symptoms. If you are unsure whether massage is suitable for you, please discuss this with the therapist before treatment.
+
+3) Consent and communication
+You can ask to change pressure, adjust areas treated, pause, or stop at any time. Please tell the therapist immediately if you feel pain, dizziness, nausea, numbness/tingling, shortness of breath, or discomfort.
+
+4) When massage may be modified or declined
+Massage may be modified or declined if it is not safe or appropriate on the day (for example, if you are unwell with fever/contagious symptoms, have an open wound or skin infection in the treatment area, or have new or unexplained symptoms). If there is a safety concern, the therapist may recommend you seek advice from a GP or relevant health professional.
+
+5) Possible effects and risks
+Massage is generally low risk, but possible effects can include temporary tenderness, light-headedness, fatigue, or mild soreness. Rarely, symptoms may be aggravated. Outcomes can vary and no specific result can be guaranteed.
+
+6) Privacy - what we collect and why
+We collect personal information (such as your name and contact details) and health information (such as screening responses) to provide the service safely and to create a treatment record (PDF). We take reasonable steps to protect your information from misuse, interference, loss, and unauthorised access or disclosure.
+
+7) Storage and access
+Your intake is stored as a PDF record. You may request access to your information using the contact details provided by the therapist.
+
+8) Marketing (optional)
+Marketing messages are only sent if you opt in. You can opt out at any time.
+
+9) Australian Consumer Law
+Nothing in these terms is intended to exclude, restrict, or modify any rights you may have under the Australian Consumer Law, including consumer guarantees that cannot be excluded.
+
+10) Acknowledgement
+By accepting these terms and providing consent, you confirm you have read and understood this information and have had the opportunity to ask questions before treatment.
+</pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/termsModal.js"></script>
     <script src="/js/intake-form.js"></script>
 </body>
 </html>

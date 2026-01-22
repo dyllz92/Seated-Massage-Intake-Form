@@ -62,13 +62,14 @@ class ConditionalFields {
     
     setupRule(rule) {
         const triggers = document.querySelectorAll(rule.trigger);
-        
+        if (!triggers || triggers.length === 0) return; // nothing on this page for this rule
+
         triggers.forEach(trigger => {
             trigger.addEventListener('change', () => {
                 this.updateVisibility(rule);
             });
         });
-        
+
         // Initial state
         this.updateVisibility(rule);
     }
