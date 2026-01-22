@@ -60,6 +60,7 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'flexion-and-flow-intake'
+          resource-group-name: 'Intake-Forms'
           slot-name: 'Production'
           package: .
           
