@@ -17,6 +17,7 @@
 - ✅ Azure Free Tier deployment configuration
 - ✅ Home page with dual form selection buttons
 - ✅ Interactive body mapping with PNG/SVG fallback
+- ✅ Azure Front Door HTTPS endpoint available: https://flexion-frontdoor-bmhzhfdwfteycuf8.z02.azurefd.net
 - ⏳ Mobile device testing pending
 - ⏳ QR code generation pending
 - ⏳ Production deployment pending

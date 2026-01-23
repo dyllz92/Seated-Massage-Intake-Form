@@ -49,6 +49,7 @@ npm run dev
 
 - **Local**: http://localhost:3000 (or your configured `PORT`)
 - **Network**: http://YOUR_LOCAL_IP:3000 (find your IP with `ipconfig` on Windows)
+- **Front Door (HTTPS)**: https://flexion-frontdoor-bmhzhfdwfteycuf8.z02.azurefd.net
 
 ## Google Drive Setup (Optional)
 
@@ -112,6 +113,16 @@ Deploy to:
 - **Railway**: https://railway.app
 - **Render**: https://render.com
 - **DigitalOcean**: https://digitalocean.com
+
+### Option 4: Azure Front Door (HTTPS on Free Tier)
+
+Use Front Door to provide HTTPS without a custom domain:
+
+- **Front Door URL**: https://flexion-frontdoor-bmhzhfdwfteycuf8.z02.azurefd.net
+
+Traffic flow:
+
+User → Front Door (HTTPS) → App Service
 
 ## Project Structure
 
