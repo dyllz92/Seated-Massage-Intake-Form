@@ -38,16 +38,16 @@
 
 ---
 
-## Ã°Å¸Å½Â¯ Next Priorities (No Deadlines)
+## 📋 Next Priorities (No Deadlines)
 
-### Priority 1 Ã¢â‚¬â€ IMMEDIATE
+### Priority 1 — IMMEDIATE
 
 **Mobile Device Testing (iOS/Android)**
 - Test signature capture on real devices
 - Verify form submission flow end-to-end
 - Validate PDF generation and Drive upload
 - Check responsive design on various screen sizes
-- Est. time: 2Ã¢â‚¬â€œ3 hours
+- Est. time: 2–3 hours
 
 **QR Code Generation**
 - Add qrcode npm package
@@ -66,53 +66,53 @@
 - Log form submission success/failure rates
 - Est. time: 2–3 hours
 
-### Priority 3 Ã¢â‚¬â€ TESTING & VALIDATION
+### Priority 3 — TESTING & VALIDATION
 
 **Comprehensive Testing**
 - Test with various form data combinations
 - Verify PDF accuracy with different inputs
 - Confirm Google Drive folder organization
 - Test local PDF fallback
-- Est. time: 2Ã¢â‚¬â€œ3 hours
+- Est. time: 2–3 hours
 
 **User Acceptance Testing (UAT)**
 - Get feedback from massage therapists
 - Test with actual client scenarios
 - Validate signature capture quality
 - Confirm consent flow clarity
-- Est. time: 4Ã¢â‚¬â€œ5 hours
+- Est. time: 4–5 hours
 
-### Priority 4 Ã¢â‚¬â€ POLISH & OPTIMIZATION
+### Priority 4 — POLISH & OPTIMIZATION
 
 **Performance Optimization**
 - Minimize unused dependencies (evaluate Puppeteer)
 - Optimize PDF generation performance
 - Cache static assets
 - Monitor page load time
-- Est. time: 1Ã¢â‚¬â€œ2 hours
+- Est. time: 1–2 hours
 
 **UX Refinements**
 - Add loading indicators for PDF generation
 - Improve error messages
 - Add success feedback on form submission
 - Consider accessibility improvements (WCAG)
-- Est. time: 2Ã¢â‚¬â€œ3 hours
+- Est. time: 2–3 hours
 
 ---
 
-## Ã¢Å“Â¨ WhatÃ¢â‚¬â„¢s Already Done
+## ✅ What’s Already Done
 
 | Feature | Status |
 |---|---|
-| 6-step wizard form | Ã¢Å“â€¦ Complete |
-| Both form options (Quick + Detailed) | Ã¢Å“â€¦ Complete |
-| PDF generation with signatures | Ã¢Å“â€¦ Complete |
-| Google Drive integration | Ã¢Å“â€¦ Complete |
-| Local PDF fallback | Ã¢Å“â€¦ Complete |
-| Body map with PNG/SVG fallback | Ã¢Å“â€¦ Complete |
-| Mobile-responsive design | Ã¢Å“â€¦ Complete |
-| Railway deployment config | Ã¢Å“â€¦ Ready |
-| Privacy & security features | Ã¢Å“â€¦ Complete |
+| 6-step wizard form | ✅ Complete |
+| Both form options (Quick + Detailed) | ✅ Complete |
+| PDF generation with signatures | ✅ Complete |
+| Google Drive integration | ✅ Complete |
+| Local PDF fallback | ✅ Complete |
+| Body map with PNG/SVG fallback | ✅ Complete |
+| Mobile-responsive design | ✅ Complete |
+| Railway deployment config | ✅ Ready |
+| Privacy & security features | ✅ Complete |
 
 ---
 
@@ -125,15 +125,15 @@
 - Priority 2 tasks (Railway deployment + monitoring)
 
 **Success Criteria**
-- Ã¢Å“â€¦ Wizard form fully functional with validation
-- Ã¢Å“â€¦ PDF generation working with form data + signature
-- Ã¢Å“â€¦ Google Drive upload confirmed
-- Ã¢Å“â€¦ Home page displays both form options
-- Ã¢Å“â€¦ Railway deployment ready
-- Ã¢ÂÂ³ Mobile testing passed
-- Ã¢ÂÂ³ Production URL live and accessible
-- Ã¢ÂÂ³ QR code generated for easy access
-- Ã¢ÂÂ³ Error logging configured
+- ✅ Wizard form fully functional with validation
+- ✅ PDF generation working with form data + signature
+- ✅ Google Drive upload confirmed
+- ✅ Home page displays both form options
+- ✅ Railway deployment ready
+- ⏳ Mobile testing passed
+- ⏳ Production URL live and accessible
+- ⏳ QR code generated for easy access
+- ⏳ Error logging configured
 
 ---
 
@@ -164,16 +164,16 @@
 |---|---|---|---|
 | 🚩 P1 | Mobile device testing | TODO | Team |
 | ✅ P1 | Production deployment | Complete | DevOps |
-| Ã°Å¸Å¸Â  P2 | QR code generation | TODO | Dev |
-| Ã°Å¸Å¸Â  P2 | Error logging setup | TODO | DevOps |
-| Ã°Å¸Å¸Â¡ P3 | Comprehensive testing | TODO | QA |
-| Ã°Å¸Å¸Â¡ P3 | User acceptance testing | TODO | Team |
-| Ã°Å¸Å¸Â¢ P4 | Performance optimization | TODO | Dev |
-| Ã°Å¸Å¸Â¢ P4 | UX refinements | TODO | Design/Dev |
+| 🟡 P2 | QR code generation | TODO | Dev |
+| 🟡 P2 | Error logging setup | TODO | DevOps |
+| 🟠 P3 | Comprehensive testing | TODO | QA |
+| 🟠 P3 | User acceptance testing | TODO | Team |
+| 🔵 P4 | Performance optimization | TODO | Dev |
+| 🔵 P4 | UX refinements | TODO | Design/Dev |
 
 ---
 
-## Ã°Å¸â€Â® Future Enhancements (Post-MVP)
+## 🚧 Future Enhancements (Post-MVP)
 
 ### Phase 2
 - Admin dashboard for viewing submissions
