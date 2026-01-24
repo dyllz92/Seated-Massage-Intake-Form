@@ -6,38 +6,26 @@
     <title>Flexion & Flow - Intake Form</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hemisphere Wellness Intake</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
 <body>
-    <div class="container home-container">
-        <div class="logo-section">
-            <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo">
-        </div>
-
-        <div class="header-section">
-            <h1>Welcome to Flexion & Flow</h1>
-            <p class="subtitle">Thank you for choosing our seated chair massage service. Please complete your intake form below:</p>
-        </div>
-
-        <div class="forms-container">
-            <div class="form-card">
-                <div class="card-icon" aria-hidden="true">
-                    <img src="/img/Chair.png" alt="" class="card-icon-image">
-                </div>
-                <h2>Seated Massage Intake</h2>
-                <a href="/intake?form=seated" class="btn btn-primary">Start Form</a>
-            </div>
-
-            <div class="form-card">
-                <div class="card-icon" aria-hidden="true">
-                    <img src="/img/Table.png" alt="" class="card-icon-image card-icon-image-table">
-                </div>
-                <h2>Table Massage Intake</h2>
-                <a href="/intake?form=table" class="btn btn-primary">Start Form</a>
-            </div>
-        </div>
-
-        <div class="footer-section">
-            <p>Your information is kept private and secure</p>
-        </div>
+  <section class="hero">
+    <div class="container" style="margin-top: 48px;">
+      <h1 class="hero-title">Welcome to Hemisphere Wellness</h1>
+      <div class="separator"></div>
+      <p class="hero-desc">Please select your massage type to begin:</p>
+      <div class="form-selection" style="margin:32px 0; display:flex; gap:32px; justify-content:center;">
+        <a href="/intake" class="btn btn-secondary" id="seatedBtn">Seated Massage</a>
+        <a href="/intake" class="btn btn-secondary" id="tableBtn">Table Massage</a>
+      </div>
     </div>
+  </section>
 </body>
 </html>
+                    <img src="/img/Table.png" alt="" class="card-icon-image card-icon-image-table">
