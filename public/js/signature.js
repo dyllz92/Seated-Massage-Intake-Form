@@ -92,7 +92,8 @@ class SignaturePad {
     }
     
     isEmpty() {
-        return !this.hasSignature;
+        // Consider typed signature as a valid signature as well
+        return !this.hasSignature && !(window.typedSignatureText && String(window.typedSignatureText).trim().length > 0);
     }
     
     toDataURL() {
@@ -110,8 +111,64 @@ document.addEventListener('DOMContentLoaded', () => {
         const clearBtn = document.getElementById('clearSignature');
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
+                // clear drawn signature
                 window.signaturePad.clear();
-                document.getElementById('signatureData').value = '';
+                // clear typed signature state too
+                window.typedSignatureText = '';
+                const typedInput = document.getElementById('typedSignatureInput');
+                const typedPreview = document.getElementById('typedSignaturePreview');
+                if (typedInput) typedInput.value = '';
+                if (typedPreview) typedPreview.textContent = '';
+                const sigField = document.getElementById('signatureData');
+                if (sigField) sigField.value = '';
+            });
+        }
+
+        // Clear typed-only button
+        const clearTypedBtn = document.getElementById('clearTypedSignature');
+        if (clearTypedBtn) {
+            clearTypedBtn.addEventListener('click', () => {
+                window.typedSignatureText = '';
+                const typedInput = document.getElementById('typedSignatureInput');
+                const typedPreview = document.getElementById('typedSignaturePreview');
+                if (typedInput) typedInput.value = '';
+                if (typedPreview) typedPreview.textContent = '';
+                const sigField = document.getElementById('signatureData');
+                if (sigField) sigField.value = '';
+                // switch back to draw mode
+                const drawRadio = document.getElementById('signatureMethodDraw');
+                if (drawRadio) drawRadio.checked = true;
+                toggleSignatureMethod('draw');
+            });
+        }
+
+        // Signature method toggles
+        const drawRadio = document.getElementById('signatureMethodDraw');
+        const typeRadio = document.getElementById('signatureMethodType');
+        function toggleSignatureMethod(mode) {
+            const drawArea = document.querySelectorAll('.signature-draw');
+            const typeArea = document.querySelectorAll('.signature-type');
+            drawArea.forEach(el => el.style.display = (mode === 'draw') ? '' : 'none');
+            typeArea.forEach(el => el.style.display = (mode === 'type') ? '' : 'none');
+        }
+        if (drawRadio) drawRadio.addEventListener('change', () => toggleSignatureMethod('draw'));
+        if (typeRadio) typeRadio.addEventListener('change', () => toggleSignatureMethod('type'));
+
+        // Typed signature input handling
+        const typedInput = document.getElementById('typedSignatureInput');
+        const typedPreview = document.getElementById('typedSignaturePreview');
+        if (typedInput) {
+            typedInput.addEventListener('input', (e) => {
+                const v = (e.target.value || '').trim();
+                window.typedSignatureText = v;
+                if (typedPreview) typedPreview.textContent = v;
+                const sigField = document.getElementById('signatureData');
+                if (sigField) {
+                    // prefix typed signatures so the server/pdf knows how to render
+                    sigField.value = v ? `text:${v}` : '';
+                }
+                // when typed signature present, mark signaturePad as having a signature for validation
+                if (window.signaturePad) window.signaturePad.hasSignature = !!v || window.signaturePad.hasSignature;
             });
         }
         

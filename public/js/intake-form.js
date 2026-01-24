@@ -62,22 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function submitForm(status) {
-        // Validate terms, treatment consent and signature
-        const termsAcceptedEl = document.getElementById('termsAccepted');
-        const treatmentConsentEl = document.getElementById('treatmentConsent');
+        // Validate combined consent and signature
+        const consentAllEl = document.getElementById('consentAll');
 
-        if (!termsAcceptedEl || !treatmentConsentEl) {
-            alert('Consent fields are not available. Please reload the page.');
+        if (!consentAllEl) {
+            alert('Consent field is not available. Please reload the page.');
             return;
         }
 
-        if (!termsAcceptedEl.checked) {
-            alert('Please confirm you have read and agree to the Terms and Privacy Collection Notice.');
-            return;
-        }
-
-        if (!treatmentConsentEl.checked) {
-            alert('Please confirm you consent to receive seated chair massage today.');
+        if (!consentAllEl.checked) {
+            alert('Please confirm you have read and agreed to the Terms and consent to treatment.');
             return;
         }
 
@@ -87,11 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Get signature data
-        if (!window.signaturePad.isEmpty()) {
-            const signatureData = window.signaturePad.toDataURL();
-            document.getElementById('signatureData').value = signatureData;
+        // Get signature data depending on chosen method
+        const typeRadio = document.getElementById('signatureMethodType');
+        if (typeRadio && typeRadio.checked) {
+            const txt = window.typedSignatureText || (document.getElementById('typedSignatureInput') && document.getElementById('typedSignatureInput').value) || '';
+            document.getElementById('signatureData').value = txt ? `text:${txt}` : '';
             document.getElementById('signedAt').value = new Date().toISOString();
+        } else {
+            if (!window.signaturePad.isEmpty()) {
+                const signatureData = window.signaturePad.toDataURL();
+                document.getElementById('signatureData').value = signatureData;
+                document.getElementById('signedAt').value = new Date().toISOString();
+            }
         }
 
         // Collect form data
@@ -122,10 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data['healthChecks'] = ['No issues to report'];
         }
 
-        // Ensure consent booleans are included
-        data.termsAccepted = !!document.getElementById('termsAccepted') && document.getElementById('termsAccepted').checked;
-        data.treatmentConsent = !!document.getElementById('treatmentConsent') && document.getElementById('treatmentConsent').checked;
-        data.publicSettingOk = !!document.getElementById('publicSettingOk') && document.getElementById('publicSettingOk').checked;
+        // Ensure combined consent and opt-in booleans are included
+        data.consentAll = !!document.getElementById('consentAll') && document.getElementById('consentAll').checked;
+        data.smsOptIn = !!document.getElementById('smsOptIn') && document.getElementById('smsOptIn').checked;
 
         // Metadata
         const nowIso = new Date().toISOString();

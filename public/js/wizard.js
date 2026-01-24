@@ -32,18 +32,16 @@
             return true;
         },
         5: () => {
-            // Step 5: consent + signature required
-            const treatmentConsent = document.getElementById('treatmentConsent');
+            // Step 5: combined consent + signature required
+            const consentAll = document.getElementById('consentAll');
             const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
-            return treatmentConsent && treatmentConsent.checked && signatureValid;
+            return consentAll && consentAll.checked && signatureValid;
         },
         6: () => {
-            // Step 6: marketing opt-in optional
-            // Submission requires the consent/signature as well — ensure they're present
-            const termsAccepted = document.getElementById('termsAccepted');
-            const treatmentConsent = document.getElementById('treatmentConsent');
+            // Step 6: marketing opt-in optional; submission still requires consentAll + signature
+            const consentAll = document.getElementById('consentAll');
             const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
-            return termsAccepted && termsAccepted.checked && treatmentConsent && treatmentConsent.checked && signatureValid;
+            return consentAll && consentAll.checked && signatureValid;
         }
     };
 
@@ -192,18 +190,16 @@
                 else if (consentAreasChecked.length === 0) message = 'Please select at least one area you consent to treatment for.';
                 break;
             case 5:
-                const treatmentConsent = document.getElementById('treatmentConsent');
+                const consentAll = document.getElementById('consentAll');
                 const signatureValid = window.signaturePad && !window.signaturePad.isEmpty();
-                if (!treatmentConsent || !treatmentConsent.checked) message = 'Please consent to receive treatment.';
+                if (!consentAll || !consentAll.checked) message = 'Please confirm you have read and agreed to the Terms and consent to treatment.';
                 else if (!signatureValid) message = 'Please provide your signature.';
                 break;
             case 6:
-                const termsAccepted = document.getElementById('termsAccepted');
-                const treatmentConsent2 = document.getElementById('treatmentConsent');
+                const consentAll = document.getElementById('consentAll');
                 const signatureValid2 = window.signaturePad && !window.signaturePad.isEmpty();
 
-                if (!termsAccepted || !termsAccepted.checked) message = 'Please confirm you have read the Terms and Privacy.';
-                else if (!treatmentConsent2 || !treatmentConsent2.checked) message = 'Please consent to receive treatment.';
+                if (!consentAll || !consentAll.checked) message = 'Please confirm you have read and agreed to the Terms and consent to treatment.';
                 else if (!signatureValid2) message = 'Please provide your signature.';
                 break;
         }

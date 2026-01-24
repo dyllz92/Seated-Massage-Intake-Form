@@ -26,15 +26,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Validate consent (terms) - mandatory
+        const consentEl = document.getElementById('consent');
+        if (!consentEl || !consentEl.checked) {
+            alert('Please confirm you consent to seated chair massage today.');
+            return;
+        }
+
         // Validate signature
         if (window.signaturePad.isEmpty()) {
             alert('Please provide your signature before submitting.');
             return;
         }
-        
-        // Get signature data
-        const signatureData = window.signaturePad.toDataURL();
-        document.getElementById('signatureData').value = signatureData;
+
+        // Get signature data depending on chosen method
+        const typeRadio = document.getElementById('signatureMethodType');
+        if (typeRadio && typeRadio.checked) {
+            const txt = window.typedSignatureText || (document.getElementById('typedSignatureInput') && document.getElementById('typedSignatureInput').value) || '';
+            document.getElementById('signatureData').value = txt ? `text:${txt}` : '';
+        } else {
+            const signatureData = window.signaturePad.toDataURL();
+            document.getElementById('signatureData').value = signatureData;
+        }
         
         // Collect form data
         const formData = new FormData(form);

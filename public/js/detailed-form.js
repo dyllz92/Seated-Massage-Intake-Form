@@ -39,18 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Validate required consents
-        const consentAccurate = document.getElementById('consentAccurate');
-        const consentTreatment = document.getElementById('consentTreatment');
-        const consentStop = document.getElementById('consentStop');
+        const consentAll = document.getElementById('consentAll');
 
-        if (!consentAccurate.checked || !consentTreatment.checked || !consentStop.checked) {
-            alert('Please check all required consent boxes.');
+        if (!consentAll || !consentAll.checked) {
+            alert('Please confirm you have read and agreed to the Terms and consent to treatment.');
             return;
         }
         
-        // Get signature data
-        const signatureData = window.signaturePad.toDataURL();
-        document.getElementById('signatureData').value = signatureData;
+        // Get signature data depending on chosen method
+        const typeRadio = document.getElementById('signatureMethodType');
+        if (typeRadio && typeRadio.checked) {
+            const txt = window.typedSignatureText || (document.getElementById('typedSignatureInput') && document.getElementById('typedSignatureInput').value) || '';
+            document.getElementById('signatureData').value = txt ? `text:${txt}` : '';
+        } else {
+            const signatureData = window.signaturePad.toDataURL();
+            document.getElementById('signatureData').value = signatureData;
+        }
         
         // Collect form data
         const formData = new FormData(form);

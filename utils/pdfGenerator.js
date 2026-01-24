@@ -62,12 +62,22 @@ async function generatePDF(formData) {
             
             if (formData.signature) {
                 try {
-                    const signatureData = formData.signature.replace(/^data:image\/\w+;base64,/, '');
-                    const signatureBuffer = Buffer.from(signatureData, 'base64');
-                    doc.image(signatureBuffer, {
-                        fit: [200, 50],
-                        align: 'left'
-                    });
+                    const sig = String(formData.signature || '');
+                    if (sig.indexOf('text:') === 0) {
+                        // Render typed signature text
+                        const txt = sig.slice(5);
+                        doc.moveDown(0.2);
+                        try { doc.font('Times-Italic'); } catch (e) { /* ignore */ }
+                        doc.fontSize(28).fillColor('#000').text(txt, { continued: false });
+                        try { doc.font('Times-Roman'); } catch (e) { /* ignore */ }
+                    } else {
+                        const signatureData = sig.replace(/^data:image\/\w+;base64,/, '');
+                        const signatureBuffer = Buffer.from(signatureData, 'base64');
+                        doc.image(signatureBuffer, {
+                            fit: [200, 50],
+                            align: 'left'
+                        });
+                    }
                 } catch (error) {
                     console.error('Error adding signature to PDF:', error);
                     doc.fontSize(10).text('[Signature image error]');
@@ -227,17 +237,13 @@ function generateUniversalForm(doc, data) {
     if (typeof data.smsOptIn !== 'undefined') addField(doc, 'SMS opt-in', data.smsOptIn ? 'Yes' : 'No');
 
     addSection(doc, 'Consent');
-    addField(doc, 'Terms accepted', data.termsAccepted ? 'Yes' : 'No');
-    addField(doc, 'Treatment consent', data.treatmentConsent ? 'Yes' : 'No');
-    if (typeof data.publicSettingOk !== 'undefined') {
-        addField(doc, 'Public setting acknowledgement', data.publicSettingOk ? 'Yes' : 'No');
-    }
+    addField(doc, 'Consent (terms, treatment & public setting)', data.consentAll ? 'Yes' : 'No');
     if (data.signedAt) addField(doc, 'Signed at', data.signedAt);
     addField(doc, 'Status', data.status || 'submitted');
 
     // Full responses: include any remaining fields not already shown above
     const shown = new Set([
-        'fullName','mobile','email','gender','muscleMapMarks','pressurePreference','healthChecks','reviewNote','avoidNotes','otherHealthConcernText','emailOptIn','smsOptIn','termsAccepted','treatmentConsent','publicSettingOk','signature','signedAt','status','submissionDate','createdAt','updatedAt','formType'
+        'fullName','mobile','email','gender','muscleMapMarks','pressurePreference','healthChecks','reviewNote','avoidNotes','otherHealthConcernText','emailOptIn','smsOptIn','consentAll','signature','signedAt','status','submissionDate','createdAt','updatedAt','formType'
     ]);
 
     addSection(doc, 'Full responses (summary)');
