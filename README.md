@@ -4,13 +4,13 @@ A locally-hosted web application for collecting client intake forms for seated m
 
 ## Features
 
-- 📱 **Mobile-Optimized**: Responsive design for phone and tablet access
-- ⚡ **Dual Forms**: Quick 60-second form or detailed comprehensive intake
-- ✍️ **Digital Signature**: Touch-enabled signature capture
-- 📄 **PDF Generation**: Automatic conversion to professional PDF documents
-- ☁️ **Google Drive Integration**: Secure cloud storage with fallback to local storage
-- 🔒 **Privacy-Focused**: No persistent local data storage after upload
-- 🔒 **Privacy-Focused**: No persistent local data storage after upload (local PDF fallback off by default)
+- ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â± **Mobile-Optimized**: Responsive design for phone and tablet access
+- ÃƒÂ¢Ã…Â¡Ã‚Â¡ **Dual Forms**: Quick 60-second form or detailed comprehensive intake
+- ÃƒÂ¢Ã…â€œÃ‚ÂÃƒÂ¯Ã‚Â¸Ã‚Â **Digital Signature**: Touch-enabled signature capture
+- ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾ **PDF Generation**: Automatic conversion to professional PDF documents
+- ÃƒÂ¢Ã‹Å“Ã‚ÂÃƒÂ¯Ã‚Â¸Ã‚Â **Google Drive Integration**: Secure cloud storage with fallback to local storage
+- ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢ **Privacy-Focused**: No persistent local data storage after upload
+- ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢ **Privacy-Focused**: No persistent local data storage after upload (local PDF fallback off by default)
 
 ## Quick Start
 
@@ -63,7 +63,7 @@ To enable automatic uploads to Google Drive:
 
 ### Step 2: Create Service Account
 
-1. Navigate to **IAM & Admin** → **Service Accounts**
+1. Navigate to **IAM & Admin** ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ **Service Accounts**
 2. Click **Create Service Account**
 3. Give it a name (e.g., "Intake Form Uploader")
 4. Grant it the role: **Editor** or **Drive File Creator**
@@ -73,7 +73,7 @@ To enable automatic uploads to Google Drive:
 
 1. Click on your service account
 2. Go to the **Keys** tab
-3. Click **Add Key** → **Create new key**
+3. Click **Add Key** ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ **Create new key**
 4. Choose **JSON** format
 5. Download the JSON file
 6. Save it as `google-credentials.json` in the project root
@@ -81,7 +81,7 @@ To enable automatic uploads to Google Drive:
 ### Step 4: Share Drive Folder
 
 1. Create a folder in Google Drive for intake forms
-2. Right-click the folder → **Share**
+2. Right-click the folder ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ **Share**
 3. Add the service account email (found in the JSON file: `client_email`)
 4. Give it **Editor** permissions
 5. Copy the folder ID from the URL (e.g., `https://drive.google.com/drive/folders/FOLDER_ID_HERE`)
@@ -116,38 +116,38 @@ Deploy to:
 
 ### Option 4: Hosted App (Railway)
 
-The app is hosted on Railway. Use the Railway URL below to access the live service:
+User -> Railway -> Service
 
 - **App URL (Railway)**: https://intake-form.up.railway.app
 
 Traffic flow:
 
-User → Railway → App Service
+User -> Railway -> Service
 
 ## Project Structure
 
 ```
 Seated-Massage-Intake-Form/
-├── server.js                 # Express server
-├── package.json             # Dependencies
-├── .env                     # Configuration (create from .env.example)
-├── views/                   # HTML pages
-│   ├── index.html          # Home page
-│   ├── quick-form.html     # Quick intake form
-│   ├── detailed-form.html  # Detailed intake form
-│   └── success.html        # Success page
-├── public/                  # Static files
-│   ├── css/
-│   │   ├── styles.css      # General styles
-│   │   └── forms.css       # Form-specific styles
-│   └── js/
-│       ├── signature.js    # Signature capture
-│       ├── quick-form.js   # Quick form logic
-│       └── detailed-form.js # Detailed form logic
-├── utils/                   # Backend utilities
-│   ├── pdfGenerator.js     # PDF generation
-│   └── driveUploader.js    # Google Drive integration
-└── pdfs/                    # Local PDF storage (if Drive not configured)
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ server.js                 # Express server
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ package.json             # Dependencies
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ .env                     # Configuration (create from .env.example)
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ views/                   # HTML pages
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ index.html          # Home page
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ quick-form.html     # Quick intake form
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ detailed-form.html  # Detailed intake form
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ success.html        # Success page
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ public/                  # Static files
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ css/
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ styles.css      # General styles
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ forms.css       # Form-specific styles
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ js/
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡       ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ signature.js    # Signature capture
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡       ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ quick-form.js   # Quick form logic
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡       ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ detailed-form.js # Detailed form logic
+ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ utils/                   # Backend utilities
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ pdfGenerator.js     # PDF generation
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡   ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ driveUploader.js    # Google Drive integration
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬ÂÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ pdfs/                    # Local PDF storage (if Drive not configured)
 ```
 
 ## Muscle Map Images
@@ -188,12 +188,12 @@ Notes:
 
 ## Security & Privacy
 
-- ✅ Data encrypted in transit (use HTTPS/tunnel in production)
-- ✅ No local database - data not stored on server
-- ✅ PDFs uploaded to private Google Drive folder
-- ✅ Service account authentication (no user OAuth)
-- ✅ Signature data embedded in PDF only
-- ✅ HIPAA considerations addressed
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Data encrypted in transit (use HTTPS/tunnel in production)
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ No local database - data not stored on server
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ PDFs uploaded to private Google Drive folder
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Service account authentication (no user OAuth)
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Signature data embedded in PDF only
+- ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ HIPAA considerations addressed
 
 By default, local PDF fallback is disabled to avoid local persistence. For local development/testing without Drive, set `ALLOW_LOCAL_PDF_FALLBACK=true` in `.env`.
 
@@ -235,17 +235,17 @@ For issues or questions:
 - Check console logs for error messages
 
 ## Deployment
-- GitHub Actions will auto-deploy to Azure on each push to `main`.
+- Deployments are handled by Railway; pushing to `main` triggers a Railway build when configured in the Railway dashboard.
 
 ### Recommended config files
 This project includes a set of recommended config files to make builds and deployments deterministic:
 
-- `.nvmrc` — pins Node version to `18`.
-- `package-lock.json` — lockfile for reproducible installs (already committed).
-- `.npmrc` — enforces exact versions and engine-strict installs.
-- `Procfile` — explicit start command used by some PaaS platforms: `web: npm start`.
-- `.env.example` — example environment variables (copy to `.env` locally).
-- `.github/workflows/ci.yml` — basic CI workflow for GitHub Actions.
+- `.nvmrc` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pins Node version to `18`.
+- `package-lock.json` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â lockfile for reproducible installs (already committed).
+- `.npmrc` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â enforces exact versions and engine-strict installs.
+- `Procfile` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â explicit start command used by some PaaS platforms: `web: npm start`.
+- `.env.example` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â example environment variables (copy to `.env` locally).
+- `.github/workflows/ci.yml` ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â basic CI workflow for GitHub Actions.
 
 ### Deployment tips for Railway
 - Build command: `npm ci --omit=dev`
