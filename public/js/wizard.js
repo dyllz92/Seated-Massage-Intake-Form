@@ -47,6 +47,13 @@
 
     // Initialize wizard
     function init() {
+                // Diagnostics for production debugging
+                console.log('Wizard init start');
+                const wizardSteps = document.querySelectorAll('.wizard-step');
+                console.log('Wizard steps found:', wizardSteps.length);
+                if (wizardSteps.length > 0) {
+                    console.log('Step 1 active:', wizardSteps[0].classList.contains('active'));
+                }
         steps = document.querySelectorAll('.wizard-step');
         stepIndicators = document.querySelectorAll('.step-indicator .step');
         prevBtn = document.getElementById('prevBtn');

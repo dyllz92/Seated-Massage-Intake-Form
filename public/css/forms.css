@@ -1,3 +1,6 @@
+/* Defensive: Hide all wizard steps by default, show only active */
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
 /* Form Styles */
 .form-header {
     display: flex;

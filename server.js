@@ -42,7 +42,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/intake', (req, res) => {
+    res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'views', 'intake.html'));
+});
+// Diagnostics endpoint for deploy/version info
+app.get('/__version', (req, res) => {
+    res.json({
+        commit: process.env.RAILWAY_GIT_COMMIT_SHA || null,
+        branch: process.env.RAILWAY_GIT_BRANCH || null,
+        time: new Date().toISOString()
+    });
 });
 
 // Deprecated routes: redirect to single intake form
