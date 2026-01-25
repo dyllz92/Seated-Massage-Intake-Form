@@ -631,7 +631,7 @@ textarea {
 .form-actions {
         display: flex;
         gap: 15px;
-        justify-content: space-between;
+        justify-content: center;
         margin-top: 30px;
 }
 
@@ -663,6 +663,31 @@ textarea {
     z-index: 10;
 }
 
+.sticky-actions .btn-primary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.sticky-actions .btn-primary:hover {
+    background: transparent;
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.sticky-actions .btn-secondary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.sticky-actions .btn-secondary:hover {
+    background: transparent;
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
 .btn-primary,
 .btn-secondary {
     padding: 15px 30px;
@@ -672,7 +697,8 @@ textarea {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex: 1;
+    flex: 0 0 auto;
+    min-width: 120px;
 }
 
 .btn-primary {
@@ -814,11 +840,13 @@ button[type="button"]#clearSignature {
 
     .form-actions {
         flex-direction: column;
+        align-items: center;
     }
 
     .btn-primary,
     .btn-secondary {
         width: 100%;
+        max-width: 300px;
     }
 
     .signature-pad-frame {

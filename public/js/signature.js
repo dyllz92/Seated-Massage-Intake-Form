@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 overlay.style.fontSize = '';
                 return;
             }
-            const maxFont = 32;
+            const maxFont = 56;
             const minFont = 14;
             const wasHidden = window.getComputedStyle(overlay).display === 'none';
             if (wasHidden) {
@@ -208,6 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
             typedInput.addEventListener('input', (e) => {
                 const v = (e.target.value || '').trim();
                 window.typedSignatureText = v;
+                // Clear any drawn signature when user starts typing
+                if (v && window.signaturePad && !window.signaturePad.isEmpty()) {
+                    window.signaturePad.clear();
+                }
                 // update any visible preview or overlay
                 const typedPreviewLocal = document.getElementById('typedSignaturePreview');
                 if (typedPreviewLocal) typedPreviewLocal.textContent = v;

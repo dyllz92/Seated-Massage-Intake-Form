@@ -110,98 +110,44 @@ function generateUniversalForm(doc, data) {
     addField(doc, 'Email', data.email || 'Not provided');
     if (data.gender) addField(doc, 'Gender', data.gender);
 
-    // Body map: include an image (if available) and draw marks
+    // Body map: include the captured image if available
     addSection(doc, 'Body Map');
     if (data.muscleMapMarks) {
         try {
             const marks = typeof data.muscleMapMarks === 'string' ? JSON.parse(data.muscleMapMarks) : data.muscleMapMarks;
             addField(doc, 'Discomfort areas marked', Array.isArray(marks) && marks.length > 0 ? `${marks.length} area(s) marked on body map` : 'None');
 
-            // Attempt to include a body map image from public/img based on gender
-            const gender = (data.gender || '').toLowerCase();
-            const imgCandidates = [];
-            if (gender === 'female') {
-                imgCandidates.push(path.join(__dirname, '..', 'public', 'img', 'Female Body Map.png'));
-                imgCandidates.push(path.join(__dirname, '..', 'public', 'img', 'Female_Body_Chart.png'));
-            } else {
-                imgCandidates.push(path.join(__dirname, '..', 'public', 'img', 'Male Body Map.png'));
-                imgCandidates.push(path.join(__dirname, '..', 'public', 'img', 'Male_Body_Chart.png'));
-            }
-
-            // Fallback to a generic candidate
-            imgCandidates.push(path.join(__dirname, '..', 'public', 'img', 'Body Map.png'));
-
-            let imagePath = null;
-            for (const p of imgCandidates) {
-                if (fs.existsSync(p)) { imagePath = p; break; }
-            }
-
-            // Reserve space for the image and draw marks scaled to a default canvas size
-            // Use a larger image on its own page for a clearer copy
-            const imgWidth = 420;
-            const imgX = Math.max(50, (doc.page.width - imgWidth) / 2);
-            const startY = doc.y + 6;
-
-            // Default canvas size used by the client when no image present
-            const defaultCanvas = { width: 400, height: 600 };
-
-            if (imagePath) {
+            // If we have a captured canvas image, use it
+            if (data.muscleMapImage) {
                 try {
-                    // Put image on its own page for clarity
                     doc.addPage();
-                    doc.fontSize(11).fillColor('#2c5f7d').text('Body Map (with markers)', { align: 'center' });
+                    doc.fontSize(11).fillColor('#2c5f7d').text('Body Map with Marked Areas', { align: 'center' });
                     doc.moveDown(0.5);
-                    doc.image(imagePath, imgX, doc.y, { width: imgWidth });
-                    const imageTopY = doc.y;
-                    // Compute scaled height from image dimensions (approx)
-                    // pdfkit will scale maintaining aspect; we read actual image dimensions via fs when possible
-                    // Use a safe scaling factor based on default canvas width
-                    const scale = imgWidth / defaultCanvas.width;
 
-                    // Draw marks as small circles over the image
-                    marks.forEach(mark => {
-                        const mx = imgX + (mark.x || 0) * scale;
-                        const my = imageTopY + (mark.y || 0) * scale;
-                        doc.circle(mx, my, 6).fill('#1e90ff').stroke('#0b5ed7');
-                    });
+                    const imgWidth = 350;
+                    const imgX = Math.max(50, (doc.page.width - imgWidth) / 2);
 
-                    // Add textual listing of marks for clarity
-                    if (Array.isArray(marks) && marks.length) {
-                        const marksText = marks.map((m, i) => {
-                            return `#${i+1}: x=${m.x || 0}, y=${m.y || 0}${m.timestamp ? `, ${m.timestamp}` : ''}`;
-                        }).join('; ');
-                        addField(doc, 'Body map marks', marksText);
-                    }
+                    // Remove the data:image prefix if present
+                    const imageData = data.muscleMapImage.replace(/^data:image\/\w+;base64,/, '');
+                    const imageBuffer = Buffer.from(imageData, 'base64');
 
-                    // Move cursor below image (small gap)
-                    doc.moveDown(1);
+                    doc.image(imageBuffer, imgX, doc.y, { width: imgWidth });
+                    doc.moveDown(2);
                 } catch (err) {
-                    addField(doc, 'Body map image', 'Error embedding image');
+                    console.error('Error embedding muscle map image:', err);
+                    addField(doc, 'Body map image', 'Could not embed image');
                 }
             } else {
-                // No image: draw a simple placeholder box and plot marks relative to default canvas
-                const boxX = imgX;
-                const boxW = imgWidth;
-                const boxH = Math.round(defaultCanvas.height * (imgWidth / defaultCanvas.width));
-                doc.rect(boxX, startY, boxW, boxH).stroke('#ddd');
-                doc.fontSize(9).fillColor('#666').text('Body diagram (no image available)', boxX, startY + 6, { width: boxW, align: 'center' });
-
-                marks.forEach(mark => {
-                    const mx = boxX + (mark.x || 0) * (boxW / defaultCanvas.width);
-                    const my = startY + (mark.y || 0) * (boxH / defaultCanvas.height);
-                    doc.circle(mx, my, 6).fill('#1e90ff').stroke('#0b5ed7');
-                });
-
+                // Fallback: show marks as text
                 if (Array.isArray(marks) && marks.length) {
-                    const marksText = marks.map((m, i) => `#${i+1}: x=${m.x || 0}, y=${m.y || 0}${m.timestamp ? `, ${m.timestamp}` : ''}`).join('; ');
+                    const marksText = marks.map((m, i) => `#${i+1}: x=${m.x || 0}, y=${m.y || 0}`).join('; ');
                     addField(doc, 'Body map marks', marksText);
                 }
-
-                doc.moveDown( Math.ceil(boxH / 12) );
             }
 
         } catch (e) {
-            addField(doc, 'Discomfort areas marked', 'Parse error');
+            console.error('Error processing body map:', e);
+            addField(doc, 'Discomfort areas marked', 'Error processing body map');
         }
     } else {
         addField(doc, 'Discomfort areas marked', 'None');
