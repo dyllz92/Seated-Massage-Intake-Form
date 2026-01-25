@@ -51,7 +51,7 @@ class DriveUploader {
                 console.log('   Add GOOGLE_SERVICE_ACCOUNT_KEY env var or google-credentials.json to enable');
             }
         } catch (error) {
-            console.error('⚠️  Error initializing Google Drive:', error.message);
+            console.error('⚠️  Error initializing Google Drive:', error);
             console.log('   PDFs will be saved locally instead');
             this.configured = false;
         }
@@ -114,7 +114,7 @@ class DriveUploader {
             };
 
         } catch (error) {
-            console.error('Error uploading to Google Drive:', error.message);
+            console.error('Error uploading to Google Drive:', error);
             console.log('Falling back to local storage...');
             return await this.saveLocally(pdfBuffer, filename);
         }
