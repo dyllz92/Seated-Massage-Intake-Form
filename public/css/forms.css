@@ -1,83 +1,4 @@
-:root {
-    --primary: #2b6777;
-    --accent: #ffb200;
-    --bg: #f7f7f7;
-    --text: #222;
-    --text-light: #666;
-    --border: #e0e0e0;
-    --radius: 14px;
-    --shadow: 0 4px 24px rgba(43,103,119,0.10);
-}
-body {
-    background: var(--bg);
-}
-.container {
-    max-width: 420px;
-    margin: 48px auto 32px auto;
-    background: #fff;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 36px 24px 32px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.hero-title {
-    color: var(--primary);
-    font-size: 2.1rem;
-    font-weight: 800;
-    margin-bottom: 0.5em;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-.separator {
-    width: 60px;
-    height: 4px;
-    background: var(--accent);
-    border-radius: 2px;
-    margin: 0 auto 18px auto;
-}
-.hero-desc {
-    color: var(--text-light);
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 1.08rem;
-}
-.form-selection {
-    display: flex;
-    gap: 28px;
-    justify-content: center;
-    margin: 32px 0 0 0;
-}
-.btn {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    padding: 12px 28px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    box-shadow: 0 1px 4px rgba(43,103,119,0.08);
-    letter-spacing: 0.5px;
-}
-.btn-secondary {
-    background: var(--accent);
-    color: #222;
-}
-.btn:active, .btn:focus {
-    outline: 2px solid var(--accent);
-}
-.form-group {
-    margin-bottom: 22px;
-    width: 100%;
-}
-label {
-    font-weight: 600;
-    color: var(--text);
-    display: block;
-/* Form Styles (restored from backup) */
+/* Form Styles */
 .form-header {
     display: flex;
     flex-direction: column;
@@ -174,11 +95,11 @@ input, textarea {
     font-size: 1rem;
     margin-bottom: 2px;
     background: #fafbfc;
-    color: var(--text);
+    color: var(--text-dark);
     box-sizing: border-box;
 }
 input:focus, textarea:focus {
-    border-color: var(--primary);
+    border-color: var(--primary-color);
     outline: none;
 }
 input[type="radio"] {
@@ -214,11 +135,11 @@ input[type="radio"] {
     transition: background 0.2s, color 0.2s;
 }
 .wizard-stepper .step.active {
-    background: var(--primary);
+    background: var(--primary-color);
     color: #fff;
 }
 .wizard-stepper .step.completed {
-    background: var(--accent);
+    background: var(--accent-color);
     color: #222;
 }
 .wizard-step-label {
@@ -242,7 +163,7 @@ input[type="radio"] {
     width: 100%;
 }
 .accent {
-    color: var(--accent);
+    color: var(--accent-color);
 }
 .uppercase {
     text-transform: uppercase;
