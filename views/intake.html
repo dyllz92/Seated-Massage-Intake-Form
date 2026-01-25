@@ -55,10 +55,20 @@
                     </div>
                     <div class="wizard-step" data-step="2">
                         <h2>Body Map</h2>
-                        <div class="form-group">
-                            <label for="bodymap">Describe any areas of discomfort or focus</label>
-                            <textarea id="bodymap" name="bodymap" rows="3" placeholder="e.g. Shoulders, lower back..."></textarea>
-                        </div>
+                            <div class="form-group">
+                                <div style="display:flex; justify-content:center; margin-bottom:12px;">
+                                    <svg width="120" height="220" viewBox="0 0 120 220" xmlns="http://www.w3.org/2000/svg" aria-label="Body Diagram">
+                                        <ellipse cx="60" cy="30" rx="22" ry="28" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                        <rect x="38" y="58" width="44" height="70" rx="22" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                        <rect x="20" y="58" width="18" height="60" rx="9" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                        <rect x="82" y="58" width="18" height="60" rx="9" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                        <rect x="48" y="128" width="12" height="50" rx="6" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                        <rect x="60" y="128" width="12" height="50" rx="6" fill="#f2e9e4" stroke="#888" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <label for="bodymap">Describe any areas of discomfort or focus</label>
+                                <textarea id="bodymap" name="bodymap" rows="3" placeholder="e.g. Shoulders, lower back..."></textarea>
+                            </div>
                     </div>
                     <div class="wizard-step" data-step="3">
                         <h2>Today's Focus</h2>
