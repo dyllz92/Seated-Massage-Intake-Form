@@ -7,7 +7,14 @@
       "Bash(npm start)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(for js in signature.js muscleMap.js wizard.js termsModal.js intake-form.js conditionalFields.js healthDisclaimers.js)",
+      "Bash(do curl -s -o /dev/null -w \"$js: %{http_code}\\\\n\" http://localhost:3001/js/$js)",
+      "Bash(done)",
+      "Bash(for js in signature.js muscleMap.js intake-form.js conditionalFields.js healthDisclaimers.js termsModal.js)",
+      "Bash(do node -c public/js/$js)",
+      "Bash(echo:*)"
     ]
   }
 }
