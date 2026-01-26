@@ -17,7 +17,9 @@
       "Bash(echo:*)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)"
     ]
   }
 }

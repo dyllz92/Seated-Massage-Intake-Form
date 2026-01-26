@@ -12,9 +12,7 @@
     <div class="container">
         <div class="form-header">
             <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo-small" id="brandLogo">
-            <div id="hemisphereLogo" class="hemisphere-logo-placeholder" style="display:none; width:80px; height:80px; margin:0 auto 12px auto;">
-                <span class="hemisphere-logo-icon" style="font-size:36px;">H</span>
-            </div>
+            <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness Logo" class="logo-small" id="hemisphereLogo" style="display:none;">
             <h1 id="formTitle">Seated Chair<br>Massage Intake</h1>
         </div>
 
@@ -26,19 +24,19 @@
             </div>
             <div class="step" data-step="2">
                 <span class="step-number">2</span>
-                <span class="step-label">Body Map</span>
+                <span class="step-label">Today's Focus</span>
             </div>
             <div class="step" data-step="3">
                 <span class="step-number">3</span>
-                <span class="step-label">Today's Focus</span>
+                <span class="step-label">Health Check</span>
             </div>
             <div class="step" data-step="4">
                 <span class="step-number">4</span>
-                <span class="step-label">Health Check</span>
+                <span class="step-label">Anything to avoid?</span>
             </div>
             <div class="step" data-step="5">
                 <span class="step-number">5</span>
-                <span class="step-label">Preferences</span>
+                <span class="step-label">Consent & Sign</span>
             </div>
         </div>
         <div id="stepCount" class="step-count" style="text-align:center; margin:12px 0; font-weight:600; color:var(--text-dark);">Step 1 of 5</div>
@@ -58,7 +56,8 @@
 
                 <div class="form-group">
                     <label for="mobile">Phone Number: <span class="required">*</span></label>
-                    <input type="tel" id="mobile" name="mobile" placeholder="e.g., 04xxxxxxxx or +61xxxxxxxxx" required>
+                    <input type="tel" id="mobile" name="mobile" placeholder="e.g., 0412 345 678" required>
+                    <div class="form-error" id="error-mobile"></div>
                 </div>
 
                 <div class="form-group">
@@ -75,7 +74,7 @@
                 </div>
             </div>
 
-            <!-- Step 2: Today's focus -->
+            <!-- Step 2: Today's Focus -->
             <div class="wizard-step form-section" data-step="2">
                 <h2>Step 2 — Today's Focus</h2>
                 <p class="section-note">Tap the body map to mark areas of discomfort. Tap a dot to remove it.</p>
@@ -95,6 +94,7 @@
                         <label><input type="radio" name="pressurePreference" value="Medium"> Medium</label>
                         <label><input type="radio" name="pressurePreference" value="Firm"> Firm</label>
                     </div>
+                    <p style="font-size: 12px; color: var(--text-light); margin-top: 8px; font-style: italic;">Continue scrolling for more options →</p>
                 </div>
 
                 <!-- Table-only: Oil/Skin Contact -->
@@ -242,6 +242,7 @@
         </form>
     </div>
 
+    <script src="/js/auPhoneFormatter.js?v=20260127" defer></script>
     <script src="/js/signature.js?v=20260125" defer></script>
     <script src="/js/muscleMap.js?v=20260125" defer></script>
     <script src="/js/conditionalFields.js?v=20260125" defer></script>

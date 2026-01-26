@@ -165,6 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Normalize phone number to canonical +61 format
+        if (data['mobile'] && window.AUPhoneFormatter) {
+            const canonical = AUPhoneFormatter.normalizeToCanonical(data['mobile']);
+            if (canonical) {
+                data['mobile'] = canonical;
+            }
+        }
+
         // Normalize health checks to array and include otherHealthConcernText if present
         if (data['healthChecks']) {
             data['healthChecks'] = Array.isArray(data['healthChecks']) ? data['healthChecks'] : [data['healthChecks']];

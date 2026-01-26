@@ -334,6 +334,13 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(74, 144, 184, 0.1);
 }
 
+/* Invalid input state */
+input.is-invalid,
+textarea.is-invalid {
+    border-color: #d32f2f;
+    background-color: #ffebee;
+}
+
 textarea {
     resize: vertical;
     min-height: 80px;
@@ -1536,14 +1543,18 @@ button[type="button"]#clearSignature {
 
 /* Signature Canvas */
 [data-brand="hemisphere"] .signature-pad-frame {
-    background: rgba(0, 0, 0, 0.6);
+    background: white;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
     overflow: hidden;
 }
 
 [data-brand="hemisphere"] .signature-pad-frame canvas {
-    background: transparent;
+    background: white;
+}
+
+[data-brand="hemisphere"] .signature-pad {
+    background: white;
 }
 
 /* Muscle Map Canvas */
