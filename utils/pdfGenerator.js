@@ -43,9 +43,15 @@ async function generatePDF(formData) {
             doc.moveDown(1);
             
             // Submission info
+            const submittedDate = formData.submissionDate ? new Date(formData.submissionDate) : new Date();
+            const formattedDate = submittedDate.toLocaleString('en-AU', {
+                dateStyle: 'full',
+                timeStyle: 'short',
+                timeZone: 'Australia/Sydney'
+            });
             doc.fontSize(9)
                .fillColor('#666')
-               .text(`Submitted: ${new Date(formData.submissionDate).toLocaleString()}`, { align: 'right' });
+               .text(`Submitted: ${formattedDate}`, { align: 'right' });
             
             doc.moveDown(1);
             
@@ -85,10 +91,15 @@ async function generatePDF(formData) {
             }
             
             doc.moveDown(0.5);
-                const signedTs = formData.signedAt ? new Date(formData.signedAt).toLocaleString() : (formData.signatureDate || new Date(formData.submissionDate).toLocaleDateString());
+                const signedDate = formData.signedAt ? new Date(formData.signedAt) : (formData.submissionDate ? new Date(formData.submissionDate) : new Date());
+                const formattedSignedDate = signedDate.toLocaleString('en-AU', {
+                    dateStyle: 'full',
+                    timeStyle: 'short',
+                    timeZone: 'Australia/Sydney'
+                });
                 doc.fontSize(9)
                     .fillColor('#666')
-                    .text(`Signed: ${signedTs}`);
+                    .text(`Signed: ${formattedSignedDate}`);
             
             // Footer
             doc.fontSize(8)
@@ -214,82 +225,36 @@ function generateUniversalForm(doc, data) {
     addSection(doc, "Preferences");
     addField(doc, 'Pressure preference', data.pressurePreference || 'Not specified');
 
-    addSection(doc, 'Quick Health Check');
+    addSection(doc, 'Health Check');
     if (Array.isArray(data.healthChecks) && data.healthChecks.length) {
-        addFieldList(doc, 'Items flagged', data.healthChecks);
+        addFieldList(doc, 'Health issues flagged', data.healthChecks);
     } else {
-        addField(doc, 'Items flagged', data.healthChecks || 'None');
+        addField(doc, 'Health issues flagged', data.healthChecks || 'None');
     }
-    // Include any therapist review note if provided
-    if (data.reviewNote) addField(doc, 'Review note', data.reviewNote);
+
+    // Include any additional health information if provided
+    if (data.reviewNote) {
+        addField(doc, 'Health Issues - Additional Information', data.reviewNote);
+    }
 
     if (data.avoidNotes) {
-        addSection(doc, 'Anything to avoid');
-        addField(doc, 'Avoid', data.avoidNotes);
+        addSection(doc, 'Areas to Avoid');
+        addField(doc, 'Notes', data.avoidNotes);
     }
 
-    // Add a Questions & Answers detailed section
-    addSection(doc, 'Questions & Answers');
-    addField(doc, 'Pressure preference', data.pressurePreference || 'Not specified');
-    if (data.avoidNotes) addField(doc, 'Anything to avoid', data.avoidNotes);
-    if (data.otherHealthConcernText) addField(doc, 'Other health concern', data.otherHealthConcernText);
-    if (typeof data.emailOptIn !== 'undefined') addField(doc, 'Email opt-in', data.emailOptIn ? 'Yes' : 'No');
-    if (typeof data.smsOptIn !== 'undefined') addField(doc, 'SMS opt-in', data.smsOptIn ? 'Yes' : 'No');
+    if (data.otherHealthConcernText) {
+        addField(doc, 'Other health concern details', data.otherHealthConcernText);
+    }
 
-    addSection(doc, 'Consent');
-    addField(doc, 'Consent (terms, treatment & public setting)', data.consentAll ? 'Yes' : 'No');
-    if (data.signedAt) addField(doc, 'Signed at', data.signedAt);
-    addField(doc, 'Status', data.status || 'submitted');
+    // Marketing Preferences
+    if (typeof data.emailOptIn !== 'undefined' || typeof data.smsOptIn !== 'undefined') {
+        addSection(doc, 'Marketing Preferences');
+        if (typeof data.emailOptIn !== 'undefined') addField(doc, 'Email updates opt-in', data.emailOptIn ? 'Yes' : 'No');
+        if (typeof data.smsOptIn !== 'undefined') addField(doc, 'SMS updates opt-in', data.smsOptIn ? 'Yes' : 'No');
+    }
 
-    // Full responses: include any remaining fields not already shown above
-    const shown = new Set([
-        'fullName','mobile','email','gender','muscleMapMarks','pressurePreference','healthChecks','reviewNote','avoidNotes','otherHealthConcernText','emailOptIn','smsOptIn','consentAll','signature','signedAt','status','submissionDate','createdAt','updatedAt','formType'
-    ]);
-
-    addSection(doc, 'Full responses (summary)');
-    const keys = Object.keys(data).sort();
-    keys.forEach(key => {
-        if (shown.has(key)) return;
-
-        const val = data[key];
-
-        if (key === 'signature') {
-            addField(doc, 'Signature included', val ? 'Yes' : 'No');
-            return;
-        }
-
-        if (key === 'muscleMapMarks') {
-            // already handled above
-            return;
-        }
-
-        if (Array.isArray(val)) {
-            addFieldList(doc, key, val);
-            return;
-        }
-
-        if (typeof val === 'boolean') {
-            addField(doc, key, val ? 'Yes' : 'No');
-            return;
-        }
-
-        if (typeof val === 'object' && val !== null) {
-            try { addField(doc, key, JSON.stringify(val)); } catch(e) { addField(doc, key, String(val)); }
-            return;
-        }
-
-        if (typeof val === 'string') {
-            addField(doc, key, val.length > 800 ? val.substring(0,800) + '…' : val);
-            return;
-        }
-
-        if (typeof val !== 'undefined') {
-            addField(doc, key, String(val));
-            return;
-        }
-
-        addField(doc, key, 'Not provided');
-    });
+    addSection(doc, 'Consent & Agreement');
+    addField(doc, 'Terms, treatment & public setting consent', data.consentAll ? 'Agreed' : 'Not agreed');
 }
 
 function addSection(doc, title) {

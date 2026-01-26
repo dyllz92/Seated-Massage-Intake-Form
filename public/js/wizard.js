@@ -183,11 +183,24 @@
                 message = 'Please mark at least one area on the body chart.';
                 break;
             case 3: {
-                const reasonsChecked = Array.from(document.querySelectorAll('input[name="reasonsToday"]:checked'));
-                const consentAreasChecked = Array.from(document.querySelectorAll('input[name="consentAreas"]:checked'));
+                // Check if any health issues are indicated
+                const healthChecks = Array.from(document.querySelectorAll('input[name="healthChecks"]:checked'));
+                const noHealthIssues = document.getElementById('noHealthIssues');
+                const reviewNote = document.getElementById('reviewNote');
+                const errorReviewNote = document.getElementById('error-reviewNote');
 
-                if (reasonsChecked.length === 0) message = 'Please select at least one reason for your visit.';
-                else if (consentAreasChecked.length === 0) message = 'Please select at least one area you consent to treatment for.';
+                // Clear previous error
+                if (errorReviewNote) errorReviewNote.textContent = '';
+
+                // If any health issues are checked (except "no issues"), reviewNote is required
+                const hasHealthIssues = healthChecks.length > 0 && !(healthChecks.length === 1 && healthChecks[0].id === 'noHealthIssues');
+
+                if (hasHealthIssues && reviewNote && !reviewNote.value.trim()) {
+                    message = 'Please provide a few details, including dates or how long ago.';
+                    if (errorReviewNote) {
+                        errorReviewNote.textContent = message;
+                    }
+                }
                 break;
             }
             case 5: {

@@ -97,15 +97,22 @@ app.post('/api/submit-form', async (req, res) => {
         console.log('Generating PDF...');
         const pdfBuffer = await pdfGenerator.generatePDF(formData);
         
-        // Create filename per universal format: ChairMassageIntake_{fullName}_{YYYY-MM-DD}_{HHmm}.pdf
-        const clientName = (formData.fullName || formData.name || 'Client').replace(/[^a-z0-9]/gi, '_');
+        // Create filename: FULLNAME_DATE_TIME_FORMNAME.pdf
+        const clientName = (formData.fullName || formData.name || 'Client')
+            .replace(/[^a-z0-9\s]/gi, '') // Remove special chars
+            .trim()
+            .replace(/\s+/g, '_'); // Replace spaces with underscores
+
         const now = new Date();
         const yyyy = now.getFullYear();
         const mm = String(now.getMonth() + 1).padStart(2, '0');
         const dd = String(now.getDate()).padStart(2, '0');
         const HH = String(now.getHours()).padStart(2, '0');
         const MM = String(now.getMinutes()).padStart(2, '0');
-        const filename = `ChairMassageIntake_${clientName}_${yyyy}-${mm}-${dd}_${HH}${MM}.pdf`;
+        const ss = String(now.getSeconds()).padStart(2, '0');
+
+        const formName = 'Seated_Chair_Massage_Intake';
+        const filename = `${clientName}_${yyyy}-${mm}-${dd}_${HH}${MM}${ss}_${formName}.pdf`;
         
         // Upload to Google Drive (or save locally if not configured)
         console.log('Uploading to Google Drive...');
