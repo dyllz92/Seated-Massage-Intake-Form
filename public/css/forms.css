@@ -662,29 +662,53 @@ textarea {
     z-index: 10;
 }
 
+/* Flexion & Flow: Subtle background fill with outline style */
 .sticky-actions .btn-primary {
-    background: transparent;
+    background: #ffffff;
     color: var(--primary-color);
-    border: 2px solid var(--primary-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 .sticky-actions .btn-primary:hover {
-    background: transparent;
-    color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    background: rgba(44, 95, 125, 0.08);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
 .sticky-actions .btn-secondary {
-    background: transparent;
+    background: #ffffff;
     color: var(--primary-color);
-    border: 2px solid var(--primary-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 .sticky-actions .btn-secondary:hover {
+    background: rgba(44, 95, 125, 0.08);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Hemisphere: Keep ghost/transparent style */
+[data-brand="hemisphere"] .sticky-actions .btn-primary,
+[data-brand="hemisphere"] .sticky-actions .btn-secondary {
     background: transparent;
-    color: var(--secondary-color);
-    border-color: var(--secondary-color);
+    color: #1a7a6c;
+    border: 1px solid #1a7a6c;
+    box-shadow: none;
+}
+
+[data-brand="hemisphere"] .sticky-actions .btn-primary:hover,
+[data-brand="hemisphere"] .sticky-actions .btn-secondary:hover {
+    background: #1a7a6c;
+    color: #ffffff;
+    border-color: #1a7a6c;
+    box-shadow: 0 4px 12px rgba(26, 122, 108, 0.2);
+    transform: translateY(-1px);
 }
 
 .btn-primary,
