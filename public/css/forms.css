@@ -83,15 +83,14 @@ input:focus, textarea:focus {
 }
 label {
     color: var(--text-dark);
-}
     margin-bottom: 7px;
     font-size: 1.04rem;
 }
 input, textarea {
     width: 100%;
     padding: 11px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 1rem;
     margin-bottom: 2px;
     background: #fafbfc;
@@ -125,7 +124,7 @@ input[type="radio"] {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--border);
+    background: var(--border-color);
     color: var(--text-light);
     display: flex;
     align-items: center;
@@ -585,12 +584,17 @@ textarea {
 /* Signature Pad */
 .signature-container {
     margin-bottom: 15px;
+}
+
+.signature-pad-frame {
     position: relative;
+    width: 100%;
+    height: 200px;
 }
 
 .signature-pad {
     width: 100%;
-    height: 200px;
+    height: 100%;
     border: 2px solid var(--border-color);
     border-radius: 8px;
     background: white;
@@ -605,10 +609,7 @@ textarea {
 /* Typed signature overlay sits on top of the canvas and matches its size */
 .signature-container .typed-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     display: none;
     align-items: center;
     justify-content: center;
@@ -619,43 +620,84 @@ textarea {
     padding: 12px;
     text-align: center;
     word-break: break-word;
+    box-sizing: border-box;
+    overflow: hidden;
+    line-height: 1.1;
 }
 
 /* Buttons */
+
 .form-actions {
     display: flex;
-    gap: 12px;
-    justify-content: space-between;
+    gap: 15px;
+    justify-content: center;
     margin-top: 30px;
+}
+
+.wizard-bottom-bar {
     width: 100%;
-    max-width: 100%;
-    padding: 0;
+    max-width: 820px;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+@media (max-width: 900px) {
+    .wizard-bottom-bar {
+        max-width: 100%;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
 }
 
 .sticky-actions {
-    position: relative;
-    bottom: auto;
+    position: sticky;
+    bottom: 0;
     background: transparent;
-    padding: 0;
+    padding: 12px;
     border-top: none;
-    z-index: 1;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    z-index: 10;
+}
+
+.sticky-actions .btn-primary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.sticky-actions .btn-primary:hover {
+    background: transparent;
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.sticky-actions .btn-secondary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.sticky-actions .btn-secondary:hover {
+    background: transparent;
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 .btn-primary,
 .btn-secondary {
-    padding: 14px 28px;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
+    padding: 18px 50px;
+    border: none;
+    border-radius: 10px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 1;
-    min-height: 48px;
-    background: transparent;
-    color: var(--primary-color);
+    transition: all 0.3s ease;
+    flex: 0 0 auto;
+    min-width: 160px;
 }
 
 .btn-primary:hover,
@@ -824,14 +866,16 @@ button[type="button"]#clearSignature {
 
     .form-actions {
         flex-direction: column;
+        align-items: center;
     }
 
     .btn-primary,
     .btn-secondary {
         width: 100%;
+        max-width: 320px;
     }
 
-    .signature-pad {
+    .signature-pad-frame {
         height: 150px;
     }
 }

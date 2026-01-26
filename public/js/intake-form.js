@@ -127,6 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
         data.consentAll = !!document.getElementById('consentAll') && document.getElementById('consentAll').checked;
         data.emailOptIn = !!document.getElementById('emailOptIn') && document.getElementById('emailOptIn').checked;
 
+        // Capture the rendered muscle map canvas as an image
+        const muscleCanvas = document.querySelector('.muscle-map-canvas');
+        if (muscleCanvas && window.muscleMap && !window.muscleMap.marks.length === false) {
+            try {
+                data.muscleMapImage = muscleCanvas.toDataURL('image/png');
+            } catch (e) {
+                console.warn('Could not capture muscle map canvas:', e);
+            }
+        }
+
         // Metadata
         const nowIso = new Date().toISOString();
         data.submissionDate = nowIso;

@@ -9,28 +9,31 @@ class DriveUploader {
     constructor() {
         this.configured = false;
         this.drive = null;
-        this.folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+        this.folderId = process.env.GOOGLE_DRIVE_FOLDER_ID || '10iOVUY8J-h9GI9B14lmZ-QX42WyGQE4x';
         this.allowLocalFallback = String(process.env.ALLOW_LOCAL_PDF_FALLBACK).toLowerCase() === 'true';
-        
-        // Try to initialize Google Drive API
-        this.initialize();
-    }
-    
-    initialize() {
+
+        // Best practice: Use GOOGLE_SERVICE_ACCOUNT_KEY_PATH to point to your credentials file location.
+        // Example: $env:GOOGLE_SERVICE_ACCOUNT_KEY_PATH = "utils/amplified-alpha-485305-u5-8deb1fe12e2a.json"
+
         try {
-            let credentials;
+            let credentials = null;
+            const credentialsPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH;
 
-            // Check if credentials are provided as JSON string in env var (for cloud deployment)
-            if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
-                credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
-                console.log('✅ Using Google credentials from environment variable');
-            } else {
-                // Fall back to file path (for local development)
-                const credentialsPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH || './google-credentials.json';
+            if (credentialsPath) {
+                try {
+                    credentials = require(credentialsPath);
+                    console.log(`✅ Using Google credentials from file: ${credentialsPath}`);
+                } catch (e) {
+                    console.warn('Could not load credentials from path:', credentialsPath);
+                }
+            }
 
-                if (fs.existsSync(credentialsPath)) {
-                    credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
-                    console.log('✅ Using Google credentials from file');
+            if (!credentials && process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+                try {
+                    credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+                    console.log(`✅ Using Google credentials from GOOGLE_SERVICE_ACCOUNT_KEY env var`);
+                } catch (e) {
+                    console.warn('Could not parse GOOGLE_SERVICE_ACCOUNT_KEY env var');
                 }
             }
 
@@ -48,12 +51,18 @@ class DriveUploader {
                 console.log('   Add GOOGLE_SERVICE_ACCOUNT_KEY env var or google-credentials.json to enable');
             }
         } catch (error) {
-            console.error('⚠️  Error initializing Google Drive:', error.message);
+            console.error('⚠️  Error initializing Google Drive:', error);
             console.log('   PDFs will be saved locally instead');
             this.configured = false;
         }
     }
     
+    isLikelyDriveId(id) {
+        // Shared Drive IDs are typically 19 characters long and start with a digit
+        // Regular folder IDs can vary, but are generally shorter or have different patterns
+        return id && id.length === 19 && /^\d/.test(id);
+    }
+
     isConfigured() {
         return this.configured;
     }
@@ -66,6 +75,16 @@ class DriveUploader {
      */
     async uploadPDF(pdfBuffer, filename) {
         if (this.configured && this.drive) {
+            // Log what we're treating the folderId as
+            if (this.isLikelyDriveId(this.folderId)) {
+                console.log(
+                    `ℹ️ Treating folderId as a Shared Drive ID (likely root of a Shared Drive): ${this.folderId.slice(0, 6)}...${this.folderId.slice(-4)}`
+                );
+            } else {
+                console.log(
+                    `ℹ️ Treating folderId as a folder ID: ${this.folderId.slice(0, 6)}...${this.folderId.slice(-4)}`
+                );
+            }
             return await this.uploadToGoogleDrive(pdfBuffer, filename);
         } else {
             if (this.allowLocalFallback) {
@@ -81,30 +100,40 @@ class DriveUploader {
      */
     async uploadToGoogleDrive(pdfBuffer, filename) {
         try {
-            const fileMetadata = {
+            let fileMetadata = {
                 name: filename,
                 mimeType: 'application/pdf'
             };
-            
-            // Add to specific folder if configured
-            if (this.folderId) {
-                fileMetadata.parents = [this.folderId];
-            }
-            
-            const media = {
-                mimeType: 'application/pdf',
-                body: require('stream').Readable.from(pdfBuffer)
-            };
-            
-            const response = await this.drive.files.create({
+
+            let createParams = {
                 requestBody: fileMetadata,
-                media: media,
-                fields: 'id, webViewLink, webContentLink'
-            });
-            
+                media: {
+                    mimeType: 'application/pdf',
+                    body: require('stream').Readable.from(pdfBuffer)
+                },
+                fields: 'id, webViewLink, webContentLink',
+                supportsAllDrives: true
+            };
+
+            // If folderId is a likely drive ID, upload to the root of the Shared Drive
+            if (this.isLikelyDriveId(this.folderId)) {
+                // For Shared Drive root, do NOT set parents, but set driveId
+                createParams.driveId = this.folderId;
+                createParams.includeItemsFromAllDrives = true;
+                createParams.corpora = 'drive';
+                // No parents: uploads to root of the Shared Drive
+                console.log('ℹ️ Uploading to root of Shared Drive (no parents set)');
+            } else if (this.folderId) {
+                // For a folder (in My Drive or Shared Drive), set parents
+                fileMetadata.parents = [this.folderId];
+                console.log('ℹ️ Uploading to folder:', this.folderId.slice(0, 6) + '...' + this.folderId.slice(-4));
+            }
+
+            const response = await this.drive.files.create(createParams);
+
             console.log(`✅ Uploaded to Google Drive: ${filename}`);
             console.log(`   File ID: ${response.data.id}`);
-            
+
             return {
                 success: true,
                 method: 'google-drive',
@@ -112,14 +141,68 @@ class DriveUploader {
                 webViewLink: response.data.webViewLink,
                 filename: filename
             };
-            
+
         } catch (error) {
             console.error('Error uploading to Google Drive:', error.message);
+            if (error.response && error.response.data) {
+                console.error('Google API response:', error.response.data);
+            }
+            console.error('Failed filename:', filename);
             console.log('Falling back to local storage...');
             return await this.saveLocally(pdfBuffer, filename);
         }
     }
-    
+
+    /**
+     * Preflight check: verify the target folder or drive exists and is accessible.
+     * Logs the result.
+     */
+    async verifyTarget() {
+        if (!this.configured || !this.drive) {
+            console.log('Google Drive not configured, cannot verify target.');
+            return false;
+        }
+        try {
+            if (this.isLikelyDriveId(this.folderId)) {
+                // Shared Drive IDs cannot be checked with files.get
+                console.log('Target is a Shared Drive ID. To check root, list files or folders in the drive.');
+                // Optionally, list root files to check access
+                const res = await this.drive.files.list({
+                    driveId: this.folderId,
+                    includeItemsFromAllDrives: true,
+                    supportsAllDrives: true,
+                    corpora: 'drive',
+                    pageSize: 1
+                });
+                if (res && res.status === 200) {
+                    console.log('✅ Able to list files in Shared Drive root.');
+                    return true;
+                }
+                console.log('⚠️  Could not list files in Shared Drive root.');
+                return false;
+            } else {
+                // Check if folder exists and is a folder
+                const res = await this.drive.files.get({
+                    fileId: this.folderId,
+                    fields: 'id, name, mimeType',
+                    supportsAllDrives: true
+                });
+                if (res && res.data && res.data.mimeType === 'application/vnd.google-apps.folder') {
+                    console.log(`✅ Target folder exists: ${res.data.name} (${res.data.id})`);
+                    return true;
+                } else {
+                    console.log('⚠️  Target exists but is not a folder:', res.data);
+                    return false;
+                }
+            }
+        } catch (error) {
+            console.error('Error verifying target:', error.message);
+            if (error.response && error.response.data) {
+                console.error('Google API response:', error.response.data);
+            }
+            return false;
+        }
+    }
     /**
      * Save PDF locally as fallback
      */
