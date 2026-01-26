@@ -505,6 +505,25 @@ body {
     max-width: 42ch;
 }
 
+.card-website-link {
+    display: block;
+    color: #2c5f7d;
+    font-size: 13px;
+    text-decoration: underline;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.card-website-link:hover {
+    color: #1e4455;
+    text-decoration: underline;
+}
+
+.card-website-link:visited {
+    color: #2c5f7d;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;

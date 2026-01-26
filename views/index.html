@@ -26,6 +26,8 @@
         </div>
         <h2>Seated Massage Intake</h2>
         <a href="/intake?form=seated" class="btn btn-primary">Start Form</a>
+        <a href="https://www.flexionandflow.com.au/" target="_blank" rel="noopener noreferrer" class="card-website-link flexion-link">flexionandflow.com.au</a>
+        <a href="https://hemispherewellness.com/" target="_blank" rel="noopener noreferrer" class="card-website-link hemisphere-link" style="display:none;">hemispherewellness.com</a>
       </div>
 
       <div class="form-card">
@@ -34,6 +36,8 @@
         </div>
         <h2>Table Massage Intake</h2>
         <a href="/intake?form=table" class="btn btn-primary">Start Form</a>
+        <a href="https://www.flexionandflow.com.au/" target="_blank" rel="noopener noreferrer" class="card-website-link flexion-link">flexionandflow.com.au</a>
+        <a href="https://hemispherewellness.com/" target="_blank" rel="noopener noreferrer" class="card-website-link hemisphere-link" style="display:none;">hemispherewellness.com</a>
       </div>
     </div>
 
@@ -61,17 +65,23 @@
       const brandLogo = document.getElementById('brandLogo');
       const hemisphereLogo = document.getElementById('hemisphereLogo');
       const brandTitle = document.getElementById('brandTitle');
+      const flexionLinks = document.querySelectorAll('.flexion-link');
+      const hemisphereLinks = document.querySelectorAll('.hemisphere-link');
 
       if (brand === 'hemisphere') {
         if (brandLogo) brandLogo.style.display = 'none';
         if (hemisphereLogo) hemisphereLogo.style.display = 'flex';
         if (brandTitle) brandTitle.textContent = 'Welcome to Hemisphere Wellness';
         document.title = 'Hemisphere Wellness - Intake Form';
+        flexionLinks.forEach(link => link.style.display = 'none');
+        hemisphereLinks.forEach(link => link.style.display = 'block');
       } else {
         if (brandLogo) brandLogo.style.display = '';
         if (hemisphereLogo) hemisphereLogo.style.display = 'none';
         if (brandTitle) brandTitle.textContent = 'Welcome to Flexion & Flow';
         document.title = 'Flexion & Flow - Intake Form';
+        flexionLinks.forEach(link => link.style.display = 'block');
+        hemisphereLinks.forEach(link => link.style.display = 'none');
       }
     });
   </script>
