@@ -51,7 +51,14 @@ body[data-brand="hemisphere"] {
     cursor: pointer;
     border: none;
     font-family: inherit;
-    min-height: 260px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    gap: 16px;
+    transition: all 0.25s ease;
 }
 
 .brand-card:focus {
@@ -59,10 +66,44 @@ body[data-brand="hemisphere"] {
     outline-offset: 2px;
 }
 
-.brand-logo-image {
-    max-width: 180px;
+.brand-card:active {
+    transform: scale(0.98);
+}
+
+.brand-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     height: auto;
+    min-height: 72px;
+    max-height: 96px;
+}
+
+.brand-logo-image {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
     object-fit: contain;
+}
+
+.brand-link {
+    color: var(--text-light);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.brand-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.brand-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .brand-subtitle {
@@ -71,44 +112,12 @@ body[data-brand="hemisphere"] {
     margin-top: 8px;
 }
 
-/* Hemisphere Card Specific Styling */
-.hemisphere-card {
-    border: 1px solid rgba(157, 78, 221, 0.35);
-    background: rgba(0, 0, 0, 0.55);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-}
-
-.hemisphere-card:hover {
-    border-color: #9D4EDD;
-    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
-    box-shadow: 0 10px 24px rgba(157, 78, 221, 0.3);
-}
-
-.hemisphere-card h2 {
-    color: #FFFFFF;
-    font-family: "Source Sans Pro", arial, sans-serif;
-    font-weight: 600;
-    font-size: 18px;
-    margin-bottom: 4px;
-}
-
-.hemisphere-logo-placeholder {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(157, 78, 221, 0.15));
-    border: 1px solid rgba(157, 78, 221, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    box-shadow: 0 8px 24px rgba(157, 78, 221, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.hemisphere-logo-icon {
-    color: white;
-    font-size: 36px;
-    font-weight: 700;
+/* Desktop Logo Sizing */
+@media (min-width: 768px) {
+    .brand-logo-container {
+        min-height: 110px;
+        max-height: 140px;
+    }
 }
 
 /* Change Brand Link */
