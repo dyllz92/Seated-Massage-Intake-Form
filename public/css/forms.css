@@ -1042,3 +1042,72 @@ button[type="button"]#clearSignature {
         min-width: 0;
     }
 }
+
+/* Hemisphere Wellness Theme - Form Styles */
+[data-brand="hemisphere"] .form-header h1 {
+    color: #1a7a6c;
+}
+
+[data-brand="hemisphere"] .form-section h2 {
+    color: #1a7a6c;
+}
+
+[data-brand="hemisphere"] .form-section h3 {
+    color: #26a896;
+}
+
+[data-brand="hemisphere"] .step-indicator .step.active .step-number {
+    background: #1a7a6c;
+}
+
+[data-brand="hemisphere"] input:focus,
+[data-brand="hemisphere"] textarea:focus {
+    border-color: #26a896;
+    box-shadow: 0 0 0 3px rgba(26, 168, 150, 0.1);
+}
+
+[data-brand="hemisphere"] .radio-group label:hover,
+[data-brand="hemisphere"] .checkbox-group label:hover {
+    background: #f0faf8;
+    border-color: #26a896;
+}
+
+[data-brand="hemisphere"] .btn-primary,
+[data-brand="hemisphere"] .btn-secondary {
+    border-color: #1a7a6c;
+    color: #1a7a6c;
+}
+
+[data-brand="hemisphere"] .btn-primary:hover,
+[data-brand="hemisphere"] .btn-secondary:hover {
+    background: #1a7a6c;
+    color: white;
+    box-shadow: 0 4px 12px rgba(26, 122, 108, 0.2);
+}
+
+[data-brand="hemisphere"] .btn-primary:focus,
+[data-brand="hemisphere"] .btn-secondary:focus {
+    outline: 3px solid rgba(26, 122, 108, 0.3);
+}
+
+[data-brand="hemisphere"] .info-box {
+    border-left-color: #26a896;
+}
+
+[data-brand="hemisphere"] .conditional-container {
+    background: #f0faf8;
+    border-left-color: #26a896;
+}
+
+[data-brand="hemisphere"] .consent-checkbox label:hover {
+    border-color: #26a896;
+}
+
+[data-brand="hemisphere"] .spinner {
+    border-top-color: #1a7a6c;
+}
+
+[data-brand="hemisphere"] .consent-section {
+    border-color: #26a896;
+    background: #f0faf8;
+}

@@ -14,7 +14,10 @@
       "Bash(done)",
       "Bash(for js in signature.js muscleMap.js intake-form.js conditionalFields.js healthDisclaimers.js termsModal.js)",
       "Bash(do node -c public/js/$js)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(node:*)"
     ]
   }
 }

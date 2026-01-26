@@ -135,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
         data.status = status;
         data.formType = 'universal';
 
+        // Ensure selectedBrand is included (from hidden field or localStorage)
+        if (!data.selectedBrand && typeof getSelectedBrand === 'function') {
+            data.selectedBrand = getSelectedBrand() || 'flexion';
+        }
+
         // Show loading
         showLoading(true);
 

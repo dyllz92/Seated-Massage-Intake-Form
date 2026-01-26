@@ -6,6 +6,7 @@
     <title>Success - Flexion & Flow</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/forms.css">
+    <script src="/js/brand.js?v=20260126"></script>
 </head>
 <body>
     <div class="container">
@@ -25,12 +26,25 @@
                 <p>We look forward to seeing you for your massage session!</p>
 
                 <div style="margin-top: 32px;">
-                    <a href="/" class="form-button btn-primary" aria-label="Submit another form">
+                    <a href="/" class="form-button btn-primary" aria-label="Submit another form" onclick="clearSelectedBrand()">
                         Submit Another Form
                     </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Apply brand theme on success page
+        document.addEventListener('DOMContentLoaded', () => {
+            const brand = getSelectedBrand();
+            if (brand) {
+                applyBrandTheme(brand);
+                if (brand === 'hemisphere') {
+                    document.title = 'Success - Hemisphere Wellness';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

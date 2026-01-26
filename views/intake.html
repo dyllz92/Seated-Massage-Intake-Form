@@ -6,12 +6,16 @@
     <title>Seated Chair Massage Intake - Flexion & Flow</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/forms.css">
+    <script src="/js/brand.js?v=20260126"></script>
 </head>
 <body>
     <div class="container">
         <div class="form-header">
-            <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo-small">
-            <h1>Seated Chair<br>Massage Intake</h1>
+            <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo-small" id="brandLogo">
+            <div id="hemisphereLogo" class="hemisphere-logo-placeholder" style="display:none; width:80px; height:80px; margin:0 auto 12px auto;">
+                <span class="hemisphere-logo-icon" style="font-size:36px;">H</span>
+            </div>
+            <h1 id="formTitle">Seated Chair<br>Massage Intake</h1>
         </div>
 
         <!-- Step Indicator -->
@@ -44,6 +48,9 @@
         <div id="stepCount" class="step-count" style="text-align:center; margin:12px 0; font-weight:600; color:var(--text-dark);">Step 1 of 6</div>
 
         <form id="intakeForm" class="intake-form wizard-form">
+            <!-- Hidden field for selected brand -->
+            <input type="hidden" id="selectedBrand" name="selectedBrand" value="">
+
             <!-- Step 1: Details -->
             <div class="wizard-step form-section" data-step="1">
                 <h2>Step 1 — Details</h2>
@@ -287,6 +294,43 @@ By accepting these terms and providing consent, you confirm you have read and un
 
     <script src="/js/termsModal.js?v=20260125" defer></script>
     <script src="/js/bodyMapModal.js?v=20260126" defer></script>
-    <script src="/js/intake-form.js?v=20260125" defer></script>
+    <script src="/js/intake-form.js?v=20260126" defer></script>
+
+    <script>
+        // Initialize brand theming on intake form
+        document.addEventListener('DOMContentLoaded', () => {
+            const brand = getSelectedBrand();
+
+            // If no brand selected, redirect to brand selection
+            if (!brand) {
+                window.location.href = '/';
+                return;
+            }
+
+            // Apply theme
+            applyBrandTheme(brand);
+
+            // Set hidden field value
+            const selectedBrandInput = document.getElementById('selectedBrand');
+            if (selectedBrandInput) {
+                selectedBrandInput.value = brand;
+            }
+
+            // Update branding elements
+            const brandLogo = document.getElementById('brandLogo');
+            const hemisphereLogo = document.getElementById('hemisphereLogo');
+            const formTitle = document.getElementById('formTitle');
+
+            if (brand === 'hemisphere') {
+                if (brandLogo) brandLogo.style.display = 'none';
+                if (hemisphereLogo) hemisphereLogo.style.display = 'flex';
+                document.title = 'Seated Chair Massage Intake - Hemisphere Wellness';
+            } else {
+                if (brandLogo) brandLogo.style.display = '';
+                if (hemisphereLogo) hemisphereLogo.style.display = 'none';
+                document.title = 'Seated Chair Massage Intake - Flexion & Flow';
+            }
+        });
+    </script>
 </body>
 </html>

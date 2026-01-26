@@ -37,7 +37,13 @@ if (spaDir) {
 }
 
 // Routes - Serve HTML pages
+// Brand selection (first page)
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'brand-select.html'));
+});
+
+// Form type selection (Seated vs Table) - second page after brand selection
+app.get('/select-form', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 

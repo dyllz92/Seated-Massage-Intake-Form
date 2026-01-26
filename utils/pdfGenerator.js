@@ -21,20 +21,25 @@ async function generatePDF(formData) {
             doc.on('end', () => resolve(Buffer.concat(chunks)));
             doc.on('error', reject);
             
+            // Determine brand name and colors
+            const isHemisphere = formData.selectedBrand === 'hemisphere';
+            const brandName = isHemisphere ? 'Hemisphere Wellness' : 'Flexion & Flow';
+            const brandColor = isHemisphere ? '#1a7a6c' : '#2c5f7d';
+
             // Header
             doc.fontSize(20)
-               .fillColor('#2c5f7d')
-               .text('Flexion & Flow', { align: 'center' });
-            
+               .fillColor(brandColor)
+               .text(brandName, { align: 'center' });
+
             doc.fontSize(16)
                .text('Seated Chair Massage Intake Form', { align: 'center' });
-            
+
                 doc.fontSize(10)
                     .fillColor('#666')
                     .text('Universal Seated Chair Massage Intake', { align: 'center' });
-            
+
             doc.moveDown(1);
-            doc.strokeColor('#2c5f7d')
+            doc.strokeColor(brandColor)
                .lineWidth(2)
                .moveTo(50, doc.y)
                .lineTo(545, doc.y)
@@ -56,7 +61,7 @@ async function generatePDF(formData) {
             doc.moveDown(1);
             
             // Generate appropriate form based on type
-            generateUniversalForm(doc, formData);
+            generateUniversalForm(doc, formData, brandColor);
             
             // Signature section
             doc.moveDown(1.5);
@@ -116,17 +121,17 @@ async function generatePDF(formData) {
     });
 }
 
-function generateUniversalForm(doc, data) {
+function generateUniversalForm(doc, data, brandColor = '#2c5f7d') {
     doc.fillColor('#000');
 
-    addSection(doc, 'Client Details');
+    addSection(doc, 'Client Details', brandColor);
     addField(doc, 'Full name', data.fullName);
     addField(doc, 'Mobile', data.mobile);
     addField(doc, 'Email', data.email || 'Not provided');
     if (data.gender) addField(doc, 'Gender', data.gender);
 
     // Body map: include an image (if available) and draw marks
-    addSection(doc, 'Body Map');
+    addSection(doc, 'Body Map', brandColor);
     if (data.muscleMapMarks) {
         try {
             const marks = typeof data.muscleMapMarks === 'string' ? JSON.parse(data.muscleMapMarks) : data.muscleMapMarks;
@@ -164,7 +169,7 @@ function generateUniversalForm(doc, data) {
                 try {
                     // Put image on its own page for clarity
                     doc.addPage();
-                    doc.fontSize(11).fillColor('#2c5f7d').text('Body Map (with markers)', { align: 'center' });
+                    doc.fontSize(11).fillColor(brandColor).text('Body Map (with markers)', { align: 'center' });
                     doc.moveDown(0.5);
                     doc.image(imagePath, imgX, doc.y, { width: imgWidth });
                     const imageTopY = doc.y;
@@ -222,10 +227,10 @@ function generateUniversalForm(doc, data) {
         addField(doc, 'Discomfort areas marked', 'None');
     }
 
-    addSection(doc, "Preferences");
+    addSection(doc, "Preferences", brandColor);
     addField(doc, 'Pressure preference', data.pressurePreference || 'Not specified');
 
-    addSection(doc, 'Health Check');
+    addSection(doc, 'Health Check', brandColor);
     if (Array.isArray(data.healthChecks) && data.healthChecks.length) {
         addFieldList(doc, 'Health issues flagged', data.healthChecks);
     } else {
@@ -238,7 +243,7 @@ function generateUniversalForm(doc, data) {
     }
 
     if (data.avoidNotes) {
-        addSection(doc, 'Areas to Avoid');
+        addSection(doc, 'Areas to Avoid', brandColor);
         addField(doc, 'Notes', data.avoidNotes);
     }
 
@@ -248,19 +253,19 @@ function generateUniversalForm(doc, data) {
 
     // Marketing Preferences
     if (typeof data.emailOptIn !== 'undefined' || typeof data.smsOptIn !== 'undefined') {
-        addSection(doc, 'Marketing Preferences');
+        addSection(doc, 'Marketing Preferences', brandColor);
         if (typeof data.emailOptIn !== 'undefined') addField(doc, 'Email updates opt-in', data.emailOptIn ? 'Yes' : 'No');
         if (typeof data.smsOptIn !== 'undefined') addField(doc, 'SMS updates opt-in', data.smsOptIn ? 'Yes' : 'No');
     }
 
-    addSection(doc, 'Consent & Agreement');
+    addSection(doc, 'Consent & Agreement', brandColor);
     addField(doc, 'Terms, treatment & public setting consent', data.consentAll ? 'Agreed' : 'Not agreed');
 }
 
-function addSection(doc, title) {
+function addSection(doc, title, brandColor = '#2c5f7d') {
     doc.moveDown(1);
     doc.fontSize(12)
-       .fillColor('#2c5f7d')
+       .fillColor(brandColor)
        .text(title, { underline: true });
     doc.moveDown(0.5);
 }
