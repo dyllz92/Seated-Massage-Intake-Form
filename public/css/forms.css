@@ -516,7 +516,7 @@ textarea {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Flexion & Flow: Muscle map container buttons */
+/* Muscle map container buttons */
 .muscle-map-container .btn-secondary {
     width: 100%;
     padding: 12px 20px;
@@ -689,7 +689,7 @@ textarea {
     flex-wrap: wrap;
 }
 
-/* Flexion & Flow: Subtle background fill with outline style */
+/* Subtle background fill with outline style */
 .sticky-actions .btn-primary {
     background: #ffffff;
     color: var(--primary-color);
@@ -1061,7 +1061,7 @@ button[type="button"]#clearSignature {
     flex: 1;
 }
 
-/* Flexion & Flow: Modal header/control buttons */
+/* Modal header/control buttons */
 .body-map-header .btn-secondary {
     padding: 8px 16px;
     font-size: 14px;
@@ -1108,7 +1108,7 @@ button[type="button"]#clearSignature {
     width: 100%;
 }
 
-/* Flexion & Flow: Modal control buttons */
+/* Modal control buttons */
 .body-map-controls .btn-secondary {
     padding: 10px 20px;
     font-size: 14px;

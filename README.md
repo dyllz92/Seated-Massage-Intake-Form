@@ -1,4 +1,4 @@
-# Flexion & Flow - Seated Massage Intake Form
+# Hemisphere Wellness - Massage Intake Form
 
 A locally-hosted web application for collecting client intake forms for seated massage services, with secure PDF generation and Google Drive integration.
 
@@ -256,4 +256,4 @@ This project includes a set of recommended config files to make builds and deplo
 
 ## License
 
-ISC License - For Flexion & Flow use
+ISC License - For Hemisphere Wellness use

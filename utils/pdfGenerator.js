@@ -21,10 +21,9 @@ async function generatePDF(formData) {
             doc.on('end', () => resolve(Buffer.concat(chunks)));
             doc.on('error', reject);
 
-            // Determine brand name and colors
-            const isHemisphere = formData.selectedBrand === 'hemisphere';
-            const brandName = isHemisphere ? 'Hemisphere Wellness' : 'Flexion & Flow';
-            const brandColor = isHemisphere ? '#1a7a6c' : '#2c5f7d';
+            // Brand name and colors (Hemisphere Wellness only)
+            const brandName = 'Hemisphere Wellness';
+            const brandColor = '#9D4EDD'; // Hemisphere purple
 
             // Determine form type title
             const formType = formData.formType || 'seated';
@@ -121,7 +120,7 @@ async function generatePDF(formData) {
     });
 }
 
-function generateUniversalForm(doc, data, brandColor = '#2c5f7d', formType = 'seated') {
+function generateUniversalForm(doc, data, brandColor = '#9D4EDD', formType = 'seated') {
     doc.fillColor('#000');
 
     addSection(doc, 'Client Details', brandColor);
@@ -221,7 +220,7 @@ function generateUniversalForm(doc, data, brandColor = '#2c5f7d', formType = 'se
     addField(doc, 'Terms, treatment & public setting consent', data.consentAll ? 'Agreed' : 'Not agreed');
 }
 
-function addSection(doc, title, brandColor = '#2c5f7d') {
+function addSection(doc, title, brandColor = '#9D4EDD') {
     doc.moveDown(1);
     doc.fontSize(12)
        .fillColor(brandColor)

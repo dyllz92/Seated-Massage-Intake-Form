@@ -37,14 +37,14 @@ if (spaDir) {
 }
 
 // Routes - Serve HTML pages
-// Brand selection (first page)
+// Form type selection (Seated vs Table) - main landing page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'brand-select.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// Form type selection (Seated vs Table) - second page after brand selection
+// Legacy route redirect
 app.get('/select-form', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.redirect('/');
 });
 
 app.get('/intake', (req, res) => {
@@ -171,7 +171,7 @@ if (spaDir) {
 app.listen(PORT, () => {
     const ip = getLocalIPv4();
     console.log(`\n${'='.repeat(50)}`);
-    console.log(`🌟 Flexion & Flow Intake Form Server`);
+    console.log(`🌟 Hemisphere Wellness Intake Form Server`);
     console.log(`${'='.repeat(50)}`);
     console.log(`\n📍 Server running at:`);
     console.log(`   Local:   http://localhost:${PORT}`);

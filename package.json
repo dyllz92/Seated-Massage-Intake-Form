@@ -1,8 +1,8 @@
 {
-  "name": "flexion-flow-intake-form",
+  "name": "hemisphere-wellness-intake-form",
   "version": "1.0.0",
   "packageManager": "npm@9",
-  "description": "Seated massage intake form web app for Flexion & Flow",
+  "description": "Massage intake form web app for Hemisphere Wellness",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,7 +10,7 @@
     "test": "echo \"No tests specified. Skipping CI tests.\" && exit 0"
   },
   "keywords": ["massage", "intake-form", "health"],
-  "author": "Flexion & Flow",
+  "author": "Hemisphere Wellness",
   "license": "ISC",
   "engines": {
     "node": ">=18 <21"

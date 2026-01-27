@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-brand="hemisphere">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seated Chair Massage Intake - Flexion & Flow</title>
+    <title>Massage Intake - Hemisphere Wellness</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/forms.css">
-    <script src="/js/brand.js?v=20260126"></script>
+    <script src="/js/brand.js?v=20260127"></script>
 </head>
-<body>
+<body data-brand="hemisphere">
     <div class="container">
         <div class="form-header">
-            <img src="/img/flexion-flow-logo.png" alt="Flexion & Flow Logo" class="logo-small" id="brandLogo">
-            <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness Logo" class="logo-small" id="hemisphereLogo" style="display:none;">
+            <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness Logo" class="logo-small">
             <h1 id="formTitle">Seated Chair<br>Massage Intake</h1>
         </div>
 
@@ -43,7 +42,7 @@
 
         <form id="intakeForm" class="intake-form wizard-form">
             <!-- Hidden fields for selected brand and form type -->
-            <input type="hidden" id="selectedBrand" name="selectedBrand" value="">
+            <input type="hidden" id="selectedBrand" name="selectedBrand" value="hemisphere">
             <input type="hidden" id="formType" name="formType" value="seated">
 
             <!-- Step 1: Details -->
@@ -325,16 +324,8 @@ I agree that selecting the consent checkbox(es) and providing a drawn or typed s
     <script src="/js/intake-form.js?v=20260126" defer></script>
 
     <script>
-        // Initialize brand and form type on intake form
+        // Initialize form type on intake form (Hemisphere Wellness only)
         document.addEventListener('DOMContentLoaded', () => {
-            const brand = getSelectedBrand();
-
-            // If no brand selected, redirect to brand selection
-            if (!brand) {
-                window.location.href = '/';
-                return;
-            }
-
             // Get form type from URL parameter or localStorage
             const urlParams = new URLSearchParams(window.location.search);
             let formType = urlParams.get('form') || getSelectedFormType() || 'seated';
@@ -343,37 +334,16 @@ I agree that selecting the consent checkbox(es) and providing a drawn or typed s
             setSelectedFormType(formType);
 
             // Set hidden field value
-            const selectedBrandInput = document.getElementById('selectedBrand');
-            if (selectedBrandInput) {
-                selectedBrandInput.value = brand;
-            }
-
             const formTypeInput = document.getElementById('formType');
             if (formTypeInput) {
                 formTypeInput.value = formType;
             }
 
-            // Apply theme
-            applyBrandTheme(brand);
-
-            // Update branding elements
-            const brandLogo = document.getElementById('brandLogo');
-            const hemisphereLogo = document.getElementById('hemisphereLogo');
+            // Update form title based on form type
             const formTitle = document.getElementById('formTitle');
-
-            const brandSuffix = brand === 'hemisphere' ? 'Hemisphere Wellness' : 'Flexion & Flow';
             const formTypeDisplay = getFormTypeDisplayName(formType);
 
-            if (brand === 'hemisphere') {
-                if (brandLogo) brandLogo.style.display = 'none';
-                if (hemisphereLogo) hemisphereLogo.style.display = 'flex';
-            } else {
-                if (brandLogo) brandLogo.style.display = '';
-                if (hemisphereLogo) hemisphereLogo.style.display = 'none';
-            }
-
-            // Update page title and form title
-            document.title = formTypeDisplay + ' - ' + brandSuffix;
+            document.title = formTypeDisplay + ' - Hemisphere Wellness';
             if (formTitle) {
                 const titleText = formType === 'table' ? 'Table<br>Massage Intake' : 'Seated Chair<br>Massage Intake';
                 formTitle.innerHTML = titleText;
