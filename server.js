@@ -7,6 +7,10 @@ require('dotenv').config();
 
 const pdfGenerator = require('./utils/pdfGenerator');
 const driveUploader = require('./utils/driveUploader');
+const MetadataStore = require('./utils/metadataStore');
+const AnalyticsService = require('./utils/analyticsService');
+const { authMiddleware, login, logout } = require('./utils/authMiddleware');
+const AnalyticsController = require('./controllers/analyticsController');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -30,6 +34,11 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(publicDir));
+
+// Initialize analytics modules
+const metadataStore = new MetadataStore(driveUploader);
+const analyticsService = new AnalyticsService(metadataStore);
+const analyticsController = new AnalyticsController(analyticsService);
 
 // Serve built SPA assets when available
 if (spaDir) {
@@ -76,6 +85,12 @@ app.get('/detailed-form', (req, res) => {
 
 app.get('/success', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'success.html'));
+});
+
+// Analytics dashboard page
+app.get('/analytics', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'views', 'analytics.html'));
 });
 
 // API endpoint - Submit form
@@ -138,23 +153,54 @@ app.post('/api/submit-form', async (req, res) => {
         // Upload to Google Drive (or save locally if not configured)
         console.log('Uploading to Google Drive...');
         const uploadResult = await driveUploader.uploadPDF(pdfBuffer, filename);
-        
+
         console.log('Form submitted successfully:', uploadResult);
-        
-        res.json({ 
-            success: true, 
+
+        // Save metadata for analytics
+        try {
+            await metadataStore.saveMetadata(formData, filename);
+            console.log('Metadata saved for analytics');
+        } catch (error) {
+            console.warn('Failed to save metadata (non-fatal):', error.message);
+        }
+
+        res.json({
+            success: true,
             message: 'Form submitted successfully',
             fileId: uploadResult.fileId
         });
-        
+
     } catch (error) {
         console.error('Error processing form:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error processing form: ' + error.message 
+        res.status(500).json({
+            success: false,
+            message: 'Error processing form: ' + error.message
         });
     }
 });
+
+// Authentication endpoints
+app.post('/api/auth/login', login);
+app.post('/api/auth/logout', authMiddleware, logout);
+
+// Analytics endpoints (all require authentication)
+app.get('/api/analytics/summary', authMiddleware, (req, res) =>
+    analyticsController.getSummary(req, res));
+
+app.get('/api/analytics/trends', authMiddleware, (req, res) =>
+    analyticsController.getTrends(req, res));
+
+app.get('/api/analytics/health-issues', authMiddleware, (req, res) =>
+    analyticsController.getHealthIssues(req, res));
+
+app.get('/api/analytics/therapists', authMiddleware, (req, res) =>
+    analyticsController.getTherapists(req, res));
+
+app.get('/api/analytics/pressure', authMiddleware, (req, res) =>
+    analyticsController.getPressure(req, res));
+
+app.get('/api/analytics/feeling-scores', authMiddleware, (req, res) =>
+    analyticsController.getFeelingScores(req, res));
 
 // Health check endpoint
 const healthPayload = () => ({

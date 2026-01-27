@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="hemisphere">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Hemisphere Wellness</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/analytics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+</head>
+<body data-brand="hemisphere">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-wrapper">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness" class="login-logo">
+                    <h1>Analytics Dashboard</h1>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter dashboard password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+
+                <div id="loginError" class="error-message" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="dashboard-wrapper" style="display:none;">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-and-title">
+                    <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness" class="header-logo">
+                    <div>
+                        <h1>Analytics Dashboard</h1>
+                        <p class="subtitle">Wellness Impact Tracking</p>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button id="refreshBtn" class="btn-secondary" title="Refresh data">
+                        <span>⟳ Refresh</span>
+                    </button>
+                    <button id="logoutBtn" class="btn-secondary" title="Logout">
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="periodFilter">Time Period:</label>
+                    <select id="periodFilter">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                        <option value="all">All time</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="formTypeFilter">Form Type:</label>
+                    <select id="formTypeFilter">
+                        <option value="all" selected>All forms</option>
+                        <option value="seated">Seated only</option>
+                        <option value="table">Table only</option>
+                        <option value="feedback">Feedback only</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <section class="summary-section">
+                <h2>Key Metrics</h2>
+                <div class="summary-cards">
+                    <div class="card">
+                        <div class="card-icon">📋</div>
+                        <h3>Total Submissions</h3>
+                        <div class="metric" id="totalSubmissions">-</div>
+                        <p class="card-detail" id="submissionDetail"></p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h3>Average Improvement</h3>
+                        <div class="metric" id="avgImprovement">-</div>
+                        <p class="card-detail">Pre → Post feeling score</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">👍</div>
+                        <h3>Recommendation Rate</h3>
+                        <div class="metric" id="recommendationRate">-</div>
+                        <p class="card-detail">Would recommend</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">⭐</div>
+                        <h3>Top Therapist</h3>
+                        <div class="metric" id="topTherapist">-</div>
+                        <p class="card-detail" id="topTherapistDetail"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Grid -->
+            <section class="charts-section">
+                <!-- Submission Trends -->
+                <div class="chart-container">
+                    <h2>Submission Trends</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Feeling Score Comparison -->
+                <div class="chart-container">
+                    <h2>Feeling Score Impact</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="feelingScoresChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Health Issues Frequency -->
+                <div class="chart-container">
+                    <h2>Top Health Issues</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="healthIssuesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pressure Preferences -->
+                <div class="chart-container">
+                    <h2>Pressure Preferences</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="pressureChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Therapist Performance -->
+                <div class="chart-container full-width">
+                    <h2>Therapist Performance</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="therapistsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2026 Hemisphere Wellness. All rights reserved. Analytics data is aggregated and confidential.</p>
+        </footer>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display:none;">
+        <div class="spinner"></div>
+        <p>Loading analytics...</p>
+    </div>
+
+    <script src="/js/analytics.js"></script>
+</body>
+</html>

@@ -204,30 +204,119 @@ class DriveUploader {
         }
     }
     /**
-     * Save PDF locally as fallback
+     * Upload metadata (JSON) to Google Drive or save locally
+     * @param {Buffer} metadataBuffer - The JSON file buffer
+     * @param {String} filename - The filename for the metadata JSON
+     * @returns {Promise<Object>} Upload result
      */
-    async saveLocally(pdfBuffer, filename) {
+    async uploadMetadata(metadataBuffer, filename) {
+        if (this.configured && this.drive) {
+            return await this.uploadMetadataToGoogleDrive(metadataBuffer, filename);
+        } else {
+            return await this.saveMetadataLocally(metadataBuffer, filename);
+        }
+    }
+
+    /**
+     * Upload metadata to Google Drive
+     */
+    async uploadMetadataToGoogleDrive(metadataBuffer, filename) {
         try {
-            const pdfsDir = path.join(__dirname, '..', 'pdfs');
-            
-            // Create pdfs directory if it doesn't exist
-            if (!fs.existsSync(pdfsDir)) {
-                fs.mkdirSync(pdfsDir, { recursive: true });
+            let fileMetadata = {
+                name: filename,
+                mimeType: 'application/json'
+            };
+
+            let createParams = {
+                requestBody: fileMetadata,
+                media: {
+                    mimeType: 'application/json',
+                    body: require('stream').Readable.from(metadataBuffer)
+                },
+                fields: 'id',
+                supportsAllDrives: true
+            };
+
+            // Same logic as PDFs
+            if (this.isLikelyDriveId(this.folderId)) {
+                createParams.driveId = this.folderId;
+                createParams.includeItemsFromAllDrives = true;
+                createParams.corpora = 'drive';
+            } else if (this.folderId) {
+                fileMetadata.parents = [this.folderId];
             }
-            
-            const filepath = path.join(pdfsDir, filename);
-            fs.writeFileSync(filepath, pdfBuffer);
-            
-            console.log(`💾 Saved locally: ${filename}`);
-            console.log(`   Location: ${filepath}`);
-            
+
+            const response = await this.drive.files.create(createParams);
+
+            console.log(`✅ Uploaded metadata to Google Drive: ${filename}`);
+            return {
+                success: true,
+                method: 'google-drive',
+                fileId: response.data.id,
+                filename: filename
+            };
+
+        } catch (error) {
+            console.error('Error uploading metadata to Google Drive:', error.message);
+            console.log('Falling back to local metadata storage...');
+            return await this.saveMetadataLocally(metadataBuffer, filename);
+        }
+    }
+
+    /**
+     * Save metadata JSON locally
+     */
+    async saveMetadataLocally(metadataBuffer, filename) {
+        try {
+            const metadataDir = path.join(__dirname, '..', 'metadata');
+
+            // Create metadata directory if it doesn't exist
+            if (!fs.existsSync(metadataDir)) {
+                fs.mkdirSync(metadataDir, { recursive: true });
+            }
+
+            const filepath = path.join(metadataDir, filename);
+            fs.writeFileSync(filepath, metadataBuffer);
+
+            console.log(`💾 Saved metadata locally: ${filename}`);
             return {
                 success: true,
                 method: 'local',
                 filepath: filepath,
                 filename: filename
             };
-            
+
+        } catch (error) {
+            console.error('Error saving metadata locally:', error);
+            throw new Error('Failed to save metadata: ' + error.message);
+        }
+    }
+
+    /**
+     * Save PDF locally as fallback
+     */
+    async saveLocally(pdfBuffer, filename) {
+        try {
+            const pdfsDir = path.join(__dirname, '..', 'pdfs');
+
+            // Create pdfs directory if it doesn't exist
+            if (!fs.existsSync(pdfsDir)) {
+                fs.mkdirSync(pdfsDir, { recursive: true });
+            }
+
+            const filepath = path.join(pdfsDir, filename);
+            fs.writeFileSync(filepath, pdfBuffer);
+
+            console.log(`💾 Saved locally: ${filename}`);
+            console.log(`   Location: ${filepath}`);
+
+            return {
+                success: true,
+                method: 'local',
+                filepath: filepath,
+                filename: filename
+            };
+
         } catch (error) {
             console.error('Error saving PDF locally:', error);
             throw new Error('Failed to save PDF: ' + error.message);
