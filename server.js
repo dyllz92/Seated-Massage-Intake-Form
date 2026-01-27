@@ -51,6 +51,11 @@ app.get('/intake', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'views', 'intake.html'));
 });
+
+app.get('/feedback', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'views', 'feedback.html'));
+});
 // Diagnostics endpoint for deploy/version info
 app.get('/__version', (req, res) => {
     res.json({
@@ -87,7 +92,9 @@ app.post('/api/submit-form', async (req, res) => {
         }
         
         // Require consent: support newer `consentAll` or legacy `termsAccepted`+`treatmentConsent`
-        const hasConsent = !!formData.consentAll || (!!formData.termsAccepted && !!formData.treatmentConsent);
+        // Feedback forms don't require consent checkbox (just signature)
+        const isFeedbackForm = formData.formType === 'feedback';
+        const hasConsent = isFeedbackForm || !!formData.consentAll || (!!formData.termsAccepted && !!formData.treatmentConsent);
         if (!hasConsent) {
             return res.status(400).json({ success: false, message: 'Consent is required to proceed' });
         }
@@ -118,7 +125,14 @@ app.post('/api/submit-form', async (req, res) => {
         const ss = String(now.getSeconds()).padStart(2, '0');
 
         const formType = formData.formType || 'seated';
-        const formName = formType === 'table' ? 'Table_Massage_Intake' : 'Seated_Chair_Massage_Intake';
+        let formName;
+        if (formType === 'feedback') {
+            formName = 'Post_Session_Feedback';
+        } else if (formType === 'table') {
+            formName = 'Table_Massage_Intake';
+        } else {
+            formName = 'Seated_Chair_Massage_Intake';
+        }
         const filename = `${clientName}_${yyyy}-${mm}-${dd}_${HH}${MM}${ss}_${formName}.pdf`;
         
         // Upload to Google Drive (or save locally if not configured)

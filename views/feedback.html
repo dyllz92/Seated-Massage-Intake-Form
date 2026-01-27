@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="hemisphere">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Session Feedback - Hemisphere Wellness</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/brand.js?v=20260127"></script>
+    <style>
+        .feedback-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .feedback-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .feedback-header img {
+            max-height: 80px;
+            margin-bottom: 15px;
+        }
+        .feedback-header h1 {
+            color: #9D4EDD;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .feedback-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .feedback-form {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .feedback-form .form-group {
+            margin-bottom: 24px;
+        }
+        .feedback-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .feedback-form input[type="text"],
+        .feedback-form input[type="tel"],
+        .feedback-form input[type="email"],
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            border-color: #9D4EDD;
+            outline: none;
+        }
+        .feedback-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .radio-group input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #9D4EDD;
+        }
+        .slider-container {
+            padding: 10px 0;
+        }
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #E0E0E0, #9D4EDD);
+            border-radius: 4px;
+            outline: none;
+        }
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #9D4EDD;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(157, 78, 221, 0.4);
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        .slider-value {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: #9D4EDD;
+            margin-top: 10px;
+        }
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #E0E0E0;
+        }
+        .signature-container {
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            background: #FAFAFA;
+            position: relative;
+            min-height: 150px;
+        }
+        .signature-canvas {
+            width: 100%;
+            height: 150px;
+            display: block;
+            touch-action: none;
+        }
+        .signature-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-clear {
+            background: #F0F0F0;
+            color: #666;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-clear:hover {
+            background: #E0E0E0;
+        }
+        .submit-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #9D4EDD, #7B2CBF);
+            color: #fff;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(157, 78, 221, 0.3);
+        }
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #AD63ED, #8B3FDF);
+            box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #9D4EDD;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .required {
+            color: #E53935;
+        }
+        .optional {
+            color: #999;
+            font-weight: normal;
+            font-size: 12px;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-spinner {
+            text-align: center;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #E0E0E0;
+            border-top-color: #9D4EDD;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body data-brand="hemisphere">
+    <div class="feedback-container">
+        <div class="feedback-header">
+            <img src="/js/Wellcorp_Logo.png" alt="Hemisphere Wellness Logo">
+            <h1>AO Wellness - Post-Session Feedback</h1>
+            <p>We'd love to hear how you're feeling after your massage</p>
+        </div>
+
+        <form id="feedbackForm" class="feedback-form">
+            <input type="hidden" id="formType" name="formType" value="feedback">
+            <input type="hidden" id="signatureData" name="signature" value="">
+            <input type="hidden" id="signedAt" name="signedAt" value="">
+
+            <div class="form-group">
+                <label for="fullName">Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile <span class="optional">(optional)</span></label>
+                <input type="tel" id="mobile" name="mobile" placeholder="0400 000 000">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email <span class="optional">(optional)</span></label>
+                <input type="email" id="email" name="email" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Who was your therapist today? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label><input type="radio" name="therapistName" value="Dylan" required> Dylan</label>
+                    <label><input type="radio" name="therapistName" value="Adriana" required> Adriana</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="feelingPost">How are you feeling now (post-massage)? <span class="required">*</span></label>
+                <div class="slider-container">
+                    <input type="range" id="feelingPost" name="feelingPost" min="1" max="10" value="5">
+                    <div class="slider-labels">
+                        <span>1 - Not great</span>
+                        <span>10 - Amazing!</span>
+                    </div>
+                    <div class="slider-value" id="feelingPostValue">5</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Would you recommend AO Wellness to a colleague? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label><input type="radio" name="wouldRecommend" value="Yes" required> Yes</label>
+                    <label><input type="radio" name="wouldRecommend" value="No" required> No</label>
+                    <label><input type="radio" name="wouldRecommend" value="Maybe" required> Maybe</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="feedbackComments">Any additional comments? <span class="optional">(optional)</span></label>
+                <textarea id="feedbackComments" name="feedbackComments" placeholder="Tell us more about your experience..."></textarea>
+            </div>
+
+            <div class="signature-section">
+                <label>Signature <span class="required">*</span></label>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Please sign below to confirm your feedback</p>
+                <div class="signature-container">
+                    <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+                </div>
+                <div class="signature-actions">
+                    <button type="button" id="clearSignature" class="btn-clear">Clear Signature</button>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" id="submitBtn" class="btn-submit">Submit Feedback</button>
+                <br>
+                <a href="/" class="back-link">&larr; Back to Home</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="/js/feedback-form.js"></script>
+</body>
+</html>

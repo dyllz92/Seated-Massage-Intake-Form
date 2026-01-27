@@ -248,6 +248,24 @@ body[data-brand="hemisphere"] {
     transform: scale(1.05);
 }
 
+[data-brand="hemisphere"] .card-icon-emoji {
+    font-size: 64px;
+    line-height: 1;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+[data-brand="hemisphere"] .form-card:hover .card-icon-emoji {
+    transform: scale(1.1);
+}
+
+[data-brand="hemisphere"] .card-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: -10px 0 10px 0;
+    line-height: 1.4;
+}
+
 [data-brand="hemisphere"] .form-card h2 {
     color: #1A1A1A;
     font-size: 20px;
