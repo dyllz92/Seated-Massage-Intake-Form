@@ -350,23 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Method-aware signature validation
- * Returns true if EITHER:
- * 1. signatureMethod === 'draw' AND the canvas contains a real signature
- * 2. signatureMethod === 'type' AND the typed signature has text
+ * Signature validation - always returns true (signature is optional)
  */
 window.isSignatureValid = function() {
-    // Get the selected signature method
-    const selectedMethod = document.querySelector('input[name="signatureMethod"]:checked')?.value || 'draw';
-
-    if (selectedMethod === 'draw') {
-        // For draw method, check if canvas has drawn content
-        return window.signaturePad && window.signaturePad.hasDrawnContent();
-    } else if (selectedMethod === 'type') {
-        // For type method, check if typed text has content
-        return window.typedSignatureText && window.typedSignatureText.trim().length > 0;
-    }
-
-    // Default: invalid
-    return false;
+    return true;
 };
