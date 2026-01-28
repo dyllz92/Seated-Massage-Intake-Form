@@ -399,6 +399,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 28px;
+    background: transparent;
+    box-shadow: none;
 }
 
 @keyframes fadeIn {
