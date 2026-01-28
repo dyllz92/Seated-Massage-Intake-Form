@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Capture the rendered muscle map canvas as an image
         const muscleCanvas = document.querySelector('.muscle-map-canvas');
-        if (muscleCanvas && window.muscleMap && !window.muscleMap.marks.length === false) {
+        if (muscleCanvas && window.muscleMap && window.muscleMap.marks.length > 0) {
             try {
                 data.muscleMapImage = muscleCanvas.toDataURL('image/png');
             } catch (e) {

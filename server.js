@@ -114,12 +114,7 @@ app.post('/api/submit-form', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Consent is required to proceed' });
         }
 
-        if (!formData.signature) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Signature is required' 
-            });
-        }
+        // Signature is optional - no validation required
         
         // Generate PDF with PDFKit
         console.log('Generating PDF...');

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const TOTAL_STEPS = 5;
+    const TOTAL_STEPS = 4;
     let currentStep = 1;
 
     // DOM Elements
@@ -82,11 +82,7 @@
             return reviewNote && reviewNote.value.trim().length > 0;
         },
         4: () => {
-            // Step 4: anything to avoid optional
-            return true;
-        },
-        5: () => {
-            // Step 5: combined consent required (signature optional)
+            // Step 4: combined consent required (signature optional)
             const consentAll = document.getElementById('consentAll');
             return consentAll && consentAll.checked;
         }
@@ -170,8 +166,8 @@
             }, 100);
         }
 
-        // Ensure signature pad is resized/available on step 5 (signature step)
-        if (currentStep === 5 && window.signaturePad) {
+        // Ensure signature pad is resized/available on step 4 (signature step)
+        if (currentStep === 4 && window.signaturePad) {
             setTimeout(() => {
                 try {
                     // Resize canvas and re-setup drawing settings
@@ -315,7 +311,7 @@
                 }
                 break;
             }
-            case 5: {
+            case 4: {
                 const consentAll = document.getElementById('consentAll');
                 if (!consentAll || !consentAll.checked) message = 'Please confirm you have read and agreed to the Terms and consent to treatment.';
                 break;

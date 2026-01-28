@@ -302,27 +302,6 @@ function addFieldList(doc, label, arr) {
     doc.moveDown(0.4);
 }
 
-function formatValue(value, otherValue) {
-    if (!value) return 'Not provided';
-    if (value === 'Other' && otherValue) {
-        return `Other: ${otherValue}`;
-    }
-    return value;
-}
-
-function formatArrayValue(arr, otherValue) {
-    if (!arr) return 'None';
-
-    const values = Array.isArray(arr) ? arr : [arr];
-    let result = values.filter(v => v && v !== 'Other').join(', ');
-
-    if (values.includes('Other') && otherValue) {
-        result += (result ? ', ' : '') + `Other: ${otherValue}`;
-    }
-
-    return result || 'None';
-}
-
 module.exports = {
     generatePDF
 };

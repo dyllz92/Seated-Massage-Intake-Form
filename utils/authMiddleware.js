@@ -116,6 +116,26 @@ function authMiddleware(req, res, next) {
 }
 
 /**
+ * Constant-time string comparison to prevent timing attacks
+ */
+function secureCompare(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') {
+    return false;
+  }
+
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+
+  // If lengths differ, compare against self to maintain constant time
+  if (bufA.length !== bufB.length) {
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+/**
  * Login handler
  */
 async function login(req, res) {
@@ -127,7 +147,7 @@ async function login(req, res) {
       return res.status(500).json({ error: 'Analytics password not configured' });
     }
 
-    if (password !== correctPassword) {
+    if (!secureCompare(password, correctPassword)) {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
