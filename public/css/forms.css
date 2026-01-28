@@ -1290,6 +1290,21 @@ button[type="button"]#clearSignature {
     outline: none;
 }
 
+/* Prevent autofill background color change */
+[data-brand="hemisphere"] input:-webkit-autofill,
+[data-brand="hemisphere"] input:-webkit-autofill:hover,
+[data-brand="hemisphere"] input:-webkit-autofill:focus {
+    background: #000000 !important;
+    -webkit-box-shadow: 0 0 0 30px #000000 inset !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    caret-color: #FFFFFF;
+}
+
+[data-brand="hemisphere"] input:autofill {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+}
+
 /* Radio & Checkbox Groups */
 [data-brand="hemisphere"] .radio-group label,
 [data-brand="hemisphere"] .checkbox-group label {
