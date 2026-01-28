@@ -1,5 +1,23 @@
 // Intake Form Validation and Submission
 document.addEventListener('DOMContentLoaded', () => {
+        // Allow unselecting the 'I feel well today' button
+        const feelWellRadio = document.getElementById('feelWellRadio');
+        const feelWellToggle = document.getElementById('feelWellToggle');
+        if (feelWellRadio && feelWellToggle) {
+            feelWellToggle.addEventListener('click', () => {
+                if (feelWellRadio.checked) {
+                    feelWellRadio.checked = false;
+                    feelWellToggle.classList.remove('active');
+                } else {
+                    feelWellRadio.checked = true;
+                    feelWellToggle.classList.add('active');
+                }
+            });
+            // Set initial state
+            if (feelWellRadio.checked) {
+                feelWellToggle.classList.add('active');
+            }
+        }
     const form = document.getElementById('intakeForm');
     const submitBtn = document.getElementById('submitBtn');
 
