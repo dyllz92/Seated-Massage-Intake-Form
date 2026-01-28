@@ -179,12 +179,6 @@
                 return;
             }
 
-            // Validate signature
-            if (!signaturePad || !signaturePad.hasDrawnContent()) {
-                alert('Please provide your signature.');
-                return;
-            }
-
             // Collect form data
             const formData = new FormData(form);
             const data = {};
