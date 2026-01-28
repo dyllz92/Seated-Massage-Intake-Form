@@ -4,63 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post-Session Feedback - Hemisphere Wellness</title>
-    <link rel="stylesheet" href="/css/styles.css?v=20260129-v11">
-    <link rel="stylesheet" href="/css/forms.css?v=20260129-v11">
+    <link rel="stylesheet" href="/css/styles.css?v=20260129-v20">
+    <link rel="stylesheet" href="/css/forms.css?v=20260129-v20">
     <script src="/js/brand.js?v=20260127"></script>
     <style>
+        body {
+            background: linear-gradient(to bottom, #000000 0%, #6B2C91 100%) !important;
+            min-height: 100vh;
+        }
         .feedback-container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
         .feedback-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         .feedback-header img {
-            max-height: 80px;
-            margin-bottom: 15px;
+            max-height: 100px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            padding: 15px;
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
         }
         .feedback-header h1 {
-            color: #9D4EDD;
-            font-size: 24px;
-            margin-bottom: 8px;
+            color: #FFFFFF;
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         .feedback-header p {
-            color: #666;
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+        }
+        /* Step Indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 10px;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #9D4EDD;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 auto 8px;
+            border: 2px solid #9D4EDD;
+        }
+        .step.active .step-number {
+            background: #9D4EDD;
+            border-color: #AD63ED;
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.3);
+        }
+        .step.completed .step-number {
+            background: #7B2CBF;
+        }
+        .step-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .step.active .step-label {
+            color: #FFFFFF;
         }
         .feedback-form {
-            background: #fff;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
         }
         .feedback-form .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
         .feedback-form label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
+            margin-bottom: 10px;
+            color: #FFFFFF;
+            font-size: 15px;
         }
         .feedback-form input[type="text"],
         .feedback-form input[type="tel"],
         .feedback-form input[type="email"],
         .feedback-form textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #E0E0E0;
-            border-radius: 10px;
+            padding: 14px 16px;
+            background: #1a1a1a;
+            border: 2px solid #333333;
+            border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.2s ease;
+            color: #FFFFFF;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
             box-sizing: border-box;
+            font-family: inherit;
+        }
+        .feedback-form input[type="text"]::placeholder,
+        .feedback-form input[type="tel"]::placeholder,
+        .feedback-form input[type="email"]::placeholder,
+        .feedback-form textarea::placeholder {
+            color: #777777;
         }
         .feedback-form input:focus,
         .feedback-form textarea:focus {
             border-color: #9D4EDD;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2);
         }
         .feedback-form textarea {
             min-height: 100px;
@@ -68,64 +132,96 @@
         }
         .radio-group {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
         .radio-group label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: normal;
+            gap: 10px;
+            font-weight: 600;
             cursor: pointer;
+            padding: 12px 20px;
+            border: 2px solid #333333;
+            background: transparent;
+            border-radius: 8px;
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+            flex: 0 1 auto;
+        }
+        .radio-group label:hover {
+            border-color: #9D4EDD;
+            background: rgba(157, 78, 221, 0.1);
         }
         .radio-group input[type="radio"] {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             accent-color: #9D4EDD;
+            cursor: pointer;
+        }
+        .radio-group label:has(input[type="radio"]:checked) {
+            border-color: #9D4EDD;
+            background: rgba(157, 78, 221, 0.15);
+            color: #9D4EDD;
         }
         .slider-container {
-            padding: 10px 0;
+            padding: 15px 0;
         }
         .slider-container input[type="range"] {
             width: 100%;
             height: 8px;
             -webkit-appearance: none;
-            background: linear-gradient(to right, #E0E0E0, #9D4EDD);
+            background: linear-gradient(to right, #444444, #9D4EDD);
             border-radius: 4px;
             outline: none;
         }
         .slider-container input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             background: #9D4EDD;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(157, 78, 221, 0.4);
+            box-shadow: 0 2px 8px rgba(157, 78, 221, 0.6);
+        }
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            background: #9D4EDD;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(157, 78, 221, 0.6);
         }
         .slider-labels {
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
+            margin-top: 10px;
             font-size: 12px;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
         }
         .slider-value {
             text-align: center;
-            font-size: 32px;
+            font-size: 40px;
             font-weight: 700;
             color: #9D4EDD;
-            margin-top: 10px;
+            margin-top: 12px;
         }
         .signature-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #E0E0E0;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .signature-section label {
+            color: #FFFFFF;
+        }
+        .signature-section p {
+            color: rgba(255, 255, 255, 0.7);
         }
         .signature-container {
-            border: 2px solid #E0E0E0;
-            border-radius: 10px;
-            background: #FAFAFA;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            background: #0a0a0a;
             position: relative;
             min-height: 150px;
         }
@@ -134,26 +230,30 @@
             height: 150px;
             display: block;
             touch-action: none;
+            border-radius: 6px;
         }
         .signature-actions {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
         .btn-clear {
-            background: #F0F0F0;
-            color: #666;
-            border: none;
-            padding: 8px 16px;
+            background: transparent;
+            color: #FFFFFF;
+            border: 2px solid #333333;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         .btn-clear:hover {
-            background: #E0E0E0;
+            border-color: #9D4EDD;
+            background: rgba(157, 78, 221, 0.1);
         }
         .submit-section {
-            margin-top: 30px;
+            margin-top: 40px;
             text-align: center;
         }
         .btn-submit {
@@ -161,7 +261,7 @@
             color: #fff;
             border: none;
             padding: 16px 48px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
@@ -171,28 +271,29 @@
         .btn-submit:hover {
             background: linear-gradient(135deg, #AD63ED, #8B3FDF);
             box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
-            transform: translateY(-2px);
         }
         .btn-submit:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
         .back-link {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 24px;
             color: #9D4EDD;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
         .back-link:hover {
+            color: #AD63ED;
             text-decoration: underline;
         }
         .required {
-            color: #E53935;
+            color: #FF6B6B;
         }
         .optional {
-            color: #999;
+            color: rgba(255, 255, 255, 0.6);
             font-weight: normal;
             font-size: 12px;
         }
@@ -203,7 +304,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -217,7 +318,7 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid #E0E0E0;
+            border: 4px solid rgba(255, 255, 255, 0.2);
             border-top-color: #9D4EDD;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -226,14 +327,47 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        @media (max-width: 600px) {
+            .feedback-container {
+                padding: 30px 16px;
+            }
+            .step-indicators {
+                margin-bottom: 30px;
+            }
+            .step-label {
+                font-size: 10px;
+            }
+            .radio-group {
+                gap: 12px;
+            }
+            .radio-group label {
+                flex: 1 1 calc(50% - 6px);
+                padding: 10px 16px;
+            }
+            .slider-value {
+                font-size: 32px;
+            }
+        }
     </style>
 </head>
 <body data-brand="hemisphere">
     <div class="feedback-container">
         <div class="feedback-header">
             <img src="/js/Wellcorp_Logo.png?v=20260129" alt="Hemisphere Wellness Logo">
-            <h1>AO Wellness - Post-Session Feedback</h1>
+            <h1>Post-Session Feedback</h1>
             <p>We'd love to hear how you're feeling after your massage</p>
+        </div>
+
+        <!-- Step Indicators -->
+        <div class="step-indicators">
+            <div class="step completed">
+                <div class="step-number">1</div>
+                <div class="step-label">Details</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Your Response</div>
+            </div>
         </div>
 
         <form id="feedbackForm" class="feedback-form">
@@ -292,7 +426,7 @@
 
             <div class="signature-section">
                 <label>Signature <span class="optional">(optional)</span></label>
-                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">You may optionally sign below</p>
+                <p style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-bottom: 10px;">You may optionally sign below</p>
                 <div class="signature-container">
                     <canvas id="signatureCanvas" class="signature-canvas"></canvas>
                 </div>
