@@ -218,7 +218,12 @@ class AnalyticsDashboard {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { stepSize: 1 }
+                        ticks: { stepSize: 1, color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 }
             }
@@ -266,7 +271,12 @@ class AnalyticsDashboard {
                 scales: {
                     x: {
                         beginAtZero: true,
-                        ticks: { stepSize: 1 }
+                        ticks: { stepSize: 1, color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 }
             }
@@ -290,7 +300,7 @@ class AnalyticsDashboard {
                     {
                         data: data.data,
                         backgroundColor: colors,
-                        borderColor: '#fff',
+                        borderColor: 'rgba(0, 0, 0, 0.3)',
                         borderWidth: 3
                     }
                 ]
@@ -303,7 +313,8 @@ class AnalyticsDashboard {
                         position: 'bottom',
                         labels: {
                             padding: 16,
-                            font: { size: 13, weight: 500 }
+                            font: { size: 13, weight: 500 },
+                            color: '#FFFFFF'
                         }
                     }
                 }
@@ -351,13 +362,20 @@ class AnalyticsDashboard {
                         position: 'bottom',
                         labels: {
                             padding: 16,
-                            font: { size: 13, weight: 500 }
+                            font: { size: 13, weight: 500 },
+                            color: '#FFFFFF'
                         }
                     }
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 }
             }
@@ -395,7 +413,8 @@ class AnalyticsDashboard {
                         position: 'bottom',
                         labels: {
                             padding: 16,
-                            font: { size: 13, weight: 500 }
+                            font: { size: 13, weight: 500 },
+                            color: '#FFFFFF'
                         }
                     },
                     tooltip: {
@@ -413,7 +432,13 @@ class AnalyticsDashboard {
                     y: {
                         beginAtZero: true,
                         min: 0,
-                        max: 10
+                        max: 10,
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#FFFFFF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 }
             }
