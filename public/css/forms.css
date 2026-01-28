@@ -580,23 +580,23 @@ textarea {
     margin: 10px 0;
     padding: 0px;
     background: transparent;
-    border-radius: 10px;
-    border: 2px solid var(--border-color);
+    border-radius: 0;
+    border: none;
 }
 
 .muscle-map-canvas {
     width: 100%;
     max-width: 100%;
     height: auto;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    background: #f9f9f9;
+    border: none;
+    border-radius: 0;
+    background: transparent;
     cursor: crosshair;
     display: block;
-    margin: 15px auto;
+    margin: 0 auto;
     touch-action: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 0.2s ease;
+    box-shadow: none;
+    transition: none;
 }
 
 .muscle-map-canvas:hover {
