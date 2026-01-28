@@ -589,8 +589,8 @@ textarea {
     border: 2px solid var(--border-color);
     border-radius: 8px;
     background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
     max-width: 100%;
 }
 
@@ -604,7 +604,7 @@ textarea {
 .svg-muscle-map {
     max-width: 100%;
     height: auto;
-    max-height: 400px;
+    max-height: 550px;
 }
 
 .svg-muscle-map path,
