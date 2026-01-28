@@ -23,7 +23,9 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\dylan\\\\Dev\\\\GitHub\\\\Seated-Massage-Intake-Form\" -Filter \"*.md\" -File)",
       "Bash(Select-Object Name, Length)",
       "Read(//c/Users/dylan/Dev/GitHub/Seated-Massage-Intake-Form/**)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(for file in utils/metadataStore.js utils/analyticsService.js controllers/analyticsController.js utils/pdfParser.js)",
+      "Bash(do node -c \"$file\")"
     ]
   }
 }
