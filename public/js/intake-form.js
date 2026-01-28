@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function submitForm(status) {
-        // Validate combined consent and signature
+        // Validate combined consent
         const consentAllEl = document.getElementById('consentAll');
 
         if (!consentAllEl) {
@@ -127,12 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!consentAllEl.checked) {
             alert('Please confirm you have read and agreed to the Terms and consent to treatment.');
-            return;
-        }
-
-        // Validate signature using method-aware validation
-        if (typeof window.isSignatureValid === 'function' && !window.isSignatureValid()) {
-            alert('Please provide your signature before submitting (draw or type).');
             return;
         }
 

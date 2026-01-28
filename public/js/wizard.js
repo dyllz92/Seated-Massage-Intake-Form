@@ -86,10 +86,9 @@
             return true;
         },
         5: () => {
-            // Step 5: combined consent + signature required (method-aware validation)
+            // Step 5: combined consent required (signature optional)
             const consentAll = document.getElementById('consentAll');
-            const signatureValid = typeof window.isSignatureValid === 'function' && window.isSignatureValid();
-            return consentAll && consentAll.checked && signatureValid;
+            return consentAll && consentAll.checked;
         }
     };
 
@@ -318,9 +317,7 @@
             }
             case 5: {
                 const consentAll = document.getElementById('consentAll');
-                const signatureValid = typeof window.isSignatureValid === 'function' && window.isSignatureValid();
                 if (!consentAll || !consentAll.checked) message = 'Please confirm you have read and agreed to the Terms and consent to treatment.';
-                else if (!signatureValid) message = 'Please provide a signature (draw or type).';
                 break;
             }
         }
