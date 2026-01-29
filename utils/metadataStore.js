@@ -150,6 +150,7 @@ class MetadataStore {
 
   /**
    * List all metadata (with caching)
+   * Prefers Google Drive, falls back to local storage
    */
   async listAllMetadata() {
     // Check cache
@@ -158,8 +159,24 @@ class MetadataStore {
       return Array.from(this.metadataCache.values());
     }
 
-    // Load from local storage
-    const allMetadata = this.loadLocalMetadata();
+    let allMetadata = [];
+
+    // Try loading from Google Drive first
+    if (this.driveUploader && this.driveUploader.isConfigured()) {
+      try {
+        console.log('[Analytics] Loading metadata from Google Drive...');
+        allMetadata = await this.driveUploader.loadAllMetadataFromDrive();
+      } catch (error) {
+        console.error('[Analytics] Error loading from Google Drive:', error.message);
+        // Fall through to local storage
+      }
+    }
+
+    // Fall back to local storage if Google Drive returned nothing
+    if (allMetadata.length === 0) {
+      console.log('[Analytics] Falling back to local metadata storage...');
+      allMetadata = this.loadLocalMetadata();
+    }
 
     // Update cache
     this.metadataCache.clear();
@@ -169,6 +186,7 @@ class MetadataStore {
     }
     this.cacheTimestamp = Date.now();
 
+    console.log(`[Analytics] Loaded ${allMetadata.length} total metadata records`);
     return allMetadata;
   }
 

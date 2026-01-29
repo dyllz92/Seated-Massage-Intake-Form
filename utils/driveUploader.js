@@ -293,6 +293,107 @@ class DriveUploader {
     }
 
     /**
+     * List all metadata JSON files from Google Drive
+     * @returns {Promise<Array>} Array of file objects with id and name
+     */
+    async listMetadataFiles() {
+        if (!this.configured || !this.drive) {
+            console.log('Google Drive not configured, cannot list metadata files.');
+            return [];
+        }
+
+        try {
+            const files = [];
+            let pageToken = null;
+
+            do {
+                const params = {
+                    q: "mimeType='application/json' and name contains '.json' and trashed=false",
+                    fields: 'nextPageToken, files(id, name, createdTime)',
+                    pageSize: 100,
+                    supportsAllDrives: true,
+                    includeItemsFromAllDrives: true
+                };
+
+                // Add folder/drive context
+                if (this.isLikelyDriveId(this.folderId)) {
+                    params.driveId = this.folderId;
+                    params.corpora = 'drive';
+                } else if (this.folderId) {
+                    params.q += ` and '${this.folderId}' in parents`;
+                }
+
+                if (pageToken) {
+                    params.pageToken = pageToken;
+                }
+
+                const response = await this.drive.files.list(params);
+
+                if (response.data.files) {
+                    files.push(...response.data.files);
+                }
+
+                pageToken = response.data.nextPageToken;
+            } while (pageToken);
+
+            console.log(`📂 Found ${files.length} metadata files in Google Drive`);
+            return files;
+
+        } catch (error) {
+            console.error('Error listing metadata files from Google Drive:', error.message);
+            return [];
+        }
+    }
+
+    /**
+     * Download and parse a metadata JSON file from Google Drive
+     * @param {string} fileId - The Google Drive file ID
+     * @returns {Promise<Object|null>} Parsed JSON object or null on error
+     */
+    async downloadMetadataFile(fileId) {
+        if (!this.configured || !this.drive) {
+            return null;
+        }
+
+        try {
+            const response = await this.drive.files.get({
+                fileId: fileId,
+                alt: 'media',
+                supportsAllDrives: true
+            });
+
+            return response.data;
+
+        } catch (error) {
+            console.error(`Error downloading metadata file ${fileId}:`, error.message);
+            return null;
+        }
+    }
+
+    /**
+     * Load all metadata from Google Drive
+     * @returns {Promise<Array>} Array of metadata objects
+     */
+    async loadAllMetadataFromDrive() {
+        const files = await this.listMetadataFiles();
+        const metadata = [];
+
+        for (const file of files) {
+            try {
+                const data = await this.downloadMetadataFile(file.id);
+                if (data) {
+                    metadata.push(data);
+                }
+            } catch (error) {
+                console.error(`Error loading metadata ${file.name}:`, error.message);
+            }
+        }
+
+        console.log(`✅ Loaded ${metadata.length} metadata records from Google Drive`);
+        return metadata;
+    }
+
+    /**
      * Save PDF locally as fallback
      */
     async saveLocally(pdfBuffer, filename) {
