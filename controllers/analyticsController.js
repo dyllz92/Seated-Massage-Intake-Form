@@ -153,11 +153,16 @@ class AnalyticsController {
 
   /**
    * GET /api/analytics/feeling-scores
-   * Returns pre vs post feeling scores
+   * Returns pre vs post feeling scores with match quality metrics
    */
   async getFeelingScores(req, res) {
     try {
       const data = await this.analyticsService.getFeelingScoreComparison();
+
+      // Calculate match quality percentage
+      const matchQuality = data.preScoresCount > 0
+        ? Math.round((data.matchedPairsCount / data.preScoresCount) * 100)
+        : 0;
 
       // Format for Chart.js
       const result = {
@@ -165,7 +170,9 @@ class AnalyticsController {
           avgPre: data.avgPre,
           avgPost: data.avgPost,
           avgImprovement: data.avgImprovement,
-          improvement: data.avgImprovement > 0 ? '✓' : 'ⓘ'
+          improvement: data.avgImprovement > 0 ? '✓ Positive' : 'ⓘ Neutral',
+          matchQuality: matchQuality,
+          matchQualityLabel: matchQuality >= 80 ? 'Excellent' : matchQuality >= 60 ? 'Good' : 'Fair'
         },
         distributions: {
           pre: data.distribution.pre,
@@ -174,7 +181,8 @@ class AnalyticsController {
         stats: {
           preScoresCount: data.preScoresCount,
           postScoresCount: data.postScoresCount,
-          matchedPairsCount: data.matchedPairsCount
+          matchedPairsCount: data.matchedPairsCount,
+          unmatchedCount: data.preScoresCount - data.matchedPairsCount
         }
       };
 
@@ -182,6 +190,34 @@ class AnalyticsController {
     } catch (error) {
       console.error('Error getting feeling scores:', error);
       res.status(500).json({ error: 'Failed to get feeling score data' });
+    }
+  }
+
+  /**
+   * GET /api/analytics/health-notes
+   * Returns aggregated health notes and concerns
+   */
+  async getHealthNotes(req, res) {
+    try {
+      const data = await this.analyticsService.getHealthNotesAnalysis();
+      res.json(data);
+    } catch (error) {
+      console.error('Error getting health notes:', error);
+      res.status(500).json({ error: 'Failed to get health notes data' });
+    }
+  }
+
+  /**
+   * GET /api/analytics/data-quality
+   * Returns metrics about data collection quality
+   */
+  async getDataQuality(req, res) {
+    try {
+      const data = await this.analyticsService.getDataQualityMetrics();
+      res.json(data);
+    } catch (error) {
+      console.error('Error getting data quality metrics:', error);
+      res.status(500).json({ error: 'Failed to get data quality data' });
     }
   }
 }

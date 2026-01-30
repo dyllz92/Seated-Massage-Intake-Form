@@ -121,13 +121,15 @@ class AnalyticsDashboard {
             const formType = document.getElementById('formTypeFilter').value;
 
             // Fetch all analytics data in parallel
-            const [summary, trends, health, therapists, pressure, feelings] = await Promise.all([
+            const [summary, trends, health, therapists, pressure, feelings, healthNotes, dataQuality] = await Promise.all([
                 this.fetchAPI(`/api/analytics/summary`),
                 this.fetchAPI(`/api/analytics/trends?period=${period}`),
                 this.fetchAPI(`/api/analytics/health-issues`),
                 this.fetchAPI(`/api/analytics/therapists`),
                 this.fetchAPI(`/api/analytics/pressure`),
-                this.fetchAPI(`/api/analytics/feeling-scores`)
+                this.fetchAPI(`/api/analytics/feeling-scores`),
+                this.fetchAPI(`/api/analytics/health-notes`).catch(() => null),
+                this.fetchAPI(`/api/analytics/data-quality`).catch(() => null)
             ]);
 
             this.renderSummaryCards(summary);
@@ -136,6 +138,9 @@ class AnalyticsDashboard {
             this.renderTherapistsChart(therapists);
             this.renderPressureChart(pressure);
             this.renderFeelingsChart(feelings);
+
+            if (healthNotes) this.renderHealthNotes(healthNotes);
+            if (dataQuality) this.renderDataQuality(dataQuality);
 
             this.showLoading(false);
         } catch (error) {
@@ -181,6 +186,15 @@ class AnalyticsDashboard {
         document.getElementById('topTherapist').textContent = data.topTherapist;
         document.getElementById('topTherapistDetail').textContent =
             `${data.topTherapistSessions} sessions`;
+
+        // Match quality
+        const matchQuality = Math.round((data.matchedFeedbackRate || 0) / 10) * 10;
+        document.getElementById('matchQuality').textContent = `${matchQuality}%`;
+        document.getElementById('matchQualityDetail').textContent =
+            `${data.matchedFeedbackRate}% matched`;
+
+        // Data quality
+        document.getElementById('dataQuality').textContent = 'Good';
     }
 
     renderTrendsChart(data) {
@@ -452,6 +466,59 @@ class AnalyticsDashboard {
             }
         }
         this.charts = {};
+    }
+
+    renderHealthNotes(data) {
+        const container = document.getElementById('healthNotesContainer');
+        if (!container) return;
+
+        container.style.display = 'block';
+
+        const reviewNotesList = document.getElementById('reviewNotesList');
+        const avoidNotesList = document.getElementById('avoidNotesList');
+
+        if (data.reviewNotes && data.reviewNotes.length > 0) {
+            reviewNotesList.innerHTML = data.reviewNotes
+                .map(note => `<div class="note-item"><p>${this.escapeHtml(note)}</p></div>`)
+                .join('');
+        } else {
+            reviewNotesList.innerHTML = '<p class="empty-state">No review notes yet</p>';
+        }
+
+        if (data.avoidNotes && data.avoidNotes.length > 0) {
+            avoidNotesList.innerHTML = data.avoidNotes
+                .map(note => `<div class="note-item"><p>${this.escapeHtml(note)}</p></div>`)
+                .join('');
+        } else {
+            avoidNotesList.innerHTML = '<p class="empty-state">No avoid notes yet</p>';
+        }
+    }
+
+    renderDataQuality(data) {
+        const container = document.getElementById('dataQualityContainer');
+        if (!container) return;
+
+        container.style.display = 'block';
+
+        const metrics = data.qualityMetrics;
+
+        document.getElementById('timestampQuality').style.width = `${metrics.submissionDatesAccuracy}%`;
+        document.getElementById('timestampValue').textContent = `${metrics.submissionDatesAccuracy}%`;
+
+        document.getElementById('contactQuality').style.width = `${metrics.contactInfoComplete}%`;
+        document.getElementById('contactValue').textContent = `${metrics.contactInfoComplete}%`;
+
+        document.getElementById('commentsQuality').style.width = `${metrics.commentsCapture}%`;
+        document.getElementById('commentsValue').textContent = `${metrics.commentsCapture}%`;
+
+        document.getElementById('healthQuality').style.width = `${metrics.healthNotesCapture}%`;
+        document.getElementById('healthValue').textContent = `${metrics.healthNotesCapture}%`;
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
 

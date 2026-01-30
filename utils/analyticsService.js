@@ -435,6 +435,111 @@ class AnalyticsService {
     this.setCache(cacheKey, result);
     return result;
   }
+
+  /**
+   * Get analysis of health notes and concerns
+   */
+  async getHealthNotesAnalysis() {
+    const cacheKey = 'health_notes_analysis';
+    const cached = this.getFromCache(cacheKey);
+    if (cached) return cached;
+
+    const metadata = await this.loadAllMetadataFromMasterFiles();
+    const reviewNotes = [];
+    const avoidNotes = [];
+    let totalWithReviewNotes = 0;
+    let totalWithAvoidNotes = 0;
+
+    for (const item of metadata) {
+      if (item.health?.reviewNote) {
+        reviewNotes.push(item.health.reviewNote);
+        totalWithReviewNotes++;
+      }
+      if (item.health?.avoidNotes) {
+        avoidNotes.push(item.health.avoidNotes);
+        totalWithAvoidNotes++;
+      }
+    }
+
+    const result = {
+      totalWithReviewNotes,
+      totalWithAvoidNotes,
+      reviewNotesCount: reviewNotes.length,
+      avoidNotesCount: avoidNotes.length,
+      reviewNotes: reviewNotes.slice(0, 5), // Most recent 5
+      avoidNotes: avoidNotes.slice(0, 5),   // Most recent 5
+      dataQuality: {
+        notesAvailable: totalWithReviewNotes + totalWithAvoidNotes,
+        intakesTotal: metadata.filter(m => m.formType === 'seated' || m.formType === 'table').length
+      }
+    };
+
+    this.setCache(cacheKey, result);
+    return result;
+  }
+
+  /**
+   * Get data quality and collection metrics
+   */
+  async getDataQualityMetrics() {
+    const cacheKey = 'data_quality_metrics';
+    const cached = this.getFromCache(cacheKey);
+    if (cached) return cached;
+
+    const metadata = await this.loadAllMetadataFromMasterFiles();
+
+    let validSubmissionDates = 0;
+    let hasComments = 0;
+    let hasHealthNotes = 0;
+    let completeFeedback = 0;
+    let validPhoneNumbers = 0;
+
+    for (const item of metadata) {
+      if (item.submissionDate && item.submissionDate !== 'null') {
+        validSubmissionDates++;
+      }
+      if (item.feedback?.comments || item.feedback?.hasComments) {
+        hasComments++;
+      }
+      if (item.health?.reviewNote || item.health?.avoidNotes) {
+        hasHealthNotes++;
+      }
+      if (item.client?.mobile) {
+        validPhoneNumbers++;
+      }
+      if (item.formType === 'feedback' && item.feedback?.feelingPost) {
+        completeFeedback++;
+      }
+    }
+
+    const totalCount = metadata.length || 1;
+
+    const result = {
+      totalRecords: metadata.length,
+      qualityMetrics: {
+        submissionDatesAccuracy: Math.round((validSubmissionDates / totalCount) * 100),
+        contactInfoComplete: Math.round((validPhoneNumbers / totalCount) * 100),
+        commentsCapture: Math.round((hasComments / totalCount) * 100),
+        healthNotesCapture: Math.round((hasHealthNotes / totalCount) * 100),
+        feedbackComplete: Math.round((completeFeedback / (metadata.filter(m => m.formType === 'feedback').length || 1)) * 100)
+      },
+      overallQuality: Math.round((
+        validSubmissionDates +
+        validPhoneNumbers +
+        hasComments +
+        hasHealthNotes +
+        completeFeedback
+      ) / (totalCount * 5) * 100),
+      improvements: [
+        validSubmissionDates < totalCount ? 'Some submissions missing timestamps' : null,
+        hasComments < totalCount * 0.5 ? 'Low comment capture rate' : null,
+        hasHealthNotes < totalCount * 0.3 ? 'Few health notes recorded' : null
+      ].filter(Boolean)
+    };
+
+    this.setCache(cacheKey, result);
+    return result;
+  }
 }
 
 module.exports = AnalyticsService;
