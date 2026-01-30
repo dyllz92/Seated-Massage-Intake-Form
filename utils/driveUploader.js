@@ -268,7 +268,18 @@ class DriveUploader {
      */
     async saveMetadataLocally(metadataBuffer, filename) {
         try {
-            const metadataDir = path.join(__dirname, '..', 'metadata');
+            // Use Google Drive synced folder if available, otherwise use local metadata
+            const googleDrivePath = process.env.GOOGLE_DRIVE_LOCAL_PATH || 'G:\\Shared drives\\App Uploads\\Intake Forms';
+            let metadataDir;
+
+            // Check if Google Drive path exists and is accessible
+            if (fs.existsSync(googleDrivePath)) {
+                metadataDir = path.join(googleDrivePath, 'metadata');
+                console.log('💾 Using Google Drive synced path for metadata saves');
+            } else {
+                metadataDir = path.join(__dirname, '..', 'metadata');
+                console.log('💾 Using local metadata folder');
+            }
 
             // Create metadata directory if it doesn't exist
             if (!fs.existsSync(metadataDir)) {
@@ -398,9 +409,20 @@ class DriveUploader {
      */
     async saveLocally(pdfBuffer, filename) {
         try {
-            const pdfsDir = path.join(__dirname, '..', 'pdfs');
+            // Use Google Drive synced folder if available, otherwise use local pdfs
+            const googleDrivePath = process.env.GOOGLE_DRIVE_LOCAL_PATH || 'G:\\Shared drives\\App Uploads\\Intake Forms';
+            let pdfsDir;
 
-            // Create pdfs directory if it doesn't exist
+            // Check if Google Drive path exists and is accessible
+            if (fs.existsSync(googleDrivePath)) {
+                pdfsDir = googleDrivePath;
+                console.log('💾 Using Google Drive synced path for local saves');
+            } else {
+                pdfsDir = path.join(__dirname, '..', 'pdfs');
+                console.log('💾 Using local pdfs folder');
+            }
+
+            // Create directory if it doesn't exist
             if (!fs.existsSync(pdfsDir)) {
                 fs.mkdirSync(pdfsDir, { recursive: true });
             }
