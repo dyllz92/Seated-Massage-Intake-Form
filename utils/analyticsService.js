@@ -1,11 +1,17 @@
+const fs = require('fs');
+const path = require('path');
+
 /**
  * AnalyticsService - Calculates all analytics metrics with caching
+ * Reads data directly from master JSON files instead of individual metadata files
  */
 class AnalyticsService {
   constructor(metadataStore) {
     this.metadataStore = metadataStore;
     this.cache = new Map();
     this.cacheTTL = 5 * 60 * 1000; // 5 minutes
+    this.masterFeedbackPath = path.join(__dirname, '..', 'pdfs', 'master_feedback.json');
+    this.masterIntakesPath = path.join(__dirname, '..', 'pdfs', 'master_intakes.json');
   }
 
   /**
@@ -40,6 +46,42 @@ class AnalyticsService {
   }
 
   /**
+   * Load all metadata from master files (feedback + intakes)
+   */
+  async loadAllMetadataFromMasterFiles() {
+    const allData = [];
+
+    try {
+      // Load feedback submissions
+      if (fs.existsSync(this.masterFeedbackPath)) {
+        const feedbackContent = fs.readFileSync(this.masterFeedbackPath, 'utf8');
+        const feedbackData = JSON.parse(feedbackContent);
+        if (Array.isArray(feedbackData)) {
+          allData.push(...feedbackData);
+        } else if (feedbackData) {
+          allData.push(feedbackData);
+        }
+      }
+
+      // Load intake submissions
+      if (fs.existsSync(this.masterIntakesPath)) {
+        const intakesContent = fs.readFileSync(this.masterIntakesPath, 'utf8');
+        const intakesData = JSON.parse(intakesContent);
+        if (Array.isArray(intakesData)) {
+          allData.push(...intakesData);
+        } else if (intakesData) {
+          allData.push(intakesData);
+        }
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('[Analytics] Error loading from master files:', error.message);
+      return [];
+    }
+  }
+
+  /**
    * Calculate submission trends by day/week/month
    */
   async calculateSubmissionTrends(period = 'daily') {
@@ -47,7 +89,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
     const trends = {};
 
     // Group by date based on period
@@ -96,7 +138,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
     const frequencyMap = {};
     const intakeCount = metadata.filter(m => m.formType === 'seated' || m.formType === 'table').length;
 
@@ -133,7 +175,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
     const therapistMap = {};
 
     for (const item of metadata) {
@@ -188,7 +230,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
     const intakes = metadata.filter(m => m.formType === 'seated' || m.formType === 'table');
     const preferenceMap = { Light: 0, Medium: 0, Firm: 0, Unknown: 0 };
 
@@ -223,7 +265,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
 
     const preScores = [];
     const postScores = [];
@@ -321,7 +363,7 @@ class AnalyticsService {
     const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const metadata = await this.metadataStore.listAllMetadata();
+    const metadata = await this.loadAllMetadataFromMasterFiles();
     const trends = await this.calculateSubmissionTrends('daily');
     const feelingScores = await this.getFeelingScoreComparison();
     const therapists = await this.getTherapistWorkload();
