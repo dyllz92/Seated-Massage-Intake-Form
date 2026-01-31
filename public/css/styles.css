@@ -1,3 +1,182 @@
+:root {
+    --main-bg-gradient: linear-gradient(135deg, #1a1625 0%, #0f0c1a 100%);
+    --container-bg: rgba(28, 24, 40, 0.80);
+    --input-bg: #0a0a0a;
+    --primary-purple: #a855f7;
+    --primary-purple-bright: #b366ff;
+    --secondary-purple: #d946ef;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-placeholder: #555555;
+    --required-red: #ef4444;
+    --button-border: #a855f7;
+    --button-hover: #b366ff;
+    --button-disabled: #3f3f46;
+    --progress-line: #4a4a4a;
+    --step-inactive: #3f3f46;
+    --step-active: #a855f7;
+    --shadow: 0 8px 32px rgba(16,24,39,0.18);
+    --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+[data-brand="hemisphere"] body,
+body[data-brand="hemisphere"] {
+    background: var(--main-bg-gradient);
+    font-family: var(--font-primary);
+    color: var(--text-primary);
+}
+
+[data-brand="hemisphere"] .home-container {
+    background: var(--container-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid rgba(139,92,246,0.10);
+    backdrop-filter: blur(10px);
+    padding: 48px 32px 32px 32px;
+    max-width: 900px;
+    margin: 48px auto 0 auto;
+}
+
+[data-brand="hemisphere"] .logo-section .logo {
+    max-width: 100px;
+    height: 100px;
+    background: #18132a;
+    border-radius: 50%;
+    padding: 16px;
+    object-fit: contain;
+    box-shadow: 0 2px 16px rgba(139,92,246,0.10);
+    border: 2.5px solid var(--primary-purple);
+    margin-bottom: 18px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+[data-brand="hemisphere"] .header-section h1 {
+    color: var(--primary-purple-bright);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-align: center;
+    letter-spacing: -1px;
+}
+[data-brand="hemisphere"] .header-section .subtitle {
+    color: var(--text-secondary);
+    font-size: 1.13rem;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+[data-brand="hemisphere"] .forms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin: 36px 0 0 0;
+    justify-items: center;
+}
+
+[data-brand="hemisphere"] .form-card, [data-brand="hemisphere"] .feedback-card {
+    background: rgba(28, 24, 40, 0.92);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(16,24,39,0.13);
+    border: 1.5px solid rgba(139,92,246,0.10);
+    padding: 32px 28px 28px 28px;
+    min-width: 240px;
+    max-width: 340px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.18s, transform 0.18s;
+}
+[data-brand="hemisphere"] .form-card:hover, [data-brand="hemisphere"] .feedback-card:hover {
+    box-shadow: 0 8px 32px rgba(139,92,246,0.18);
+    transform: translateY(-2px) scale(1.025);
+}
+
+[data-brand="hemisphere"] .card-icon {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    width: 56px;
+}
+[data-brand="hemisphere"] .card-icon svg {
+    display: block;
+    width: 44px;
+    height: 44px;
+}
+
+[data-brand="hemisphere"] .form-card h2, [data-brand="hemisphere"] .feedback-card h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+[data-brand="hemisphere"] .card-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+[data-brand="hemisphere"] .btn {
+    font-size: 1.08rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 13px 0;
+    width: 100%;
+    margin-top: 8px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--button-border);
+    box-shadow: 0 2px 8px rgba(139,92,246,0.10);
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.18s, border-color 0.18s;
+    outline: none;
+}
+[data-brand="hemisphere"] .btn:hover, [data-brand="hemisphere"] .btn:focus {
+    background: var(--button-hover);
+    border-color: var(--button-hover);
+    box-shadow: 0 4px 16px rgba(139,92,246,0.18);
+    transform: translateY(-1px) scale(1.02);
+}
+[data-brand="hemisphere"] .btn-secondary {
+    border-color: var(--secondary-purple);
+    color: var(--text-primary);
+}
+[data-brand="hemisphere"] .btn-secondary:hover, [data-brand="hemisphere"] .btn-secondary:focus {
+    background: var(--secondary-purple);
+    border-color: var(--primary-purple);
+}
+
+[data-brand="hemisphere"] .footer-section {
+    background: transparent;
+    border-radius: 18px;
+    box-shadow: none;
+    border: none;
+    padding: 18px 0 10px 0;
+    margin-top: 48px;
+    text-align: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+}
+
+@media (max-width: 900px) {
+  [data-brand="hemisphere"] .forms-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  [data-brand="hemisphere"] .form-card, [data-brand="hemisphere"] .feedback-card {
+    max-width: 98vw;
+    min-width: 0;
+  }
+}
 [data-brand="hemisphere"] .forms-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
