@@ -28,6 +28,10 @@ class AnalyticsDashboard {
         });
 
         // Dashboard actions
+        document.getElementById('updateDataBtn')?.addEventListener('click', () => {
+            this.handleUpdateData();
+        });
+
         document.getElementById('refreshBtn')?.addEventListener('click', () => {
             this.loadDashboard();
         });
@@ -113,6 +117,43 @@ class AnalyticsDashboard {
         this.showLogin();
     }
 
+    async handleUpdateData() {
+        const updateBtn = document.getElementById('updateDataBtn');
+        if (!updateBtn) return;
+
+        try {
+            // Disable button and show loading state
+            updateBtn.disabled = true;
+            const originalText = updateBtn.innerHTML;
+            updateBtn.innerHTML = '<span>⏳ Updating...</span>';
+
+            this.showLoading(true);
+
+            const response = await this.fetchAPI('/api/analytics/update-data', {
+                method: 'POST'
+            });
+
+            if (response.success) {
+                // Show success message
+                alert(`✓ Data updated successfully!\n\n${response.message}`);
+
+                // Reload dashboard data
+                await this.loadDashboard();
+            } else {
+                alert(`⚠ Update completed with issues:\n\n${response.message}`);
+                await this.loadDashboard();
+            }
+        } catch (error) {
+            console.error('Update data error:', error);
+            alert(`✗ Update failed: ${error.message || 'Please try again'}`);
+            this.showLoading(false);
+        } finally {
+            // Restore button state
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = '<span>⬇ Update Data</span>';
+        }
+    }
+
     async loadDashboard() {
         try {
             this.showLoading(true);
@@ -156,12 +197,16 @@ class AnalyticsDashboard {
         }
     }
 
-    async fetchAPI(endpoint) {
-        const response = await fetch(endpoint, {
+    async fetchAPI(endpoint, options = {}) {
+        const fetchOptions = {
             headers: {
-                'X-Session-Id': this.sessionId
-            }
-        });
+                'X-Session-Id': this.sessionId,
+                'Content-Type': 'application/json'
+            },
+            ...options
+        };
+
+        const response = await fetch(endpoint, fetchOptions);
 
         if (!response.ok) {
             const error = new Error('API request failed');

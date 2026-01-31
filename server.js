@@ -257,6 +257,102 @@ app.get('/api/analytics/pressure', authMiddleware, (req, res) =>
 app.get('/api/analytics/feeling-scores', authMiddleware, (req, res) =>
     analyticsController.getFeelingScores(req, res));
 
+// Update data endpoint - runs extraction and update scripts
+app.post('/api/analytics/update-data', authMiddleware, async (req, res) => {
+    try {
+        const { execFile } = require('child_process');
+        const util = require('util');
+        const execFileAsync = util.promisify(execFile);
+
+        const googleDriveDir = "G:\\Shared drives\\App Uploads\\Intake Forms";
+        const results = [];
+        const errors = [];
+
+        // Helper to run Python script
+        const runPythonScript = async (scriptName) => {
+            try {
+                const { stdout, stderr } = await execFileAsync('python3', [scriptName], {
+                    cwd: googleDriveDir,
+                    timeout: 120000 // 2 minute timeout
+                });
+
+                const output = stdout.trim() || stderr.trim();
+                return { script: scriptName, output, success: true };
+            } catch (error) {
+                const errorMsg = error.stderr || error.stdout || error.message;
+                throw { script: scriptName, error: errorMsg, code: error.code };
+            }
+        };
+
+        // Run extraction scripts in sequence
+        console.log('Starting intake and feedback data extraction...');
+
+        try {
+            const intakeResult = await runPythonScript('extract_intakes.py');
+            results.push(`✓ ${intakeResult.output}`);
+            console.log('Intake extraction completed:', intakeResult.output);
+        } catch (error) {
+            const errorMsg = typeof error === 'object' ? error.error : error;
+            errors.push(`✗ Intake extraction: ${errorMsg}`);
+            console.error('Intake extraction failed:', error);
+        }
+
+        try {
+            const feedbackResult = await runPythonScript('extract_feedback.py');
+            results.push(`✓ ${feedbackResult.output}`);
+            console.log('Feedback extraction completed:', feedbackResult.output);
+        } catch (error) {
+            const errorMsg = typeof error === 'object' ? error.error : error;
+            errors.push(`✗ Feedback extraction: ${errorMsg}`);
+            console.error('Feedback extraction failed:', error);
+        }
+
+        // Run update scripts in sequence
+        console.log('Starting master file update...');
+
+        try {
+            const intakeUpdateResult = await runPythonScript('update_master_intakes.py');
+            results.push(`✓ ${intakeUpdateResult.output}`);
+            console.log('Intake update completed:', intakeUpdateResult.output);
+        } catch (error) {
+            const errorMsg = typeof error === 'object' ? error.error : error;
+            errors.push(`✗ Intake update: ${errorMsg}`);
+            console.error('Intake update failed:', error);
+        }
+
+        try {
+            const feedbackUpdateResult = await runPythonScript('update_master_feedback.py');
+            results.push(`✓ ${feedbackUpdateResult.output}`);
+            console.log('Feedback update completed:', feedbackUpdateResult.output);
+        } catch (error) {
+            const errorMsg = typeof error === 'object' ? error.error : error;
+            errors.push(`✗ Feedback update: ${errorMsg}`);
+            console.error('Feedback update failed:', error);
+        }
+
+        // Clear analytics cache to force reload
+        analyticsService.clearCache();
+
+        const message = [
+            ...results,
+            ...(errors.length > 0 ? ['', 'Issues encountered:', ...errors] : [])
+        ].join('\n');
+
+        res.json({
+            success: errors.length === 0,
+            message: message,
+            timestamp: new Date().toISOString()
+        });
+
+    } catch (error) {
+        console.error('Update data error:', error);
+        res.status(500).json({
+            success: false,
+            message: `Failed to update data: ${error.message}`
+        });
+    }
+});
+
 // Health check endpoint
 const healthPayload = () => ({
     status: 'ok',
