@@ -198,15 +198,29 @@ class AnalyticsDashboard {
         if (!strengthDiv) return;
 
         let strength = 0;
-        if (password.length >= 8) strength++;
-        if (/[A-Z]/.test(password)) strength++;
-        if (/[a-z]/.test(password)) strength++;
-        if (/[0-9]/.test(password)) strength++;
+        const criteria = [];
 
-        const strengthLevels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
-        const strengthClasses = ['weak', 'fair', 'good', 'strong', 'very-strong'];
+        if (password.length >= 8) {
+            strength++;
+            criteria.push('length');
+        }
+        if (/[A-Z]/.test(password)) {
+            strength++;
+            criteria.push('uppercase');
+        }
+        if (/[a-z]/.test(password)) {
+            strength++;
+            criteria.push('lowercase');
+        }
+        if (/[0-9]/.test(password) || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            strength++;
+            criteria.push('special');
+        }
+
+        const strengthLevels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+        const strengthClasses = ['very-weak', 'weak', 'fair', 'good', 'strong'];
         const strengthText = strengthLevels[strength] || 'Very Weak';
-        const strengthClass = strengthClasses[strength] || 'weak';
+        const strengthClass = strengthClasses[strength] || 'very-weak';
 
         strengthDiv.textContent = strengthText;
         strengthDiv.className = `password-strength ${strengthClass}`;

@@ -249,14 +249,14 @@ class UserStore {
 
     /**
      * Validate password strength
-     * Min 8 chars, must contain uppercase, lowercase, and number
+     * Min 8 chars, must contain uppercase and lowercase
+     * Optional: number or special character for additional strength
      */
     validatePassword(password) {
         if (!password || password.length < 8) return false;
         const hasUppercase = /[A-Z]/.test(password);
         const hasLowercase = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        return hasUppercase && hasLowercase && hasNumber;
+        return hasUppercase && hasLowercase;
     }
 
     /**

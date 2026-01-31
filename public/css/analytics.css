@@ -685,6 +685,11 @@
     margin-top: 4px;
 }
 
+.password-strength.very-weak {
+    background: #fee;
+    color: #c33;
+}
+
 .password-strength.weak {
     background: #fee;
     color: #c33;
@@ -701,11 +706,6 @@
 }
 
 .password-strength.strong {
-    background: #d4edda;
-    color: #155724;
-}
-
-.password-strength.very-strong {
     background: #d4edda;
     color: #155724;
 }
