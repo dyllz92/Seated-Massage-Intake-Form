@@ -6,6 +6,7 @@ class AnalyticsDashboard {
     constructor() {
         this.sessionId = localStorage.getItem('analyticsSession');
         this.userRole = localStorage.getItem('analyticsUserRole') || 'manager';
+        this.userFirstName = localStorage.getItem('analyticsUserFirstName') || 'User';
         this.charts = {};
         this.init();
     }
@@ -14,6 +15,12 @@ class AnalyticsDashboard {
         this.setupEventListeners();
 
         if (this.sessionId) {
+            // Display user's first name if logged in
+            const userFirstNameElement = document.getElementById('userFirstName');
+            if (userFirstNameElement) {
+                userFirstNameElement.textContent = this.userFirstName;
+            }
+
             this.showDashboard();
             // Load admin panel if user is admin
             if (this.userRole === 'admin') {
@@ -95,7 +102,7 @@ class AnalyticsDashboard {
     }
 
     async handleLogin() {
-        const username = document.getElementById('loginUsername').value;
+        const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
         const errorDiv = document.getElementById('loginError');
         errorDiv.style.display = 'none';
@@ -106,7 +113,7 @@ class AnalyticsDashboard {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ email, password })
             });
 
             this.showLoading(false);
@@ -115,9 +122,18 @@ class AnalyticsDashboard {
                 const data = await response.json();
                 this.sessionId = data.sessionId;
                 this.userRole = data.role;
+                this.userFirstName = data.firstName;
                 localStorage.setItem('analyticsSession', this.sessionId);
                 localStorage.setItem('analyticsUserRole', data.role);
+                localStorage.setItem('analyticsUserFirstName', data.firstName);
                 document.getElementById('loginForm').reset();
+
+                // Update UI with user's first name
+                const userFirstNameElement = document.getElementById('userFirstName');
+                if (userFirstNameElement) {
+                    userFirstNameElement.textContent = data.firstName;
+                }
+
                 this.showDashboard();
                 if (data.role === 'admin') {
                     this.showAdminPanel();
@@ -139,8 +155,9 @@ class AnalyticsDashboard {
     }
 
     async handleRegister() {
-        const username = document.getElementById('regUsername').value;
         const email = document.getElementById('regEmail').value;
+        const firstName = document.getElementById('regFirstName').value;
+        const lastName = document.getElementById('regLastName').value;
         const password = document.getElementById('regPassword').value;
         const confirmPassword = document.getElementById('regConfirmPassword').value;
         const errorDiv = document.getElementById('loginError');
@@ -155,7 +172,7 @@ class AnalyticsDashboard {
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password, confirmPassword })
+                body: JSON.stringify({ email, firstName, lastName, password, confirmPassword })
             });
 
             this.showLoading(false);
@@ -240,8 +257,10 @@ class AnalyticsDashboard {
 
         localStorage.removeItem('analyticsSession');
         localStorage.removeItem('analyticsUserRole');
+        localStorage.removeItem('analyticsUserFirstName');
         this.sessionId = null;
         this.userRole = 'manager';
+        this.userFirstName = 'User';
         this.clearCharts();
         this.showLogin();
         this.showLoginForm();
@@ -771,9 +790,9 @@ class AnalyticsDashboard {
                 html += `
                     <div class="user-item">
                         <div class="user-info">
-                            <strong>${this.escapeHtml(user.username)}</strong>
+                            <strong>${this.escapeHtml(user.firstName)} ${this.escapeHtml(user.lastName)}</strong>
                             <p>${this.escapeHtml(user.email)}</p>
-                            <small>${new Date(user.createdAt).toLocaleDateString()}</small>
+                            <small>Registered: ${new Date(user.createdAt).toLocaleDateString()}</small>
                         </div>
                         <div class="user-actions">
                             <button class="btn-small btn-approve" onclick="dashboard.approveUser('${user.id}'); return false;">✓ Approve</button>

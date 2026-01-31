@@ -1,3 +1,38 @@
+[data-brand="hemisphere"] .home-container {
+    background: rgba(30, 34, 45, 0.82);
+    border-radius: 28px;
+    box-shadow: 0 8px 32px rgba(16,24,39,0.18);
+    border: 1.5px solid rgba(139,92,246,0.10);
+    backdrop-filter: blur(10px);
+    padding: 48px 32px 32px 32px;
+    max-width: 900px;
+    margin: 48px auto 0 auto;
+}
+
+[data-brand="hemisphere"] .logo-section .logo {
+    max-width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50%;
+    padding: 18px;
+    object-fit: contain;
+    box-shadow: 0 2px 16px rgba(139,92,246,0.10);
+    border: 2px solid var(--primary-color);
+    margin-bottom: 24px;
+}
+
+[data-brand="hemisphere"] .footer-section {
+    background: rgba(30, 34, 45, 0.82);
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(16,24,39,0.10);
+    border: 1px solid rgba(139,92,246,0.08);
+    padding: 18px 0 10px 0;
+    margin-top: 48px;
+    text-align: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap');
 
 * {

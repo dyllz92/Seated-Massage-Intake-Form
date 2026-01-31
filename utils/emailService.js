@@ -58,7 +58,7 @@ class EmailService {
     /**
      * Send approval email
      */
-    async sendApprovalEmail(email, username) {
+    async sendApprovalEmail(email, firstName, lastName) {
         if (!this.initialized || !this.transporter) {
             console.log(`[SKIPPED EMAIL] Approval email to ${email} - email service not configured`);
             return { success: false, message: 'Email service not configured' };
@@ -72,11 +72,11 @@ class EmailService {
                 from: emailFrom,
                 to: email,
                 subject: 'Your Analytics Dashboard Access Has Been Approved',
-                html: this.getApprovalEmailTemplate(username, dashboardUrl)
+                html: this.getApprovalEmailTemplate(firstName, lastName, dashboardUrl)
             };
 
             const result = await this.transporter.sendMail(mailOptions);
-            console.log(`✓ Approval email sent to ${email}`, result.messageId);
+            console.log(`✓ Approval email sent to ${email} (${firstName} ${lastName})`, result.messageId);
             return { success: true, messageId: result.messageId };
         } catch (error) {
             console.error(`✗ Failed to send approval email to ${email}:`, error.message);
@@ -87,7 +87,7 @@ class EmailService {
     /**
      * Send rejection email
      */
-    async sendRejectionEmail(email, username, reason = '') {
+    async sendRejectionEmail(email, firstName, lastName, reason = '') {
         if (!this.initialized || !this.transporter) {
             console.log(`[SKIPPED EMAIL] Rejection email to ${email} - email service not configured`);
             return { success: false, message: 'Email service not configured' };
@@ -100,11 +100,11 @@ class EmailService {
                 from: emailFrom,
                 to: email,
                 subject: 'Your Analytics Dashboard Registration',
-                html: this.getRejectionEmailTemplate(username, reason)
+                html: this.getRejectionEmailTemplate(firstName, lastName, reason)
             };
 
             const result = await this.transporter.sendMail(mailOptions);
-            console.log(`✓ Rejection email sent to ${email}`, result.messageId);
+            console.log(`✓ Rejection email sent to ${email} (${firstName} ${lastName})`, result.messageId);
             return { success: true, messageId: result.messageId };
         } catch (error) {
             console.error(`✗ Failed to send rejection email to ${email}:`, error.message);
@@ -115,7 +115,7 @@ class EmailService {
     /**
      * Get approval email HTML template
      */
-    getApprovalEmailTemplate(username, dashboardUrl) {
+    getApprovalEmailTemplate(firstName, lastName, dashboardUrl) {
         return `
 <!DOCTYPE html>
 <html>
@@ -136,13 +136,13 @@ class EmailService {
             <h1>Welcome! 🎉</h1>
         </div>
         <div class="content">
-            <p>Hi <strong>${this.escapeHtml(username)}</strong>,</p>
+            <p>Hi <strong>${this.escapeHtml(firstName)} ${this.escapeHtml(lastName)}</strong>,</p>
             <p>Great news! Your registration for the Analytics Dashboard has been <strong>approved</strong>.</p>
             <p>You can now log in and access the dashboard:</p>
             <p style="text-align: center;">
                 <a href="${this.escapeHtml(dashboardUrl)}" class="button">Access Dashboard</a>
             </p>
-            <p>Use your username and password to log in.</p>
+            <p>Use your email address and password to log in.</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
             <p>If you have any questions, please contact your administrator.</p>
         </div>
@@ -158,7 +158,7 @@ class EmailService {
     /**
      * Get rejection email HTML template
      */
-    getRejectionEmailTemplate(username, reason) {
+    getRejectionEmailTemplate(firstName, lastName, reason) {
         const reasonText = reason ? `<p><strong>Reason:</strong> ${this.escapeHtml(reason)}</p>` : '';
         return `
 <!DOCTYPE html>
@@ -179,7 +179,7 @@ class EmailService {
             <h1>Registration Status</h1>
         </div>
         <div class="content">
-            <p>Hi <strong>${this.escapeHtml(username)}</strong>,</p>
+            <p>Hi <strong>${this.escapeHtml(firstName)} ${this.escapeHtml(lastName)}</strong>,</p>
             <p>Thank you for registering for the Analytics Dashboard.</p>
             <p>Unfortunately, your registration could not be approved at this time.</p>
             ${reasonText}

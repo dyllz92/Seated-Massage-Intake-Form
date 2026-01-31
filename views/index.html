@@ -8,7 +8,7 @@
   <script src="/js/brand.js?v=20260127"></script>
 </head>
 <body data-brand="hemisphere">
-  <div class="container home-container">
+  <div class="home-container" data-brand="hemisphere">
     <div class="logo-section" id="logoSection">
       <img src="/js/Wellcorp_Logo.png?v=20260129" alt="Hemisphere Wellness Logo" class="logo" style="max-height:120px;">
     </div>
@@ -56,10 +56,14 @@
       </div>
     </div>
 
-    <div class="footer-section">
-      <p>Your information is kept private and secure</p>
-      <a href="https://hemispherewellness.com/" target="_blank" rel="noopener noreferrer" class="card-website-link">hemispherewellness.com</a>
-    </div>
+        <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 32px;">
+            <a href="/intake" class="btn btn-primary" style="font-size: 1.1rem; padding: 16px 0; border-radius: 16px;">Start New Intake Form</a>
+            <a href="/feedback" class="btn btn-secondary" style="font-size: 1.1rem; padding: 16px 0; border-radius: 16px;">Leave Feedback</a>
+            <a href="/analytics" class="btn btn-tertiary" style="font-size: 1.1rem; padding: 16px 0; border-radius: 16px;">View Analytics</a>
+        </div>
+    <footer class="footer-section" data-brand="hemisphere">
+        <span style="color: #b3b8c5; font-size: 1.05rem;">&copy; 2026 Seated Massage Intake. All rights reserved.</span>
+    </footer>
   </div>
 </body>
 </html>

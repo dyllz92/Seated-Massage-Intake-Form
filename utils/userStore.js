@@ -56,24 +56,24 @@ class UserStore {
     /**
      * Create a new user account
      */
-    async createUser(username, email, password, role = 'manager') {
+    async createUser(email, firstName, lastName, password, role = 'manager') {
         // Validate inputs
-        if (!this.validateUsername(username)) {
-            throw new Error('Username must be 3-30 characters, alphanumeric and underscore only');
-        }
         if (!this.validateEmail(email)) {
             throw new Error('Invalid email address');
         }
+        if (!this.validateFirstName(firstName)) {
+            throw new Error('First name must be 2-50 characters and contain only letters, spaces, hyphens, and apostrophes');
+        }
+        if (!this.validateLastName(lastName)) {
+            throw new Error('Last name must be 2-50 characters and contain only letters, spaces, hyphens, and apostrophes');
+        }
         if (!this.validatePassword(password)) {
-            throw new Error('Password must be at least 8 characters, containing uppercase, lowercase, and a number');
+            throw new Error('Password must be at least 8 characters, containing uppercase and lowercase letters');
         }
 
         const users = await this.loadUsers();
 
         // Check for duplicates
-        if (users.some(u => u.username === username)) {
-            throw new Error('Username already exists');
-        }
         if (users.some(u => u.email === email && u.status !== 'rejected')) {
             throw new Error('Email already registered');
         }
@@ -84,8 +84,9 @@ class UserStore {
         // Create user
         const newUser = {
             id: await this.generateUuid(),
-            username,
             email,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
             passwordHash,
             role,
             status: 'pending',
@@ -98,7 +99,7 @@ class UserStore {
         users.push(newUser);
         await this.saveUsers(users);
 
-        return { id: newUser.id, username, email, status: 'pending' };
+        return { id: newUser.id, email, firstName: newUser.firstName, lastName: newUser.lastName, status: 'pending' };
     }
 
     /**
@@ -109,13 +110,6 @@ class UserStore {
         return users.find(u => u.id === userId);
     }
 
-    /**
-     * Get user by username
-     */
-    async getUserByUsername(username) {
-        const users = await this.loadUsers();
-        return users.find(u => u.username === username);
-    }
 
     /**
      * Get user by email
@@ -200,10 +194,10 @@ class UserStore {
      */
     async ensureAdminExists() {
         const users = await this.loadUsers();
-        const adminExists = users.some(u => u.username === process.env.ADMIN_USERNAME);
+        const adminEmail = process.env.ADMIN_EMAIL || 'admin@admin.local';
+        const adminExists = users.some(u => u.email === adminEmail);
 
         if (!adminExists) {
-            const adminUsername = process.env.ADMIN_USERNAME || 'admin';
             const adminPassword = process.env.ADMIN_PASSWORD;
 
             if (!adminPassword) {
@@ -213,8 +207,9 @@ class UserStore {
             const passwordHash = await bcrypt.hash(adminPassword, this.BCRYPT_ROUNDS);
             const adminUser = {
                 id: await this.generateUuid(),
-                username: adminUsername,
-                email: `${adminUsername}@admin.local`,
+                email: adminEmail,
+                firstName: 'Admin',
+                lastName: 'User',
                 passwordHash,
                 role: 'admin',
                 status: 'approved',
@@ -226,16 +221,24 @@ class UserStore {
 
             users.push(adminUser);
             await this.saveUsers(users);
-            console.log(`✓ Admin account created: ${adminUsername}`);
+            console.log(`✓ Admin account created: ${adminEmail}`);
         }
     }
 
     /**
-     * Validate username format
+     * Validate first name format
      */
-    validateUsername(username) {
-        if (!username || username.length < 3 || username.length > 30) return false;
-        return /^[a-zA-Z0-9_]+$/.test(username);
+    validateFirstName(firstName) {
+        if (!firstName || firstName.trim().length < 2 || firstName.trim().length > 50) return false;
+        return /^[a-zA-Z\s'-]+$/.test(firstName.trim());
+    }
+
+    /**
+     * Validate last name format
+     */
+    validateLastName(lastName) {
+        if (!lastName || lastName.trim().length < 2 || lastName.trim().length > 50) return false;
+        return /^[a-zA-Z\s'-]+$/.test(lastName.trim());
     }
 
     /**

@@ -21,8 +21,8 @@
                 <!-- Login Form (shown by default) -->
                 <form id="loginForm" style="display:block;">
                     <div class="form-group">
-                        <label for="loginUsername">Username</label>
-                        <input type="text" id="loginUsername" placeholder="Enter your username" required>
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Password</label>
@@ -35,13 +35,18 @@
                 <!-- Registration Form (hidden initially) -->
                 <form id="registerForm" style="display:none;">
                     <div class="form-group">
-                        <label for="regUsername">Username</label>
-                        <input type="text" id="regUsername" placeholder="Choose a username (3-30 chars)" required>
-                        <small class="form-help">Alphanumeric and underscore only</small>
-                    </div>
-                    <div class="form-group">
                         <label for="regEmail">Email</label>
                         <input type="email" id="regEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regFirstName">First Name</label>
+                        <input type="text" id="regFirstName" placeholder="Enter your first name" required>
+                        <small class="form-help">2-50 characters, letters only</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastName">Last Name</label>
+                        <input type="text" id="regLastName" placeholder="Enter your last name" required>
+                        <small class="form-help">2-50 characters, letters only</small>
                     </div>
                     <div class="form-group">
                         <label for="regPassword">Password</label>
@@ -74,6 +79,11 @@
                         <h1>Analytics Dashboard</h1>
                         <p class="subtitle">Wellness Impact Tracking</p>
                     </div>
+                </div>
+
+                <div class="user-profile">
+                    <p>Hi, <strong id="userFirstName">User</strong>!</p>
+                    <button id="logoutBtn" class="btn-logout">Logout</button>
                 </div>
 
                 <section class="summary-section">

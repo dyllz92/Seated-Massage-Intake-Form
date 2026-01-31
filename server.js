@@ -250,8 +250,9 @@ app.get('/api/admin/pending-users', authMiddleware, adminMiddleware, async (req,
         // Remove password hashes for security
         const safeUsers = pendingUsers.map(u => ({
             id: u.id,
-            username: u.username,
             email: u.email,
+            firstName: u.firstName,
+            lastName: u.lastName,
             createdAt: u.createdAt
         }));
 
@@ -271,11 +272,11 @@ app.post('/api/admin/approve-user/:userId', authMiddleware, adminMiddleware, asy
         const user = await userStore.updateUserStatus(userId, 'approved', req.user.userId);
 
         // Send approval email
-        await emailService.sendApprovalEmail(user.email, user.username);
+        await emailService.sendApprovalEmail(user.email, user.firstName, user.lastName);
 
         res.json({
             success: true,
-            message: `User ${user.username} approved and notified by email`
+            message: `User ${user.firstName} ${user.lastName} approved and notified by email`
         });
     } catch (error) {
         console.error('Error approving user:', error);
@@ -293,14 +294,14 @@ app.post('/api/admin/reject-user/:userId', authMiddleware, adminMiddleware, asyn
         const user = await userStore.updateUserStatus(userId, 'rejected', req.user.userId);
 
         // Send rejection email
-        await emailService.sendRejectionEmail(user.email, user.username, reason);
+        await emailService.sendRejectionEmail(user.email, user.firstName, user.lastName, reason);
 
         // Remove rejected user to allow re-registration
         await userStore.deleteRejectedUser(user.email);
 
         res.json({
             success: true,
-            message: `User ${user.username} rejected and notified by email`
+            message: `User ${user.firstName} ${user.lastName} rejected and notified by email`
         });
     } catch (error) {
         console.error('Error rejecting user:', error);
@@ -316,8 +317,9 @@ app.get('/api/admin/all-users', authMiddleware, adminMiddleware, async (req, res
         // Remove password hashes for security
         const safeUsers = allUsers.map(u => ({
             id: u.id,
-            username: u.username,
             email: u.email,
+            firstName: u.firstName,
+            lastName: u.lastName,
             role: u.role,
             status: u.status,
             createdAt: u.createdAt,

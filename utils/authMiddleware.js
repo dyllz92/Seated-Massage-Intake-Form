@@ -24,7 +24,7 @@ class SessionManager {
   /**
    * Create a new session with user info
    */
-  createSession(userId, username, role = 'manager') {
+  createSession(userId, email, firstName, role = 'manager') {
     const sessionId = this.generateSessionId();
     const isAdmin = role === 'admin';
     const sessionDuration = isAdmin ? this.ADMIN_SESSION_DURATION : this.SESSION_DURATION;
@@ -32,7 +32,8 @@ class SessionManager {
 
     this.sessions.set(sessionId, {
       userId,
-      username,
+      email,
+      firstName,
       role,
       createdAt: Date.now(),
       expiresAt,
@@ -133,7 +134,8 @@ function authMiddleware(req, res, next) {
   req.sessionId = sessionId;
   req.user = {
     userId: session.userId,
-    username: session.username,
+    email: session.email,
+    firstName: session.firstName,
     role: session.role
   };
 
@@ -151,22 +153,22 @@ function adminMiddleware(req, res, next) {
 }
 
 /**
- * Login handler - now uses username and password
+ * Login handler - uses email and password
  */
 async function login(req, res) {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     const userStore = new UserStore();
 
     // Validate input
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password required' });
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
     }
 
-    // Get user by username
-    const user = await userStore.getUserByUsername(username);
+    // Get user by email
+    const user = await userStore.getUserByEmail(email);
     if (!user) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     // Check if account is approved
@@ -177,19 +179,21 @@ async function login(req, res) {
     // Verify password
     const isPasswordValid = await userStore.verifyPassword(user.id, password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     // Update last login
     await userStore.updateLastLogin(user.id);
 
     // Create session
-    const sessionId = sessionManager.createSession(user.id, user.username, user.role);
+    const sessionId = sessionManager.createSession(user.id, user.email, user.firstName, user.role);
 
     return res.json({
       success: true,
       sessionId,
-      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       role: user.role,
       expiresIn: (user.role === 'admin'
         ? sessionManager.ADMIN_SESSION_DURATION
@@ -206,12 +210,12 @@ async function login(req, res) {
  */
 async function register(req, res) {
   try {
-    const { username, email, password, confirmPassword } = req.body;
+    const { email, firstName, lastName, password, confirmPassword } = req.body;
     const userStore = new UserStore();
 
     // Validate input
-    if (!username || !email || !password) {
-      return res.status(400).json({ error: 'Username, email, and password required' });
+    if (!email || !firstName || !lastName || !password) {
+      return res.status(400).json({ error: 'Email, first name, last name, and password required' });
     }
 
     if (password !== confirmPassword) {
@@ -219,19 +223,21 @@ async function register(req, res) {
     }
 
     // Create user
-    const user = await userStore.createUser(username, email, password);
+    const user = await userStore.createUser(email, firstName, lastName, password);
 
     return res.status(201).json({
       success: true,
       message: 'Registration successful. Your account is pending admin approval.',
       userId: user.id,
-      username: user.username
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName
     });
   } catch (error) {
     console.error('Registration error:', error);
 
     // Handle specific error cases
-    if (error.message.includes('already exists')) {
+    if (error.message.includes('already exists') || error.message.includes('already registered')) {
       return res.status(409).json({ error: error.message });
     }
 
