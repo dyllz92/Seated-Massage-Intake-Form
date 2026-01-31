@@ -33,7 +33,8 @@
       "Bash(python3:*)",
       "Bash(kill:*)",
       "Bash(cmd /c:*)",
-      "Bash(PORT=3001 npm start)"
+      "Bash(PORT=3001 npm start)",
+      "Bash(PORT=3005 npm start:*)"
     ]
   }
 }
