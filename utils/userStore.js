@@ -1,7 +1,15 @@
 const fs = require('fs').promises;
 const path = require('path');
 const bcrypt = require('bcrypt');
-const { v4: uuidv4 } = require('uuid');
+
+let uuidv4;
+async function getUuidV4() {
+    if (!uuidv4) {
+        const uuidModule = await import('uuid');
+        uuidv4 = uuidModule.v4;
+    }
+    return uuidv4;
+}
 
 /**
  * UserStore - Manages user accounts for Analytics Dashboard
@@ -38,6 +46,14 @@ class UserStore {
     }
 
     /**
+     * Generate a UUID (v4)
+     */
+    async generateUuid() {
+        const v4 = await getUuidV4();
+        return v4();
+    }
+
+    /**
      * Create a new user account
      */
     async createUser(username, email, password, role = 'manager') {
@@ -67,7 +83,7 @@ class UserStore {
 
         // Create user
         const newUser = {
-            id: uuidv4(),
+            id: await this.generateUuid(),
             username,
             email,
             passwordHash,
@@ -196,7 +212,7 @@ class UserStore {
 
             const passwordHash = await bcrypt.hash(adminPassword, this.BCRYPT_ROUNDS);
             const adminUser = {
-                id: uuidv4(),
+                id: await this.generateUuid(),
                 username: adminUsername,
                 email: `${adminUsername}@admin.local`,
                 passwordHash,
